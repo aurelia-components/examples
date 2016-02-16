@@ -72,5 +72,4 @@ describe('testing pager(no dependent to data store):', () =>{
 		expect(pager.page).toBe(45);
 		done();
 	});
-
 })
