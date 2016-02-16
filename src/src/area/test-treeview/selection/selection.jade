@@ -17,6 +17,6 @@ template
           grid-col(heading="node", nosort)
             | ${$item.text}
           grid-col(nosort)
-            button(click.trigger="$parent.parent.selectItem($item)") select item
+            button(click.trigger="selectItem($item)") select item
     div.col-sm-4
       
