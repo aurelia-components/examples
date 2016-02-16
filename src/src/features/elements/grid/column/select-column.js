@@ -46,7 +46,11 @@ export class SelectColumn extends BaseColumn {
         name: this.field,
         value: this.filterValue
       }];
+
+      return result;
     }
+
+    return [];
   }
 
   compare(first, second) {

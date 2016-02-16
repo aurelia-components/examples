@@ -39,6 +39,8 @@ export class InputColumn extends BaseColumn {
         name: this.field,
         value: this.filterValue
       }];
+
+      return result;
     }
 
     return [];
