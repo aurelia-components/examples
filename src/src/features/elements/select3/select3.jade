@@ -12,11 +12,13 @@ template
         keydown.trigger="onValueInputKeyPressed($event)")
       div.input-group-btn
         button.btn.btn-secondary(tabindex="-1",
+          type="button",
           disabled.bind="disabled",
           show.bind="!opts.disableClear && value !== opts.emptyValue",
           mousedown.trigger="clearValue()")
           i.fa.fa-times
         button.btn.btn-secondary(tabindex="-1",
+          type="button",
           disabled.bind="disabled",
           mousedown.trigger="toggleDropdown()")
           i.fa(class.bind="isDropdownOpen? 'fa-caret-up' : 'fa-caret-down'")
