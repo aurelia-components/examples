@@ -76,16 +76,19 @@ export class DialogRenderer {
           }
         };
       } else {
+        modalContainer.onmousedown = ((event) => {
+          modalContainer.style.zIndex = getNextZIndex();
+        }).bind(this);
+
         const modalHeader = modalContainer.firstElementChild.firstElementChild;
         modalHeader.classList.add('draggable');
         modalHeader.onmousedown = ((event) => {
           modalContainer.classList.add('dragging');
-          modalContainer.style.zIndex = getNextZIndex();
         }).bind(this);
 
         this.previousMouseEvent = undefined;
 
-        document.onmousemove = ((event) => {
+        document.addEventListener('mousemove', ((event) => {
           let dragging = modalContainer.classList.contains('dragging');
           if (dragging) {
             let movementX = event.movementX || (this.previousMouseEvent !== undefined ? event.screenX - this.previousMouseEvent.screenX : 0);
@@ -111,12 +114,12 @@ export class DialogRenderer {
             modalContainer.style.left = leftPosition + 'px';
             this.previousMouseEvent = event;
           }
-        }).bind(this);
+        }).bind(this));
 
-        document.onmouseup = (() => {
+        document.addEventListener('mouseup', (() => {
           modalContainer.classList.remove('dragging');
           this.previousMouseEvent = undefined;
-        }).bind(this);
+        }).bind(this));
       }
 
       return new Promise((resolve) => {
