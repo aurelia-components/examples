@@ -30,4 +30,5 @@ template
           mousedown.trigger="selectItem(datum)",
           innerhtml.bind="datum.highlightedName",
           mouseenter.trigger="setHover(datum)",
-          class.bind="datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : datum.item[opts.name] === selectedItemName ? 'selected' : ''")
+          class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
+                "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")

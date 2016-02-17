@@ -5,3 +5,25 @@
 .input-group.date .input-group-addon.cursor-disabled{
   cursor: not-allowed;
 }
+
+.bootstrap-datetimepicker-widget a[data-action] {
+  padding: 0;
+}
+.bootstrap-datetimepicker-widget table td,
+.bootstrap-datetimepicker-widget table td span,
+.bootstrap-datetimepicker-widget .timepicker-hour,
+.bootstrap-datetimepicker-widget .timepicker-minute,
+.bootstrap-datetimepicker-widget .timepicker-second{
+  line-height: 50px;
+  width: 50px;
+  height: 50px;
+}
+
+.bootstrap-datetimepicker-widget.usetwentyfour td.hour{
+  line-height: 26px;
+  height: 26px;
+}
+
+.bootstrap-datetimepicker-widget table td span{
+  margin: 0;
+}
