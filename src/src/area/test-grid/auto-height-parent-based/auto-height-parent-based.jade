@@ -12,7 +12,7 @@ template
         grid-col(heading="Active", field="isActive", filter="boolean")
           | ${$item.isActive}
         grid-col(heading="Name", field="name")
-          button.btn.btn-primary(click.delegate="$parent.parent.itemClicked($item)")
+          button.btn.btn-primary(click.delegate="itemClicked($item)")
             | Click me I'm ... ${ $item.name }!
 
         grid-col(heading="Test", field="name")

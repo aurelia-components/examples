@@ -134,7 +134,7 @@ export class Grid {
     this.rowTemplate = document.createDocumentFragment();
     this.rowTemplate.appendChild(row);
 
-    this._buildTemplates();
+    this._buildTemplates(bindingContext, overrideContext);
 
     if (this.selection !== false) {
       if (this.selection.indexOf('noDeselect') > -1) {
@@ -175,7 +175,7 @@ export class Grid {
     }
   }
 
-  _buildTemplates() {
+  _buildTemplates(bindingContext, overrideContext) {
     // Create a fragment we will manipulate the DOM in
     let rowTemplate = this.rowTemplate.cloneNode(true);
     let row = rowTemplate.querySelector('tr');
@@ -185,9 +185,17 @@ export class Grid {
       .map(c => c.createDOMElement())
       .forEach(row.appendChild.bind(row));
 
+    let overrideBindingContext = {
+      bindingContext: this,
+      parentOverrideContext: {
+        bindingContext: bindingContext,
+        parentOverrideContext: overrideContext
+      }
+    };
+
     // Now compile the row template
     let view = this.viewCompiler.compile(rowTemplate, this.viewResources).create(this.container);
-    view.bind(this);
+    view.bind(this, overrideBindingContext);
 
     // based on viewSlot.swap() from templating 0.16.0
     let removeResponse = this.viewSlot.removeAll();
@@ -400,6 +408,7 @@ export class Grid {
     }
 
     const gridContainerTopAndBottomBorderWidth = 2;
+    // todo: fix - error in build
     this._height = this.element.parentElement.clientHeight - headerHeight - gridFooterHeight - gridContainerTopAndBottomBorderWidth;
     this.heightChanged();
   }

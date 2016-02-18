@@ -26,7 +26,7 @@ export class Select3 {
     sort: false,
     sortField: '',
     disableClear: false,
-    emptyValue: null,
+    emptyValue: null, // ??? or undefined???
     selectHoveredOnCloseDropdown: false
   };
 

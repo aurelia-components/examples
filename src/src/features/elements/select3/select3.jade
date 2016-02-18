@@ -12,11 +12,13 @@ template
         keydown.trigger="onValueInputKeyPressed($event)")
       div.input-group-btn
         button.btn.btn-secondary(tabindex="-1",
+          type="button",
           disabled.bind="disabled",
           show.bind="!opts.disableClear && value !== opts.emptyValue",
           mousedown.trigger="clearValue()")
           i.fa.fa-times
         button.btn.btn-secondary(tabindex="-1",
+          type="button",
           disabled.bind="disabled",
           mousedown.trigger="toggleDropdown()")
           i.fa(class.bind="isDropdownOpen? 'fa-caret-up' : 'fa-caret-down'")
@@ -30,4 +32,5 @@ template
           mousedown.trigger="selectItem(datum)",
           innerhtml.bind="datum.highlightedName",
           mouseenter.trigger="setHover(datum)",
-          class.bind="datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : datum.item[opts.name] === selectedItemName ? 'selected' : ''")
+          class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
+                "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")

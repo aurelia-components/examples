@@ -5,6 +5,6 @@ export class ShortDateFormatValueConverter {
     if (format) {
       return moment(value).format(format);
     }
-    return moment(value).format('L');
+    return value ? moment(value).format('L') : '';
   }
 }

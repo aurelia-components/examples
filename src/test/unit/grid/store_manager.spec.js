@@ -30,7 +30,6 @@ describe('testing store manager:', () =>{
   });
 
   it('should get remote storage instance with undefined data subscriptions', done => {
-    grid.data = null;
     grid.read = function(query) { };
 
     var manager = new StoreManager(grid);

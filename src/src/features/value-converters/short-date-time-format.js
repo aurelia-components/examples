@@ -5,6 +5,6 @@ export class ShortDateTimeFormatValueConverter {
     if (format) {
       return moment(value).format(format);
     }
-    return moment(value).format('DD.MM.YYYY hh:mm');
+    return value ? moment(value).format('DD.MM.YYYY HH:mm') : '';
   }
 }

@@ -76,29 +76,50 @@ export class DialogRenderer {
           }
         };
       } else {
+        modalContainer.onmousedown = ((event) => {
+          modalContainer.style.zIndex = getNextZIndex();
+        }).bind(this);
+
         const modalHeader = modalContainer.firstElementChild.firstElementChild;
+        modalHeader.classList.add('draggable');
         modalHeader.onmousedown = ((event) => {
           modalContainer.classList.add('dragging');
-          modalContainer.style.zIndex = getNextZIndex();
         }).bind(this);
 
         this.previousMouseEvent = undefined;
 
-        document.onmousemove = ((event) => {
+        document.addEventListener('mousemove', ((event) => {
           let dragging = modalContainer.classList.contains('dragging');
           if (dragging) {
             let movementX = event.movementX || (this.previousMouseEvent !== undefined ? event.screenX - this.previousMouseEvent.screenX : 0);
             let movementY = event.movementY || (this.previousMouseEvent !== undefined ? event.screenY - this.previousMouseEvent.screenY : 0);
-            modalContainer.style.top = modalContainer.offsetTop + movementY + 'px';
-            modalContainer.style.left = modalContainer.offsetLeft + movementX + 'px';
+            let topPosition = modalContainer.offsetTop + movementY;
+            let leftPosition = modalContainer.offsetLeft + movementX;
+
+            let modalContainerRect = modalContainer.getBoundingClientRect();
+            let bottomPosition = topPosition + modalContainerRect.height;
+            let rightPosition = leftPosition + modalContainerRect.width;
+
+            let windowWidth = window.innerWidth || document.documentElement.clientWidth;
+            let windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+            // if we drag out of screen, stop dragging
+            if (topPosition < 0 || leftPosition < 0 || bottomPosition > windowHeight || rightPosition > windowWidth) {
+              modalContainer.classList.remove('dragging');
+              this.previousMouseEvent = undefined;
+              return;
+            }
+
+            modalContainer.style.top = topPosition + 'px';
+            modalContainer.style.left = leftPosition + 'px';
             this.previousMouseEvent = event;
           }
-        }).bind(this);
+        }).bind(this));
 
-        modalContainer.onmouseup = (() => {
+        document.addEventListener('mouseup', (() => {
           modalContainer.classList.remove('dragging');
           this.previousMouseEvent = undefined;
-        }).bind(this);
+        }).bind(this));
       }
 
       return new Promise((resolve) => {
@@ -158,9 +179,9 @@ export class DialogRenderer {
     dialogController.centerDialog = () => {
       let child = modalContainer.children[0];
 
-      modalContainer.style.width = child.offsetWidth + 20 + 'px';
+      modalContainer.style.width = child.offsetWidth + 10 + 'px';
       //modalContainer.style.height = child.offsetHeight + 20 + 'px';
-      const modalContainerHeight = child.offsetHeight + 20;
+      const modalContainerHeight = child.offsetHeight + 10;
 
       let vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
       modalContainer.style.left = Math.max((vw - modalContainer.offsetWidth) / 2, 0) + 'px';

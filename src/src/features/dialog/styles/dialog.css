@@ -20,9 +20,6 @@ ai-dialog-container {
   display: block;
   transition: opacity .2s linear;
   opacity: 0;
-  /*overflow-x: hidden;*/
-  /*overflow-y: auto;*/
-  /*-webkit-overflow-scrolling: touch;*/
   outline: 0;
 }
 
@@ -38,12 +35,6 @@ ai-dialog {
   border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 5px;
   padding: 4px 0;
-  /*width: -moz-fit-content;*/
-  /*width: -webkit-fit-content;*/
-  /*width: fit-content;*/
-  /*height: -moz-fit-content;*/
-  /*height: -webkit-fit-content;*/
-  /*height: fit-content;*/
   margin: auto;
   border-image-source: initial;
   border-image-slice: initial;
@@ -57,23 +48,20 @@ ai-dialog > ai-dialog-header {
   display: block;
   padding: 6px 16px;
   border-bottom: 1px solid #e5e5e5;
+  cursor: default;
+  /*no select*/
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently
+                                  not supported by any browser */
 }
 
-/*ai-dialog > ai-dialog-header > button {*/
-  /*float: right;*/
-  /*border: none;*/
-  /*background: 0 0;*/
-  /*font-size: 22px;*/
-  /*position: relative;*/
-  /*top: -4px;*/
-  /*margin: 0;*/
-  /*padding: 0;*/
-  /*cursor: pointer;*/
-/*}*/
-
-/*ai-dialog > ai-dialog-footer button:focus, ai-dialog > ai-dialog-header > button:focus {*/
-  /*outline: 0;*/
-/*}*/
+ai-dialog > ai-dialog-header.draggable {
+  cursor: move;
+}
 
 ai-dialog > ai-dialog-body {
   display: block;
@@ -86,38 +74,6 @@ ai-dialog ai-dialog-footer {
   border-top: 1px solid #e5e5e5;
   text-align: right;
 }
-
-/*ai-dialog ai-dialog-footer button {*/
-  /*color: #333;*/
-  /*background-color: #fff;*/
-  /*padding: 6px 12px;*/
-  /*font-size: 14px;*/
-  /*text-align: center;*/
-  /*white-space: nowrap;*/
-  /*vertical-align: middle;*/
-  /*-ms-touch-action: manipulation;*/
-  /*touch-action: manipulation;*/
-  /*cursor: pointer;*/
-  /*-webkit-user-select: none;*/
-  /*-moz-user-select: none;*/
-  /*-ms-user-select: none;*/
-  /*user-select: none;*/
-  /*background-image: none;*/
-  /*border: 1px solid #ccc;*/
-  /*border-radius: 4px;*/
-  /*margin: 5px 0 5px 5px;*/
-/*}*/
-
-/*ai-dialog ai-dialog-footer button:disabled {*/
-  /*cursor: default;*/
-  /*opacity: .45;*/
-/*}*/
-
-/*ai-dialog ai-dialog-footer button:hover:enabled {*/
-  /*color: #333;*/
-  /*background-color: #e6e6e6;*/
-  /*border-color: #adadad;*/
-/*}*/
 
 .ai-dialog-open {
   overflow: hidden;

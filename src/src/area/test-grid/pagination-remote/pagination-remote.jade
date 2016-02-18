@@ -14,7 +14,7 @@ template
         strong ${ $item.id }
 
       grid-col(heading="Name", field="name")
-        button.btn.btn-primary(click.delegate="$parent.call('itemClicked', $item)") 
+        button.btn.btn-primary(click.delegate="itemClicked($item)")
           | Click me I'm ... ${ $item.name }!
 
       grid-col(heading="Test", field="name")
