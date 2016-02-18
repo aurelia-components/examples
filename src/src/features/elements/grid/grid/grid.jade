@@ -28,7 +28,7 @@ template
                 datepicker(value.bind="$column.filterValueFrom", change.trigger="$column.updateFilter()")
                 datepicker(value.bind="$column.filterValueTo", change.trigger="$column.updateFilter()")
               div.filter-select(if.bind="$column.filter === 'select'")
-                select(value.bind="$column.filterValue", change.trigger="$column.updateFilter()")
+                select.form-control(value.bind="$column.filterValue", change.trigger="$column.updateFilter()")
                   option(model.bind="undefined") All...
                   option(repeat.for="item of $column.items", model.bind="item.id") ${item.name}
 
