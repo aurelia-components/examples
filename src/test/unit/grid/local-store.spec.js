@@ -15,7 +15,7 @@ describe('testing local store data :', () =>{
 		grid = container.get(Grid);
 	});
 
-	it('should change data source on paging, filter, sorting', done => {
+	it('should change data source on paging and filtering', done => {
 		var booleanField = 'isActive',
 		dateField = 'assignmentDate', dateFilterValue = { from: new Date(2016, 3, 15), to: new Date(2016, 3, 20) },
 		inputFilterValue = 'harl', inputField = 'name',
