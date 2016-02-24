@@ -8,7 +8,7 @@ export class ListItem {
     this.icon = item.icon;
     this.expanded = item.expanded || false;
     this.selected = item.selected || false;
-    this.hasChildren = Array.isArray(item.nodes);
+    this.hasChildren = Array.isArray(item.nodes) && item.nodes.length > 0;
 
 
     this.visible = true;
@@ -37,12 +37,16 @@ export class ListItem {
 
   applyFilter() {
     if (this.filter) {
-      this.filterd = this.filter(this.item);
+      this.filtered = !this.filter(this.item);
+      
+      if (this.filtered === true) {
+        this.collapse();
+      }
     }
   }
 
   clearFilter() {
-    this.filterd = false;
+    this.filtered = false;
   }
 
   getChildren() {

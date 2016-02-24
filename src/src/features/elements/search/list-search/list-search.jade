@@ -1,9 +1,11 @@
 template
-  div(style="max-height:200px; overflow-y:scroll")
-    table.table.table-hover(if.bind="models.length > 0")
-      thead
-        tr
-          th(repeat.for="column of columns") ${column.title | t}
-      tbody
-        tr(repeat.for="model of models", click.trigger="rowClicked(model)", class.bind="model.selected === true ? 'table-info' : ''")
-          td(repeat.for="column of columns") ${model[column.name]}
+  grid(if.bind="models.length > 0",
+       data.bind="models",
+       height="150",
+       columns-metadata.bind="columns",
+       show-filters.bind="true",
+       selection="multiselect",
+       select-grid-row.trigger="onRowSelect($event.detail.$item)",
+       deselect-grid-row.trigger="onRowDeselected($event.detail.$item)")
+    grid-row
+      grid-col

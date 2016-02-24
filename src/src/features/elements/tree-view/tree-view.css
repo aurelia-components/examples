@@ -8,7 +8,9 @@ tree-view > div > a > div.indent {
 }
 
 tree-view > div > a > div.content {
-  display: inline-block;
+  /*display: inline-block;*/
+  width:auto;
+  overflow:hidden;
 }
 
 tree-view .list-group-item {

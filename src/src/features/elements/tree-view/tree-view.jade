@@ -2,7 +2,7 @@ template
   require(from="./compose-relative-to-parent")
   require(from="./tree-view.css")
   div.list-group()
-    a.list-group-item(repeat.for="$item of treeData", show.bind="$item.visible && !$item.filterd", click.trigger="listItemClicked($item)", class.bind="$item.selected ? 'active': ''")
+    a.list-group-item(repeat.for="$item of treeData", show.bind="$item.visible && !$item.filtered", click.trigger="listItemClicked($item)", class.bind="$item.selected ? 'active': ''")
       div.indent
         span.indent(repeat.for="num of $item.nestedLevel")
         span.indent(if.bind="!$item.hasChildren")
@@ -12,5 +12,7 @@ template
           compose-relative-to-parent(view.bind="$item.view", view-model.bind="$item.viewModel")
           //compose-relative-to-parent(view.bind="$item.view")
         template(if.bind="!$item.view")
+          div.label.label-pill.label-default ${$item.label}
           i(if.bind="$item.icon", class.bind="$item.icon") &nbsp;
           | ${$item.text}
+

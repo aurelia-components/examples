@@ -48,7 +48,7 @@ export class Select3 {
   }
 
   valueChanged() {
-    if (this.value === undefined || this.value === null) {
+    if (this.value === undefined || this.value === this.opts.emptyValue) {
       this.selectedItemName = null;
       return;
     }
@@ -67,6 +67,7 @@ export class Select3 {
       this.selectedItemName = selectedDatum.item[this.opts.name];
     } else {
       this.selectedItemName = null;
+      this.value = this.opts.emptyValue;
     }
   }
 
@@ -81,6 +82,11 @@ export class Select3 {
       i._escapedName = this._escapeHtml(i[this.opts.name]);
     });
     this.search(this.searchedItem);
+
+    // todo: figure out smarter way for opening dropdown initially
+    if (this.opts.hasFocus && this.items.length > 0) {
+      this.openDropdown();
+    }
   }
 
   _subscribeToItemsCollectionChanges() {

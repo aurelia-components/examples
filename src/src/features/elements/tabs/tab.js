@@ -6,6 +6,7 @@ export class Tab {
   @bindable name;
   @bindable badge;
   @bindable active = false;
+  @bindable headingStyleObject = {};
 
   constructor(element) {
     this.element = element;

@@ -1,9 +1,9 @@
 template
-  div.row
+  div.row(style="height:100%;")
     div.col-xl-2
       ul.nav.nav-pills.nav-stacked
         li.nav-item(repeat.for="navModel of router.navigation", if.one-way="$parent.checkAccess(navModel)")
           a.nav-link(href.bind="navModel.href", class="${ navModel.isActive ? 'active' : '' }") ${navModel.title}
 
-    div.col-xl-10
+    div.col-xl-10(style="height:100%;")
       router-view

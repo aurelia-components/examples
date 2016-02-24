@@ -1,16 +1,17 @@
 import {inject, customElement, bindable} from 'aurelia-framework';
 import {searchOperator} from '../search-operator';
+import {customElementHelper} from 'utils';
 
 @customElement('text-search')
 @inject(Element)
 export class TextSearch {
   @bindable entity = '';
   @bindable property = '';
+  @bindable value = '';
 
   constructor(element) {
     this.element = element;
 
-    this.value = '';
     this.prefixSelected = false;
     this.suffixSelected = false;
   }
@@ -55,5 +56,26 @@ export class TextSearch {
     );
 
     return result;
+  }
+
+  valueChanged(newValue, oldValue) {
+    if (!this.debounce) {
+      this.debounce = customElementHelper.debounce(() => {
+        customElementHelper.dispatchEvent(this.element, 'search-control-dirty-state', {
+          dirty: this.isDirty(),
+          hash: this.getHash()
+        });
+      }, 100);
+    }
+
+    this.debounce();
+  }
+
+  getHash() {
+    return this.entity + this.property;
+  }
+
+  isDirty() {
+    return this.value !== '';
   }
 }

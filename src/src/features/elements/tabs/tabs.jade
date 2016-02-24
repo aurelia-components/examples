@@ -1,7 +1,7 @@
 template
   ul.nav.nav-tabs.m-b-1
     li.nav-item(repeat.for="tab of tabs")
-      a.nav-link(href="#", click.trigger="$parent.onTabClick(tab)", class="${tab.active ? 'active': ''}") ${tab.name | t}
+      a.nav-link(href="#", click.trigger="$parent.onTabClick(tab)", class="${tab.active ? 'active': ''}", style.bind="tab.headingStyleObject") ${tab.name | t}
         | &nbsp;
         span.label.label-pill.label-default() ${tab.badge}
   content

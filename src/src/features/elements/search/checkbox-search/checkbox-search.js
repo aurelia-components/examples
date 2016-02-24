@@ -1,5 +1,6 @@
 import {inject, customElement, bindable} from 'aurelia-framework';
 import {searchOperator} from '../search-operator';
+import {customElementHelper} from 'utils';
 
 @customElement('checkbox-search')
 @inject(Element)
@@ -7,11 +8,10 @@ export class CheckboxSearch {
   @bindable entity = '';
   @bindable property = '';
   @bindable value = '';
+  @bindable isChecked = false;
 
   constructor(element) {
     this.element = element;
-
-    this.isChecked = false;
   }
 
   getResult() {
@@ -32,5 +32,26 @@ export class CheckboxSearch {
     );
 
     return result;
+  }
+
+  isCheckedChanged(newValue, oldValue) {
+    if (!this.debounce) {
+      this.debounce = customElementHelper.debounce(() => {
+        customElementHelper.dispatchEvent(this.element, 'search-control-dirty-state', {
+          dirty: this.isDirty(),
+          hash: this.getHash()
+        });
+      }, 100);
+    }
+
+    this.debounce();
+  }
+
+  getHash() {
+    return this.entity + this.property;
+  }
+
+  isDirty() {
+    return this.isChecked !== false;
   }
 }

@@ -235,6 +235,8 @@ export class Grid {
     this.refresh();
   }
 
+
+  // todo: use custonm element utils
   debounce(func, wait) {
     var timeout;
 

@@ -22,9 +22,16 @@
 }
 // ============
 
-
 // ==Popover==
 .popover .popover-content > div {
   display: block !important;
+}
+// ===========
+
+// ==Toastr under navbar==
+#toast-container.toast-top-right,
+#toast-container.toast-top-left,
+#toast-container.toast-top-full-width {
+  top: 40px;
 }
 // ===========

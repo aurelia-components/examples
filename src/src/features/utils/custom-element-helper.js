@@ -21,5 +21,24 @@ export const customElementHelper = {
         throw new Error('Not an aurelia view model!');
       }
     });
+  },
+  debounce(func, wait) {
+    var timeout;
+
+    // the debounced function
+    return function () {
+      var context = this,
+        args = arguments;
+
+      // nulls out timer and calls original function
+      var later = function () {
+        timeout = null;
+        func.apply(context, args);
+      };
+
+      // restart the timer to call last function
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
 };
