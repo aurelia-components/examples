@@ -15,15 +15,15 @@ template
       div.form-group.row
         label.form-control-label.col-lg-3 Popover Title
         div.col-lg-8
-          select3(items.bind="items", value.two-way="popoverTitle", caption="none")
+          select3(items.bind="items", value.bind="popoverTitle", options.bind="{caption: 'none'}")
       div.form-group.row
         label.form-control-label.col-lg-3 Popover Placement
         div.col-lg-8
-          select3(items.bind="placements", value.two-way="placement", options.bind="{modelValueBind:true, disableClear:true}")
+          select3(items.bind="placements", value.bind="placement", options.bind="{modelValueBind:true, disableClear:true}")
       div.form-group.row
         label.form-control-label.col-lg-3 Popover Trigger
         div.col-lg-8
-          select3(items.bind="triggers", value.two-way="trigger")
+          select3(items.bind="triggers", value.bind="trigger")
       div.form-group.row
         div.col-lg-12
           button.btn.btn-success ${trigger} me
