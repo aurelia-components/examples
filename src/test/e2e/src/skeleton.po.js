@@ -1,5 +1,4 @@
 export class PageObjectSkeleton {
-
   constructor() {
 
   }
@@ -12,4 +11,5 @@ export class PageObjectSkeleton {
     element(by.css('a[href="' + href + '"]')).click();
     return browser.waitForRouterComplete();
   }
+  
 }

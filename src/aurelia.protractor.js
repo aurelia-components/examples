@@ -26,7 +26,7 @@ function loadAndWaitForAureliaPage(pageUrl) {
     '  cb("Aurelia App composed")' +
     '}, false);'
   ).then(function(result) {
-    console.log(result);
+    //console.log(result);
     return result;
   });
 }
@@ -39,6 +39,7 @@ function waitForRouterComplete() {
     '  cb(true)' +
     '});'
   ).then(function(result) {
+    //console.log("Router navigation completed");    
     return result;
   });
 }
