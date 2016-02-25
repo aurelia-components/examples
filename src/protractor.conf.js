@@ -16,6 +16,7 @@ exports.config = {
   }],
 
   onPrepare: function() {
+    browser.manage().timeouts().setScriptTimeout(60000);
     var SpecReporter = require('jasmine-spec-reporter');
     jasmine.getEnv().addReporter(new SpecReporter({
 

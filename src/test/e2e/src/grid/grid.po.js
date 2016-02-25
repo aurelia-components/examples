@@ -1,39 +1,46 @@
-export class PageObjectGrid {
+import { PageObjectSkeleton} from './../skeleton.po.js'
+
+export class PageObjectGrid extends PageObjectSkeleton{
+	constructor(){
+		super();
+		this.routePrefix = '#/test-grid/';
+	}
+
 	clickNextPage() {
-		element.all(by.css('a[aria-label="Next"]')).get(1).click();
+		this.click('next');
 	}
 
 	clickPrevPage(){
-		element(by.css('a[aria-label="Previous"]')).click();
+		this.click('prev');
 	}
 
 	clickFirstPage(){
-		element(by.css('a[aria-label="First"]')).click();
+		this.click('first');
 	}
 
 	clickLastPage(){
-		element(by.css('a[aria-label="Last"]')).click();
+		this.click('last');
 	}
 
 	clickPage(page){
 		element(by.cssContainingText('a', page)).click();
 	}
 
-	getActivePage(){
-		return element(by.css('.page-item.active')).element(by.tagName('a')).getText();
+	clickActiveFalse(){
+		this.getClickablesByHandler('buttonClicked').get(1).click();
 	}
 
-	changeSelectMenu(size){
-		element(by.cssContainingText('option', size)).click();
-		
+	getActivePage(){
+		return this.getElement('.page-item.active').element(by.tagName('a')).getText();
 	}
+
 
 	getGridRowsCount(){
-		return element.all(by.css('tr')).count();
+		return this.getElementsCount('tr');
 	}
 
 	clickAddItem(){
-		element.all(by.css('button')).first().click();
+		this.click('addItem');
 	}
 
 	getAddedItemsCount(){
@@ -41,15 +48,15 @@ export class PageObjectGrid {
 	}
 
 	toggleFilter(){
-		element.all(by.css('button')).first().click();
+		this.click('toggleFilter');
 	}
 
 	hasFilterRowElement(){
-		return element(by.css('.grid-column-filters')).isPresent();
+		return this.getElement('.grid-column-filters').isPresent();
 	}
 
 	changeNameFilter(value){
-		let filter = element.all(by.css('.grid-column-filters input')).get(1);
+		let filter = this.getElements('.grid-column-filters input').get(1);
 		filter.clear();
 
 		if(value){
@@ -57,8 +64,14 @@ export class PageObjectGrid {
 		}
 	}	
 
-	getFilteredRows(){
-		return element.all(by.css('tbody tr'));
+	getFilteredRows(fieldName){
+		return this.getElements('tbody tr').filter( e => {
+			return e.element(by.css('td[field="' + fieldName+ '"]'));
+		});
+	}
+
+	getFilteredRowsCount(){
+		return this.getElementsCount('tbody tr');
 	}
 
 }
