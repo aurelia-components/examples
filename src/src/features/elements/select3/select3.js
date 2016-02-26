@@ -69,6 +69,8 @@ export class Select3 {
       this.selectedItemName = null;
       this.value = this.opts.emptyValue;
     }
+
+    this._dispatchChangeEvent();
   }
 
   itemsChanged() {
@@ -113,6 +115,8 @@ export class Select3 {
     if (!this.opts.disableClear) {
       this.value = this.opts.emptyValue;
     }
+
+    this._dispatchChangeEvent();
   }
 
   openDropdown() {
@@ -336,6 +340,12 @@ export class Select3 {
       this.scrollHoveredLiIntoView(true);
     });
 
+  }
+
+  _dispatchChangeEvent() {
+    setTimeout(() => {
+      this.element.dispatchEvent(new Event('change'));
+    });
   }
 
   _queryTokenizer(query) {
