@@ -1,11 +1,34 @@
-import { PageObjectSkeleton} from './../skeleton.po.js'
+import { PageObjectSkeleton } from './../skeleton.po.js'
+import { Constants } from './../constants.js';
 
-export class PageObjectGrid extends PageObjectSkeleton{
+export class PageObjectGrid extends PageObjectSkeleton {
+
 	constructor(){
 		super();
 		this.routePrefix = '#/test-grid/';
 	}
 
+	//common
+	getGridRowsCount(){
+		return this.getElementsCount('tbody tr');
+	}
+
+
+	getGridColumnsByFieldName(fieldName){
+		return Array.from(this.getElements('tbody tr').map(e => {
+			return this.getElements('td[field="' + fieldName+ '"]', e).first().getText();
+		}));
+	}
+
+	//addition
+	clickAddItem(){
+		this.click('addItem');
+	}
+	getAddedItemsCount(){
+		return element.all(by.cssContainingText('td', '-1')).count();
+	}
+
+	//paging 
 	clickNextPage() {
 		this.click('next');
 	}
@@ -16,6 +39,7 @@ export class PageObjectGrid extends PageObjectSkeleton{
 
 	clickFirstPage(){
 		this.click('first');
+
 	}
 
 	clickLastPage(){
@@ -26,27 +50,11 @@ export class PageObjectGrid extends PageObjectSkeleton{
 		element(by.cssContainingText('a', page)).click();
 	}
 
-	clickActiveFalse(){
-		this.getClickablesByHandler('buttonClicked').get(1).click();
-	}
-
 	getActivePage(){
-		return this.getElement('.page-item.active').element(by.tagName('a')).getText();
+		return this.getElement('.page-item.active a').getText();
 	}
 
-
-	getGridRowsCount(){
-		return this.getElementsCount('tr');
-	}
-
-	clickAddItem(){
-		this.click('addItem');
-	}
-
-	getAddedItemsCount(){
-		return element.all(by.cssContainingText('td', '-1')).count();
-	}
-
+	//filtering
 	toggleFilter(){
 		this.click('toggleFilter');
 	}
@@ -62,16 +70,44 @@ export class PageObjectGrid extends PageObjectSkeleton{
 		if(value){
 			filter.sendKeys(value);
 		}
+		browser.sleep(Constants.VisualDelayTime * 5);
 	}	
 
-	getFilteredRows(fieldName){
-		return this.getElements('tbody tr').filter( e => {
-			return e.element(by.css('td[field="' + fieldName+ '"]'));
+	clickActiveFalse(){
+		this.getClickablesByHandler('buttonClicked').get(1).click();
+		browser.sleep(Constants.VisualDelayTime * 5);
+	}
+
+	//sorting
+	changeIdSortDirection(){
+		this.getClickablesByHandler('$column.changeDirectionSort').get(0).click();
+		browser.sleep(Constants.VisualDelayTime * 5);
+	}
+
+	changeNameSortDirection(){
+		this.getClickablesByHandler('$column.changeDirectionSort').get(3).click();
+		browser.sleep(Constants.VisualDelayTime * 5);
+	}
+
+	//sync
+	changeSelectedRow(splitterIndex, gridIndex, rowIndex){
+		let splitter = this.getElements('split-vertical').get(splitterIndex),
+		grid = this.getElements('grid', splitter).get(gridIndex),
+		row = this.getClickablesByHandler('rowClicked($item)', grid).get(rowIndex);
+
+		row.click();
+		browser.sleep(Constants.VisualDelayTime * 5);
+	}
+
+	getSyncedGridColumn(splitterIndex, gridIndex, rowIndex){
+		let splitter = this.getElements('split-vertical').get(splitterIndex),
+		grid = this.getElements('grid', splitter).get(gridIndex);
+		
+		return this.getElements('tbody tr', grid).map(e => {
+			return this.getElement('td', e).getText();
+		}).then(result => {
+			return result;
 		});
-	}
 
-	getFilteredRowsCount(){
-		return this.getElementsCount('tbody tr');
 	}
-
 }

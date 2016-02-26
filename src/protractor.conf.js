@@ -34,7 +34,7 @@ exports.config = {
         pending: 'yellow'
       },
       prefixes: {
-        success: '! ',
+        success: '√ ',
         failure: 'X ',
         pending: '* '
       },

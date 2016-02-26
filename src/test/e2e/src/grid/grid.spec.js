@@ -1,7 +1,7 @@
 import {PageObjectGrid} from './grid.po.js';
 import {Constants} from './../constants.js';
 
-describe('aurelia grid pagination', function() {
+describe('aurelia grid pagination', () => {
   let poGrid;
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('aurelia grid pagination', function() {
   it("should load grid paging, change pages and check active page", ()=>{
 
     expect(poGrid.getActivePage()).toBe('1');
-    for(var i = 2; i < 12; i++){
+    for(let i = 2; i < 12; i++){
       poGrid.clickNextPage();
       expect(poGrid.getActivePage()).toBe(("" + i).toString());
       browser.sleep(Constants.VisualDelayTime);
@@ -27,45 +27,38 @@ describe('aurelia grid pagination', function() {
 
     poGrid.clickPrevPage();
     expect(poGrid.getActivePage()).toBe(("10").toString());
-    browser.sleep(Constants.VisualDelayTime);
 
     poGrid.clickLastPage();
     expect(poGrid.getActivePage()).toBe(("100").toString());
-    browser.sleep(Constants.VisualDelayTime);
 
     poGrid.clickFirstPage();
     expect(poGrid.getActivePage()).toBe(("1").toString());
-    browser.sleep(Constants.VisualDelayTime);
 
     poGrid.clickPage(7);
     expect(poGrid.getActivePage()).toBe(("7").toString());
-    browser.sleep(Constants.VisualDelayTime);
   });
 
 
   it('should change page sizes and check grid rows count', () => {
-    var sizes = [50,25,10];
-    for(var i = 0; i < sizes.length; i++){
-      browser.sleep(Constants.VisualDelayTime);
+    let sizes = [50,25,10];
+    for(let i = 0; i < sizes.length; i++){
       poGrid.changeSelectMenu(("" + sizes[i]).toString());
-      expect(poGrid.getGridRowsCount()).toBe(sizes[i] + 1);
+      expect(poGrid.getGridRowsCount()).toBe(sizes[i]);
     }
 
   });
 
 
   it('should click add item and check grid for added items', () => {
-    var rand = Math.floor(Math.random() * 10) + 1;
-    for(var i = 0; i < rand; i++){
+    let rand = Math.floor(Math.random() * 10) + 1;
+    for(let i = 0; i < rand; i++){
       poGrid.clickAddItem();
-      browser.sleep(Constants.VisualDelayTime);
     }
     expect(poGrid.getAddedItemsCount()).toBe(rand);
-
   });
 });
 
-describe('aurelia grid filtering', function() {
+describe('aurelia grid filtering', () => {
   let poGrid;
 
   beforeEach(() => {
@@ -83,34 +76,113 @@ describe('aurelia grid filtering', function() {
   it("should click filter toggle and hide filter row", ()=>{
 
     expect(poGrid.hasFilterRowElement()).toBeTruthy();
-    browser.sleep(Constants.VisualDelayTime);
     poGrid.toggleFilter();
-    browser.sleep(Constants.VisualDelayTime);
     expect(poGrid.hasFilterRowElement()).toBeFalsy();
-    browser.sleep(Constants.VisualDelayTime);
     poGrid.toggleFilter();
     expect(poGrid.hasFilterRowElement()).toBeTruthy();
   });
 
   it("should change boolean/input/select filters and check data in the grid rows", ()=>{
     poGrid.changeNameFilter('alex');
-    browser.sleep(Constants.VisualDelayTime * 5);
 
-    poGrid.getFilteredRows('name').each( e => {
-     expect(e.getText()).toMatch(/alex/);
-   });
+    poGrid.getGridColumnsByFieldName('name').forEach(text => {
+      expect(text).toMatch(/alex/);
+    });
 
     poGrid.changeNameFilter();
     poGrid.changeSelectMenu('end with 5');
-    browser.sleep(Constants.VisualDelayTime * 5);
-    poGrid.getFilteredRows('type').each( e => {
-      expect(e.getText()).toMatch(/-5$/);
+    poGrid.getGridColumnsByFieldName('type').forEach(text => {
+      expect(text).toMatch(/-5$/);
     });
 
     poGrid.clickActiveFalse();
-    browser.sleep(Constants.VisualDelayTime * 5);
-    expect(poGrid.getFilteredRowsCount()).toBe(0);
+    expect(poGrid.getGridRowsCount()).toBe(0);
 
   });
 });
 
+describe('aurelia grid sorting', () => {
+  let poGrid;
+
+  beforeEach(() => {
+    poGrid = new PageObjectGrid();
+    browser.loadAndWaitForAureliaPage(Constants.DefaultUrl);
+    browser.sleep(Constants.PageLoadingTime);
+    poGrid.navigateTo('filters');
+    browser.sleep(Constants.PageLoadingTime);
+  });
+
+  it("should sort columns ascending/descending on clicking column header", () => {
+    poGrid.changeNameSortDirection();
+    poGrid.changeIdSortDirection();
+    poGrid.changeIdSortDirection();
+
+    poGrid.changeNameSortDirection();
+    let rows = poGrid.getGridColumnsByFieldName('name');
+    rows.forEach((r, i) => {
+      if(i > 0){
+        expect(rows[i - 1] <= r).toBeTruthy();
+      }
+    });
+
+    poGrid.changeNameSortDirection();
+    rows = poGrid.getGridColumnsByFieldName('name');
+    rows.forEach((r, i) => {
+      if(i > 0){
+        expect(rows[i - 1] >= r).toBeTruthy();
+      }
+    });
+
+    poGrid.changeIdSortDirection();
+
+    let idRows = poGrid.getGridColumnsByFieldName('id');
+    idRows.forEach((r, i) => {
+      if(i > 0){
+        if(rows[i - 1] == rows[i]){
+          expect(idRows[i - 1] <= r).toBeTruthy();
+        }
+      }
+    });
+
+  });
+});
+
+describe('aurelia grid syncing', () => {
+  let poGrid;
+
+  beforeEach(() => {
+    poGrid = new PageObjectGrid();
+    browser.loadAndWaitForAureliaPage(Constants.DefaultUrl);
+    browser.sleep(Constants.PageLoadingTime);
+    poGrid.navigateTo('sync-two-grids');
+    browser.sleep(Constants.PageLoadingTime);
+  });
+
+  it("should load grid syncing page and check title", ()=>{
+    expect(poGrid.getCurrentPageTitle()).toBe('sync two grids | Test Grid | Page Title');
+  });
+
+  it('should change users grid selected row and check related role grid', () => {
+    //first splitter
+    let firstRoleBefore = poGrid.getSyncedGridColumn(0, 1, 0);
+    poGrid.changeSelectedRow(0, 0, 2);
+    let firstRoleAfter = poGrid.getSyncedGridColumn(0, 1, 0);
+    expect(firstRoleBefore).not.toEqual(firstRoleAfter);
+
+    //second splitter
+    let firstPirvillageBefore = poGrid.getSyncedGridColumn(1, 1, 0);
+    poGrid.changeSelectedRow(1, 0, 2);
+    let firstPirvillageAfter = poGrid.getSyncedGridColumn(1, 1, 0);
+    expect(firstPirvillageBefore).not.toEqual(firstPirvillageAfter);
+
+    //third splitter
+    firstRoleBefore = poGrid.getSyncedGridColumn(2, 1, 0);
+    let firstUserBefore = poGrid.getSyncedGridColumn(2, 2, 0);
+    poGrid.changeSelectedRow(2, 0, 2);
+    firstRoleAfter = poGrid.getSyncedGridColumn(2, 1, 0);
+    let firstUserAfter = poGrid.getSyncedGridColumn(2, 2, 0);
+    expect(firstRoleBefore).not.toEqual(firstRoleAfter);
+    expect(firstUserBefore).not.toEqual(firstUserAfter);
+
+  });
+});
