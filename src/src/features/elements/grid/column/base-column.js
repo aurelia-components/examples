@@ -55,7 +55,7 @@ export class BaseColumn {
     td.innerHTML = this.template;
 
     // Set attributes
-    for (var prop in this.config) {
+    for (let prop in this.config) {
       if (this.config.hasOwnProperty(prop) && this.specialColumns[prop] === undefined) {
         td.setAttribute(prop, this.config[prop]);
       }
@@ -84,7 +84,7 @@ export class BaseColumn {
     this.grid.changeSort({
       name: this.field,
       value: this.sortDirection,
-      column: this
+      columnId: this.id
     });
   }
 
@@ -93,7 +93,7 @@ export class BaseColumn {
     let sort = {
       name: this.field,
       value: this.sortDirection,
-      column: this
+      columnId: this.id
     };
 
     return sort;
@@ -108,11 +108,27 @@ export class BaseColumn {
   }
 
   _updateViewModelOnPropertyChange(viewModel, viewModelPropertyName, columnPropertyName) {
-    const subscription = this.grid.bindingEngine
-            .propertyObserver(this, columnPropertyName)
-            .subscribe((newValue, oldValue) => {
-              viewModel[viewModelPropertyName] = newValue;
-            });
+    const viewModelPropertyNameTokens = viewModelPropertyName.split('.');
+    let subscription;
+    if (viewModelPropertyNameTokens.length > 1) {
+      subscription = this.grid.bindingEngine
+        .propertyObserver(this, columnPropertyName)
+        .subscribe((newValue, oldValue) => {
+          let obj = viewModel;
+          let i;
+          for (i = 0; i < viewModelPropertyNameTokens.length - 1; i += 1) {
+            obj = obj[viewModelPropertyNameTokens[i]];
+          }
+
+          obj[viewModelPropertyNameTokens[i]] = newValue;
+        });
+    } else {
+      subscription = this.grid.bindingEngine
+        .propertyObserver(this, columnPropertyName)
+        .subscribe((newValue, oldValue) => {
+          viewModel[viewModelPropertyName] = newValue;
+        });
+    }
 
     this._subscriptions.push(subscription);
   }
@@ -123,13 +139,24 @@ export class BaseColumn {
     }
 
     const viewModel = this.grid.parent;
-    let value = viewModel[viewModelPropertyName];
+    const viewModelPropertyNameTokens = viewModelPropertyName.split('.');
+    let subscription, value;
+    if (viewModelPropertyNameTokens.length > 1) {
+      value = viewModelPropertyNameTokens.reduce((obj, token) => obj = obj[token], viewModel);
 
-    const subscription = this.grid.bindingEngine
-      .propertyObserver(viewModel, viewModelPropertyName)
-      .subscribe((newValue, oldValue) => {
-        this.setColumnProperty(columnPropertyName, newValue);
-      });
+      subscription = this.grid.bindingEngine
+        .expressionObserver(viewModel, viewModelPropertyName)
+        .subscribe((newValue, oldValue) => {
+          this.setColumnProperty(columnPropertyName, newValue);
+        });
+    } else {
+      value = viewModel[viewModelPropertyName];
+      subscription = this.grid.bindingEngine
+        .propertyObserver(viewModel, viewModelPropertyName)
+        .subscribe((newValue, oldValue) => {
+          this.setColumnProperty(columnPropertyName, newValue);
+        });
+    }
 
     this._subscriptions.push(subscription);
     this._updateViewModelOnPropertyChange(viewModel, viewModelPropertyName, columnPropertyName);

@@ -1,7 +1,8 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import $ from 'jquery';
-import 'libs/jquery.signalR';
-import 'libs/hubs';
+// IMPORTANT! needs to be uncommented if used!
+//import 'libs/jquery.signalR';
+//import 'libs/hubs';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {
   HttpRequestStartedMessage, HttpRequestFinishedMessage,
@@ -10,7 +11,6 @@ import {
 } from '../http-client/http-client-messages';
 
 import {Config} from '../config';
-import {hub} from './hub';
 
 import {Logger} from 'service';
 

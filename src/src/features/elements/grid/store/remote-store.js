@@ -35,7 +35,6 @@ export class RemoteStore extends BaseStore {
 
   getSorters() {
     return this.sortProcessingOrder.map(sorter => {
-      delete sorter.column;
       return sorter;
     });
   }

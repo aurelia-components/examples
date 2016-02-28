@@ -93,11 +93,13 @@ export class Grid {
 
     if (this.sortOptions !== undefined) {
       let maxColumnId = this.columns[this.columns.length - 1].id;
+      // assert sort options contract
       this.sortOptions.forEach(sortOption => {
         let isValidColumnId = sortOption.columnId >= 1 && sortOption.columnId <= maxColumnId;
         if (isValidColumnId === false) {
           throw new Error(`Invalid column id: ${sortOption.columnId}. Column Id should be an integer number between 1 and ${maxColumnId}.`);
         }
+
         let isValidSortDirection = sortOption.sortDirection === 'asc' || sortOption.sortDirection === 'desc';
         if (isValidSortDirection === false) {
           throw new Error(`Invalid sort direction: '${sortOption.sortDirection}'. Sort direction should be one of the following: 'asc', 'desc' or undefined.`);
@@ -106,10 +108,12 @@ export class Grid {
 
       // Apply sort options (cached)
       let sorts = this.sortOptions.map(sortOption => {
-        let column = this.columns.find(c => c.id == sortOption.columnId);
+        let column = this.columns[sortOption.columnId - 1];
         let sort = column.setSortDirection(sortOption.sortDirection);
+
         return sort;
       });
+
       this.storeManager.getDataStore().applySortOptions(sorts);
     }
 
@@ -226,9 +230,10 @@ export class Grid {
     let sortOrder = this.storeManager.getDataStore().changeSortProcessingOrder(sort);
     this.sortOptions = sortOrder.map(sort => {
       let sortOption = {
-        columnId: sort.column.id,
+        columnId: sort.columnId,
         sortDirection: sort.value
       };
+
       return sortOption;
     });
 

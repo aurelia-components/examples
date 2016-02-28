@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'Eonasdan/bootstrap-datetimepicker';
 import moment from 'moment';
 import {Timespan} from 'utils';
+import {customElementHelper} from 'utils';
 
 @customElement('timepicker')
 @inject(Element)
@@ -43,14 +44,23 @@ export class Timepicker {
     let options = $.extend({}, defaultOpts, this.options);
     this.datepicker = this.$element.datetimepicker(options);
     this.datepicker.on('dp.change', (ev) => {
+      const el = this.element;
       let elVal = input.value;
       if (elVal === '') {
         this.value = undefined;
+        customElementHelper.dispatchEvent(el, 'change', {
+          value: this.value,
+          element: el
+        });
       } else {
         let newTimespan = new Timespan(elVal);
         const areSame = newTimespan.equals(this.value);
         if (!areSame) {
           this.value = newTimespan;
+          customElementHelper.dispatchEvent(el, 'change', {
+            value: this.value,
+            element: el
+          });
         }
       }
     });

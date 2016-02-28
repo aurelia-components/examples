@@ -49,7 +49,14 @@ export class Datepicker {
     this.datepicker = this.$element.datetimepicker(this.options);
 
     this.datepicker.on('dp.change', (event) => {
-      this.value = event.date;
+      const value = event.date;
+      const el = this.element;
+      customElementHelper.dispatchEvent(el, 'change', {
+        value: value,
+        element: el
+      });
+
+      this.value = value;
     });
 
     this.valueChanged(this.value);

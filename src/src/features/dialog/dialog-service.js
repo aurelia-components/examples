@@ -42,7 +42,8 @@ export class DialogService {
     return this.openConfirmDialog({
       title: opts.title || 'Внимание!',
       msg: opts.msg,
-      okBtnClass: 'btn btn-danger',
+      icon: 'fa-trash-o',
+      okBtnClass: 'btn-danger',
       okBtnText: opts.okBtnText || 'Изтрий',
       cancelBtnText: opts.cancelBtnText || 'Отказ',
       showCancelButton: opts.showCancelButton || true
@@ -59,7 +60,8 @@ export class DialogService {
     let options = {
       title: opts.title || 'Внимание!',
       msg: opts.msg,
-      okBtnClass: opts.okBtnClass || 'btn btn-secondary',
+      icon: opts.icon || '',
+      okBtnClass: opts.okBtnClass || 'btn-secondary',
       okBtnText: opts.okBtnText || 'Oк',
       cancelBtnText: opts.cancelBtnText || 'Отказ',
       showCancelButton: opts.showCancelButton || true

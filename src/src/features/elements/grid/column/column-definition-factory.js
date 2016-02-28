@@ -9,10 +9,10 @@ export class ColumnDefinitionFactory {
     this.colDefinitions = gridDefinition.cols;
     this.rowAttrs = gridDefinition.rowAttrs;
     this.grid = grid;
-    this.columnId = 1;
   }
 
   create(columnsMetadata) {
+    this.columnId = 1;
     if (columnsMetadata === undefined) {
       return this._createFromColumnDefintions();
     } else {

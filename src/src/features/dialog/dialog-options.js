@@ -13,7 +13,7 @@ export class DialogOptions {
     this.title = opts.title;
     this.msg = opts.msg;
 
-    this.okBtnClass = opts.okBtnClass;
+    this.okBtnType = opts.okBtnClass;
     this.okBtnText = opts.okBtnText;
 
     this.cancelBtnText = opts.cancelBtnText;
@@ -21,5 +21,7 @@ export class DialogOptions {
 
     this.viewModel = opts.viewModel;
     this.model = opts.model;
+
+    this.icon = opts.icon;
   }
 }

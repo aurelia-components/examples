@@ -2,7 +2,10 @@ template
   require(from="Eonasdan/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css")
   require(from="../style.css")
 
-  div.input-group.date
+  div.input-group.date(show.bind="icon")
     input.form-control(type="text", disabled.bind="disabled", readonly.bind="readonly")
     span.input-group-addon(class="${disabled ? 'cursor-disabled' : ''} ${readonly ? 'cursor-readonly' : ''}")
       span.fa.fa-calendar
+
+  div(show.bind="icon === false")
+    input.form-control(type="text", disabled.bind="disabled", readonly.bind="readonly")

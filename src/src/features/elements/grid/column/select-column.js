@@ -44,7 +44,8 @@ export class SelectColumn extends BaseColumn {
     if (this.hasFilterValue()) {
       let result = [{
         name: this.field,
-        value: this.filterValue
+        value: this.filterValue,
+        valueType: 'select'
       }];
 
       return result;

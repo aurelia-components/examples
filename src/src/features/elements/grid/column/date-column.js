@@ -5,19 +5,19 @@ export class DateColumn extends BaseColumn {
   constructor(config, template, grid, columnId) {
     super(config, template, grid, columnId);
 
-    this.filterValueFrom = this._setFilterDateValue('from') || this._subscribe('from.bind');
-    this.filterValueTo = this._setFilterDateValue('to') || this._subscribe('to.bind');
+    this.filterValueFrom = this._setFilterDateValue('from') || this._subscribe('from.bind', 'filterValueFrom');
+    this.filterValueTo = this._setFilterDateValue('to') || this._subscribe('to.bind', 'filterValueTo');
   }
 
-  _subscribe(propName) {
+  _subscribe(propName, columnPropertyName) {
     let viewModelPropertyName = this.config[propName];
     if (viewModelPropertyName === undefined) {
-      return viewModelProperty;
+      return viewModelPropertyName;
     }
 
-    const value = this.subscribe(viewModelPropertyName, 'filterValueFrom');
+    const value = this.subscribe(viewModelPropertyName, columnPropertyName);
 
-    return this._getMomentValue(value, true);
+    return this._getMomentValue(value);
   }
 
   setColumnProperty(propertyName, newValue) {
@@ -26,7 +26,11 @@ export class DateColumn extends BaseColumn {
 
   _getMomentValue(value, throwErrorIfNotValidDate) {
     if (value === undefined) {
-      throw new Error('Argument exception! Value is not defined!');
+      if (throwErrorIfNotValidDate) {
+        throw new Error('Argument exception! Value is not defined!');
+      } else {
+        return null;
+      }
     }
 
     const date = value && value.constructor.name === 'Moment' ? value : moment(value);

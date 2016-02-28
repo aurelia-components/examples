@@ -11,21 +11,24 @@ export class Datepicker {
   @bindable options = null;
   @bindable disabled = false;
   @bindable readonly = false;
+  @bindable icon = true;
 
   constructor(element) {
     this.element = element;
   }
 
   bind() {
-    let self = this;
-    const defaultOpts = {
+    let defaultOpts = {
       collapse: false,
       useCurrent: false,
       calendarWeeks: true,
       debug: false,
       locale: moment.locale(),
-      format: 'L',
-      icons: {
+      format: 'L'
+    };
+
+    if (this.icon) {
+      defaultOpts.icons = {
         time: 'fa fa-clock-o',
         date: 'fa fa-calendar',
         up: 'fa fa-chevron-up',
@@ -35,11 +38,16 @@ export class Datepicker {
         today: 'fa fa-crosshairs',
         clear: 'fa fa-trash',
         close: 'fa fa-times'
-      }
-    };
+      };
+    }
 
-    let div = this.element.firstElementChild;
-    this.$element = $(div);
+    if (this.icon) {
+      let div = this.element.firstElementChild;
+      this.$element = $(div);
+    } else {
+      let div = this.element.children[1].firstElementChild;
+      this.$element = $(div);
+    }
 
     this.options = this.options || {};
     if (this.options.format !== undefined) {
@@ -50,7 +58,14 @@ export class Datepicker {
     this.datepicker = this.$element.datetimepicker(this.options);
 
     this.datepicker.on('dp.change', (event) => {
-      this.value = event.date;
+      const value = event.date;
+      const el = this.element;
+      customElementHelper.dispatchEvent(el, 'change', {
+        value: value,
+        element: el
+      });
+
+      this.value = value;
     });
 
     this.valueChanged(this.value);

@@ -16,7 +16,7 @@ export class InputColumn extends BaseColumn {
   }
 
   hasFilterValue() {
-    return this.filterValue !== '';
+    return this.filterValue !== '' && this.filterValue !== undefined;
   }
 
   matchFilter(filteredValue) {
@@ -37,7 +37,8 @@ export class InputColumn extends BaseColumn {
     if (this.hasFilterValue()) {
       let result = [{
         name: this.field,
-        value: this.filterValue
+        value: this.filterValue,
+        valueType: 'string'
       }];
 
       return result;
