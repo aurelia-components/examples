@@ -1,5 +1,5 @@
-import { PageObjectSkeleton } from './../skeleton.po.js'
-import { Constants } from './../constants.js';
+import { PageObjectSkeleton } from '../skeleton.po.js';
+import { Constants } from '../constants.js';
 
 export class PageObjectGrid extends PageObjectSkeleton {
 
