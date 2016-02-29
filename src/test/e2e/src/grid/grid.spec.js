@@ -1,5 +1,5 @@
 import { PageObjectGrid } from './grid.po.js';
-import { Constants } from './../constants.js';
+import { Constants } from '../constants.js';
 
 describe('aurelia grid pagination', () => {
   let poGrid;
