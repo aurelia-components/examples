@@ -22,20 +22,19 @@ module.exports = function(config) {
     },
 
     proxies: {
-        '/base/libs' : '/base/src/libs',
-        '/base/features' : '/base/src/features',
-        '/base/jspm_packages/github/HubSpot' : '/base/jspm_packages/github/hubspot'
+      '/base/libs': '/base/src/libs',
+      '/base/features': '/base/src/features',
+      '/base/jspm_packages/github/HubSpot': '/base/jspm_packages/github/hubspot',
+      '/base/select2.js': '/base/src/features/elements/select2/select2/select2.js'
     },
 
     // list of files / patterns to load in the browser
     files: [
-    'node_modules/es6-shim/es6-shim.min.js',
-    'jspm_packages/github/components/jquery@2.2.0/jquery.min.js', 
-    'src/libs/jquery.signalR.js',
-    'src/libs/jubs.js'
+      'node_modules/es6-shim/es6-shim.min.js',
+      'jspm_packages/github/components/jquery@2.2.0/jquery.min.js',
+      'src/libs/jquery.signalR.js'
     ],
 
-    // list of files to exclude
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -76,13 +75,12 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [
-        //'PhantomJS',
-        'Chrome', 
-        //'Firefox',
-        //'IE',
-        //'Safari
+      //'PhantomJS',
+      'Chrome',
+      //'Firefox',
+      //'IE',
+      //'Safari
     ],
-
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

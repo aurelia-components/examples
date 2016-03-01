@@ -99,9 +99,7 @@ describe('aurelia grid filtering', () => {
       .toBeTruthy();
   });
 
-  it(
-    "should change boolean/input/select filters and check data in the grid rows",
-    () => {
+  it("should change boolean/input/select filters and check data in the grid rows", () => {
       poGrid.changeNameFilter('alex');
 
       poGrid.getGridColumnsByFieldName('name')
@@ -136,8 +134,7 @@ describe('aurelia grid sorting', () => {
     browser.sleep(Constants.PageLoadingTime);
   });
 
-  it("should sort columns ascending/descending on clicking column header",
-    () => {
+  it("should sort columns ascending/descending on clicking column header", () => {
       poGrid.changeNameSortDirection();
       poGrid.changeIdSortDirection();
       poGrid.changeIdSortDirection();

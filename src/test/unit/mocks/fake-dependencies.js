@@ -1,7 +1,7 @@
 import { inject, BindingEngine } from 'aurelia-framework';
 import { moment } from 'moment';
 
-@inject(BindingEngine);
+@inject(BindingEngine)
 export class Grid {
   constructor(bindingEngine) {
     this.bindingEngine = bindingEngine;
