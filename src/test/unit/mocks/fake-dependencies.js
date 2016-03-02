@@ -41,6 +41,10 @@ export class Column {
     return this.field;
   }
 
+  hasFilter(){
+    return true;
+  }
+
   matchFilter(filteredValue) {
     switch (this.type) {
       case 'input':

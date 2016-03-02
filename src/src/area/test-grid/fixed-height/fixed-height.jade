@@ -1,22 +1,26 @@
 template
-  h1 Grid Test
+  div.container
+    div.card
+      div.card-header
+        h3 Grid sample with fixed height
+      div.card-block
+        p Sample grid with fixed height
+        button(click.trigger="addItem()") Add item
 
-  button(click.trigger="addItem()") Add item
-    
-  button(click.trigger="changeItem()") change item
-  
-  //grid(data.bind="data", height="150", selection="multiselect", on-select.call="itemSelected($event)")
-  grid(data.bind="data", height="150", selection="single", on-select.call="itemSelected($event)")
-    grid-row
-      grid-col(heading="ID", field="id", width="200", filter="input")
-        | This is a
-        i column template
-        | :
-        strong ${ $item.id }
+        button(click.trigger="changeItem()") change item
 
-      grid-col(heading="Name", field="name")
-        button.btn.btn-primary(click.delegate="itemClicked($item)")
-          | Click me I'm ... ${ $item.name }!
+        //grid(data.bind="data", height="150", selection="multiselect", on-select.call="itemSelected($event)")
+        grid(data.bind="data", height="150", selection="single", on-select.call="itemSelected($event)")
+          grid-row
+            grid-col(heading="ID", field="id", width="200", filter="input")
+              | This is a
+              i column template
+              | :
+              strong ${ $item.id }
 
-      grid-col(heading="Test", field="name")
-        a(href="#") Jump to somewhere
+            grid-col(heading="Name", field="name")
+              button.btn.btn-primary(click.delegate="itemClicked($item)")
+                | Click me I'm ... ${ $item.name }!
+
+            grid-col(heading="Test", field="name")
+              a(href="#") Jump to somewhere
