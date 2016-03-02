@@ -1,25 +1,55 @@
 template
-  h1 Grid Test
-  div(style="height: 200px;border:1px solid red;")
-    grid(show-filters.bind="true", height="auto", data.bind="data")
-      grid-row(popover="view: ./popover-view.html; placement: top; trigger: insideClick; width: 250")
-        grid-col(heading="ID", field="id", width="200", filter="input")
-          | This is a
-          i column template
-          | :
-          strong ${ $item.id }
+  div.container
+    div.card
+      div.card-header
+        h3 Grid auto heigth inheritence, row popover usage and data manipulation
+      div.card-block
+        div.card
+          div.card-header
+            h4 Features
+          div.card-block
+            ul
+              li Grid size is relative to the parent (in this case - the 
+                code.language-js div
+                | with red border)
+                p Usage:
+                  code.language-js  
+                    b grid(height="auto")  
+              li Grid popover bound to the grid row
+                p Usage:
+                  code.language-js
+                    b grid-row(popover="your options here...")  
+                  | - check 
+                  a(href='#/test-popover') popover page 
+                  | for available options
+              li Manipulating grid data - whenever an item is added, removed or changed in the initialy bound  array to the data.bind attribute, the grid is rerendered reflecting the changes
+                p Usage(locally manipulated data): 
+                  code.language-js
+                    b grid(data.bind="your array...")
+                  | <br/> Usage(remotelly manipulated data): 
+                  code.language-js
+                    b grid(read.call="your function...")
 
-        grid-col(heading="Active", field="isActive", filter="boolean")
-          | ${$item.isActive}
-        grid-col(heading="Name", field="name")
-          button.btn.btn-primary(click.delegate="itemClicked($item)")
-            | Click me I'm ... ${ $item.name }!
+        div(style="height: 300px;border:1px solid red;")
+          grid(show-filters.bind="true", height="auto", data.bind="data")
+            grid-row(popover="view: ./popover-view.html; placement: top; trigger: insideClick; width: 250")
+              grid-col(heading="ID", field="id", width="200", filter="input")
+                | This is a
+                i column template
+                | :
+                strong ${ $item.id }
+  
+              grid-col(heading="Active", field="isActive", filter="boolean")
+                | ${$item.isActive}
+              grid-col(heading="Name", field="name")
+                button.btn.btn-primary(click.delegate="itemClicked($item)")
+                  | Click me I'm ... ${ $item.name }!
+  
+              grid-col(heading="Test", field="name")
+                a(href="#") Jump to somewhere
 
-        grid-col(heading="Test", field="name")
-          a(href="#") Jump to somewhere
-
-  hr
-  button(click.trigger="addItem()") Add item
-    
-  button(click.trigger="changeItem()") change item
+        hr
+        button(click.trigger="addItem()") Add item
+        
+        button(click.trigger="changeItem()") change item
   
