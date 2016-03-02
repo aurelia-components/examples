@@ -27,13 +27,13 @@ export class SelectColumn extends BaseColumn {
     return this.filterValue !== undefined;
   }
 
-  matchFilter(filteredValue) {
-    if (filteredValue === undefined) {
-      throw new Error('Filtered value can\'t be undefined!');
+  matchFilter(valueToFilter) {
+    if (valueToFilter === undefined) {
+      throw new Error('Value to filter can\'t be undefined!');
     }
 
     if (this.hasFilterValue()) {
-      return this.filterValue === filteredValue;
+      return this.filterValue === valueToFilter;
     }
 
     // no filter value -> match everything

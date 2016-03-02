@@ -4,3 +4,5 @@ export function configure(aurelia, configCallback) {
   aurelia.globalResources('./list-search/list-search');
   aurelia.globalResources('./checkbox-search/checkbox-search');
 }
+
+export {searchOperator} from './search-operator';

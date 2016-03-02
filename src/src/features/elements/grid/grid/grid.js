@@ -230,10 +230,9 @@ export class Grid {
     let sortOrder = this.storeManager.getDataStore().changeSortProcessingOrder(sort);
     this.sortOptions = sortOrder.map(sort => {
       let sortOption = {
-        columnId: sort.columnId,
+        columnId: sort.column.id,
         sortDirection: sort.value
       };
-
       return sortOption;
     });
 

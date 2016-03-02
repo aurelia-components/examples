@@ -34,6 +34,10 @@ export class BaseColumn {
     this.filterValue = config['filter-value'] || '';
   }
 
+  hasFilter(){
+    return this.filter;
+  }
+
   hasFilterValue() {
     throw new Error('Unimplemented method!');
   }
@@ -84,7 +88,7 @@ export class BaseColumn {
     this.grid.changeSort({
       name: this.field,
       value: this.sortDirection,
-      columnId: this.id
+      column: this
     });
   }
 
@@ -93,7 +97,7 @@ export class BaseColumn {
     let sort = {
       name: this.field,
       value: this.sortDirection,
-      columnId: this.id
+      column: this
     };
 
     return sort;

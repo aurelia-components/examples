@@ -62,7 +62,7 @@ export class BaseStore {
 
   changeSortProcessingOrder(sort) {
     let index = this.sortProcessingOrder.findIndex((el, index) => {
-      if (el.columnId === sort.columnId) {
+      if (el.column === sort.column) {
         return true;
       }
 

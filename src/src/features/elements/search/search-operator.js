@@ -1,3 +1,4 @@
+// todo: camelCase
 export const searchOperator = {
   Equal: 0,
   NotEqual: 1,

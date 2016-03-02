@@ -55,7 +55,7 @@ export class Select3 {
 
     let valueId = this.opts.modelValueBind ? this.value[this.opts.id] : this.value;
 
-    if(isNaN(valueId) === false && this.filteredData.every(x => Number.isInteger(x.item[this.opts.id]))){
+    if (isNaN(valueId) === false && this.filteredData.every(x => Number.isInteger(x.item[this.opts.id]))) {
       valueId = parseInt(valueId, 10);
     }
 
@@ -136,7 +136,7 @@ export class Select3 {
       this.selectHoveredItem();
     }
 
-    if(this.value !== this.opts.emptyValue) {
+    if (this.value !== this.opts.emptyValue) {
       this.taskQueue.queueTask(()=> {
         let valueInput = this.element.getElementsByClassName('select3-value-box')[0];
         valueInput.focus();
@@ -158,15 +158,15 @@ export class Select3 {
     if (this.value === this.opts.emptyValue) {
       this.openDropdown();
     } else {
-      if(this.isDropdownOpen){
+      if (this.isDropdownOpen) {
         this.closeDropdown();
       }
     }
   }
 
   selectItem(datum) {
-    if(datum === null || datum === undefined){
-       return;
+    if (datum === null || datum === undefined) {
+      return;
     }
 
     this.value = this.opts.modelValueBind ? datum.item : datum.item[this.opts.id];

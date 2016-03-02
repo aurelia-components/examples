@@ -32,7 +32,7 @@ export class LocalStore extends BaseStore {
 
       for (let i = this.columnDefinitions.length - 1; i >= 0; i--) {
         let col = this.columnDefinitions[i];
-        if (col.filter === false) {
+        if (col.hasFilter() === false) {
           continue;
         }
 

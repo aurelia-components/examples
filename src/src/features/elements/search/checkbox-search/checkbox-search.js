@@ -1,5 +1,4 @@
 import {inject, customElement, bindable} from 'aurelia-framework';
-import {searchOperator} from '../search-operator';
 import {customElementHelper} from 'utils';
 
 @customElement('checkbox-search')
@@ -7,6 +6,7 @@ import {customElementHelper} from 'utils';
 export class CheckboxSearch {
   @bindable entity = '';
   @bindable property = '';
+  @bindable operator = '';
   @bindable value = '';
   @bindable isChecked = false;
 
@@ -26,7 +26,7 @@ export class CheckboxSearch {
         criteria: {
           name: this.property,
           value: this.value,
-          operator: searchOperator.Equal
+          operator: this.operator
         }
       }
     );
