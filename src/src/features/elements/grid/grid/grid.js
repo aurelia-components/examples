@@ -118,13 +118,14 @@ export class Grid {
     }
 
     // Listen for window resize so we can re-flow the grid layout
-    this.resizeListener = window.addEventListener('resize', (() => {
+    this.resizeListener = (() => {
       if (this.height === 'auto') {
         this.syncGridHeight();
       }
 
       this.syncColumnHeadersWithColumns();
-    }).bind(this));
+    }).bind(this);
+    window.addEventListener('resize', this.resizeListener);
 
 
     // The table body element will host the rows
