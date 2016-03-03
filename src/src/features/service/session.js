@@ -1,20 +1,21 @@
-/**
- * Created by moshensky on 6/16/15.
- */
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject} from 'aurelia-dependency-injection';
 import {Router} from 'aurelia-router';
 import {Logger} from './logger';
+import {UserLoggedInEvent} from './event/user-logged-in-event';
+import {UserLoggedOutEvent} from './event/user-logged-out-event';
 
 const constant = {
   appData: 'appData'
 };
 
-@inject(Router, Logger)
+@inject(Router, Logger, EventAggregator)
 export class Session {
 
-  constructor(router, logger) {
+  constructor(router, logger, eventAggregator) {
     this.router = router;
-    this.log = logger;
+    this.logger = logger;
+    this.eventAggregator = eventAggregator;
 
     this.initUserData();
 
@@ -33,16 +34,20 @@ export class Session {
     this.isBusy = false;
   }
 
-  setUser(data) {
+  loginUser(data) {
+    // todo: check data params
     if (data) {
       localStorage[constant.appData] = JSON.stringify(data);
       this.restoreData();
+    } else {
+      throw new Error('Argument Exception!');
     }
   }
 
-  clearUser() {
+  logoutUser() {
     localStorage.clear();
     this.initUserData();
+    this.eventAggregator.publish(new UserLoggedOutEvent());
   }
 
   userHasAccessRight(requiredAccessRight) {
@@ -99,7 +104,8 @@ export class Session {
     this.userAccessRights['access'] = true;
 
     this.isLoggedIn = true;
-    this.router.navigate('');
+    this.token = data.token;
+    this.eventAggregator.publish(new UserLoggedInEvent(data.token));
   }
 
   rememberedToken() {

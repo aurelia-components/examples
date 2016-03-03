@@ -62,6 +62,9 @@ export class Config {
   setLoggerService(loggerOpts) {
     Config.loggerOpts = loggerOpts;
   }
+  setWSService(wsOpts) {
+    Config.wsOpts = wsOpts;
+  }
 
   routerAuthStep(opts) {
     Config.routerAuthStepOpts = opts;

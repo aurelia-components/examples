@@ -21,11 +21,11 @@ export class Http {
     this.locale = Locale.Repository.default;
     this.eventAggregator = eventAggregator;
 
-    this.requestsCount = 0;
     this.host = Config.httpOpts.serviceHost;
     this.origin = this.host + Config.httpOpts.serviceApiPrefix;
     this.authOrigin = Config.httpOpts.authHost;
     this.hosts = Config.httpOpts.hosts || {};
+    // todo: this is unused
     this.loadingMaskDelay = Config.httpOpts.loadingMaskDelay || 1000;
     this.requestTimeout = Config.httpOpts.requestTimeout;
 
@@ -35,28 +35,11 @@ export class Http {
   }
 
   _showLoadingMask() {
-    this.requestsCount += 1;
-    if (this.requestsCount === 1) {
-      if (this.loadingMaskDelay > 0) {
-        this._queryTimeout = window.setTimeout(() => {
-          this.eventAggregator.publish(new HttpRequestStartedMessage());
-        }, this.loadingMaskDelay);
-      } else {
-        this.loadingMask.show();
-      }
-    }
+    this.eventAggregator.publish(new HttpRequestStartedMessage());
   }
 
   _hideLoadingMask() {
-    this.requestsCount -= 1;
-    if (this.requestsCount <= 0) {
-      if (this._queryTimeout) {
-        window.clearTimeout(this._queryTimeout);
-      }
-
-      this.eventAggregator.publish(new HttpRequestFinishedMessage());
-      this.requestsCount = 0;
-    }
+    this.eventAggregator.publish(new HttpRequestFinishedMessage());
   }
 
   get(url, data) {
@@ -235,6 +218,7 @@ export class Http {
         x.withHeader('Content-Type', 'application/x-www-form-urlencoded');
       });
 
+    // todo: refactor out $.param
     const promise = client.post('token', $.param(data));
     promise.then(this.loginHandle.bind(this));
     promise.catch(this.errorHandler.bind(this));
@@ -283,7 +267,7 @@ export class Http {
       claims = JSON.parse(claims);
     }
 
-    this.session.setUser({
+    this.session.loginUser({
       token: token,
       userName: data.userName || 'please give me a name!',
       userClaims: claims,

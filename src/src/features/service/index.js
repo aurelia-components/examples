@@ -9,6 +9,9 @@ export {HttpRequestStartedMessage, HttpRequestFinishedMessage,
   HttpBadRequestMessage, HttpServerErrorRequestMessage,
   HttpSessionTimedOutMessage} from './http-client/http-client-messages';
 
+export {UserLoggedInEvent} from './event/user-logged-in-event';
+export {UserLoggedOutEvent} from './event/user-logged-out-event';
+
 export {AccessRightsAuthorizeStep, RolesAuthorizeStep} from './authorize-steps';
 
 export function configure(aurelia, configCallback) {
