@@ -1,7 +1,8 @@
 import {inject, customElement, bindable, bindingMode, BindingEngine, TaskQueue} from 'aurelia-framework';
-import {Tokenizers} from './tokenizers'
-import {Datum} from './datum'
-import {KEYS} from './keys'
+import {Tokenizers} from './tokenizers';
+import {Datum} from './datum';
+import {KEYS} from './keys';
+import {customElementHelper} from 'utils';
 
 @customElement('select3')
 @inject(Element, BindingEngine, TaskQueue)
@@ -55,6 +56,7 @@ export class Select3 {
 
     let valueId = this.opts.modelValueBind ? this.value[this.opts.id] : this.value;
 
+    //todo: optimize check for "are all ids numbers?"
     if (isNaN(valueId) === false && this.filteredData.every(x => Number.isInteger(x.item[this.opts.id]))) {
       valueId = parseInt(valueId, 10);
     }
@@ -261,10 +263,28 @@ export class Select3 {
     this.scrollHoveredLiIntoView(true);
   }
 
+  /* todo: separate methods for when the previous hovered li is visible and not
+   if visible -> only change the scrollTop of parent by one li height
+   else -> this method as is
+   */
   scrollHoveredLiIntoView(scrollToTop) {
-    let datumLis = this.element.getElementsByClassName('hovered');
-    if (datumLis.length > 0) {
-      datumLis[0].scrollIntoView(scrollToTop);
+    let hoveredLis = this.element.getElementsByClassName('hovered');
+    if (hoveredLis.length > 0) {
+      let target = hoveredLis[0];
+
+      let parentScrollTop = target.offsetTop - target.parentNode.offsetTop;
+
+      if (scrollToTop === true) {
+        parentScrollTop += target.offsetHeight;
+      } else {
+        parentScrollTop -= target.offsetHeight;
+      }
+
+      // todo: remove hack! (currently 11 LIs are visible)
+      // hovered item to be in the center of the dropdown
+      parentScrollTop -= 5 * target.offsetHeight;
+
+      target.parentNode.scrollTop = parentScrollTop;
     }
   }
 
@@ -277,6 +297,7 @@ export class Select3 {
   }
 
   reorientDropdownIfNeeded() {
+    // todo: use query selector, maybe keep this element in this?
     let dropdown = this.element.getElementsByClassName('select3-dropdown')[0];
     let currentBottomStyle = dropdown.style.bottom;
     let rect = dropdown.getBoundingClientRect();
@@ -295,6 +316,7 @@ export class Select3 {
   }
 
   search(query) {
+    // todo: check for empty or null or not an array? maybe in items changed and throw error?
     if (this.items === undefined) {
       this.filteredData = [];
       return;

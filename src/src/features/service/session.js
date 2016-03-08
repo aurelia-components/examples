@@ -1,5 +1,5 @@
+import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {inject} from 'aurelia-dependency-injection';
 import {Router} from 'aurelia-router';
 import {Logger} from './logger';
 import {UserLoggedInEvent} from './event/user-logged-in-event';

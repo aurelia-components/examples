@@ -154,6 +154,7 @@ export class Grid {
   }
 
   attached() {
+    this.canLoadData = true;
     this._height = this.height;
     if (this.height === 'auto') {
       this.syncGridHeight();
@@ -273,15 +274,17 @@ export class Grid {
 
   /* === Data === */
   refresh() {
-    this.loading = true;
-    this.storeManager.getDataStore().getData().then(data => {
-      // todo: enable case for empty column?
-      //this.checkData(result.data);
-      this.rowData = data;
-      this.loading = false;
+    if (this.canLoadData === true) {
+      this.loading = true;
+      this.storeManager.getDataStore().getData().then(data => {
+        // todo: enable case for empty column?
+        //this.checkData(result.data);
+        this.rowData = data;
+        this.loading = false;
 
-      this.taskQueue.queueTask(() => this.syncColumnHeadersWithColumns());
-    });
+        this.taskQueue.queueTask(() => this.syncColumnHeadersWithColumns());
+      });
+    }
   }
 
   checkData(data) {

@@ -1,7 +1,7 @@
 // todo: migrate to aurelia-fetch-client
 import {HttpClient} from 'aurelia-http-client';
 import $ from 'jquery';
-import {inject} from 'aurelia-dependency-injection';
+import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {HttpRequestStartedMessage, HttpRequestFinishedMessage,
   HttpBadRequestMessage, HttpServerErrorRequestMessage,

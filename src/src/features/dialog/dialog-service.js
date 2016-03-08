@@ -1,7 +1,6 @@
 // todo: get Origin from aurelia-framework and jspm uninstall aurelia-metadata
 import {Origin} from 'aurelia-metadata';
-import {Container} from 'aurelia-dependency-injection';
-import {CompositionEngine, inject} from 'aurelia-framework';
+import {Container, CompositionEngine, inject} from 'aurelia-framework';
 import {DialogController} from './dialog-controller';
 import {DialogRenderer} from './dialog-renderer';
 import {invokeLifecycle} from './lifecycle';

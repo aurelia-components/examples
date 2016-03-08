@@ -35,7 +35,10 @@ export class RemoteStore extends BaseStore {
 
   getSorters() {
     return this.sortProcessingOrder.map(sorter => {
-      return sorter;
+      return {
+        name: sorter.name,
+        value: sorter.value
+      };
     });
   }
 

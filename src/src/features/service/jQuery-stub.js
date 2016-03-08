@@ -1,4 +1,4 @@
-import ajax from './ajax';
+//import ajax from './ajax';
 import Promise from 'bluebird';
 
 function fakeQuery(subject){
@@ -39,7 +39,7 @@ function fakeQuery(subject){
 }
 
 window.jQuery = Object.assign(fakeQuery, {
-  ajax,
+  //ajax,
   noop(){},
   isFunction: o => typeof o === 'function',
   isArray: arr => Array.isArray(arr),
