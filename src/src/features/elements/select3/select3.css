@@ -2,11 +2,11 @@
   position: relative;
 }
 
-.select3 .form-control[readonly] {
+.select3 .select3-value-box {
   background-color: white;
 }
 
-.select3 .form-control:disabled {
+.select3 .select3-value-box:disabled {
   background-color: #eceeef;
 }
 

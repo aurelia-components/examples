@@ -86,6 +86,8 @@ export class TestSelect3 {
     ];
 
     this.selectedPerson = this.people[2];
+
+    this.manyPeople = this._generateTestData(10000);
   }
 
   changeArray() {
@@ -94,5 +96,24 @@ export class TestSelect3 {
 
   pushToArray() {
 
+  }
+
+
+  _generateTestData(count) {
+    var data = [];
+    var names = ["charles", "john", "oliver", "fred", "dean", "chris", "pete", "steve", "lee", "rob", "alex", "rose", "mike", "dan", "james", "rebecca", "heather", "kate", "liam"];
+
+    for (var i = 0; i < count; i++) {
+      let name = '';
+      for(let j = 0; j < 5; j++) {
+        name = `${name} ${names[Math.floor(Math.random() * names.length)]}`;
+      }
+      data.push({
+        id: i,
+        name: name
+      });
+    }
+
+    return data;
   }
 }
