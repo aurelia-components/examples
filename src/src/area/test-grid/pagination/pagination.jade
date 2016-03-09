@@ -2,12 +2,12 @@ template
   div.container
     div.card
       div.card-header
-        h1 Pagination 
+        h3 Pagination 
       div.card-block
         div
-          p To make the grid pagable simply add the respective attribute to the grid
+          p To make the grid pagable simply add the respective attribute
           p Usage:
-            code.language-js &lt;grid pagable-bind="true"&gt;&lt;/grid&gt;
+            code.language-js &lt;grid pagable.bind="true"&gt;&lt;/grid&gt;
         br
         p You can customize the pager using the following attributes (note that if the pagable is false the attributes below are ignored)
         ul 
@@ -17,14 +17,6 @@ template
           li Setting visible page buttons count of the pager
             p Usage:
               code.language-js &lt;grid pager-size.bind="10"&gt;&lt;/grid&gt;
-          li
-            ul Page size select menu
-              li Setting select menu visibility (if false the options below are ignored)
-                p Usage:
-                  code.language-js &lt;grid show-page-size-box.bind="false"&gt;&lt;/grid&gt;
-              li Setting page sizes options  in the pager select menu
-                 p Usage:
-                  code.language-js &lt;grid page-sizes.bind="[20, 30, 40]"&gt;&lt;/grid&gt;
           li Setting first and last page buttons visibility
             p Usage:
               code.language-js &lt;grid show-first-last-buttons.bind="false"&gt;&lt;/grid&gt;

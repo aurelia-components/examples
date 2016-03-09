@@ -1,21 +1,26 @@
 template
-  h1 Pagination 
+  div.container
+    div.card
+      div.card-header
+        h3 Remote pagination 
+      div.card-block
+        p Same usage as the 
+          a(href="#/test-grid/pagination") local pagination
+        button(click.trigger="addItem()") Add item
 
-  button(click.trigger="addItem()") Add item
-    
-  button(click.trigger="changeItem()") change item
-  
-  grid(read.call="getData($event)", height="150", style="width: 900px", pageable.bind="true")
-    grid-row
-      grid-col(heading="ID", field="id", width="200", filter="input")
-        | This is a
-        i column template
-        | : 
-        strong ${ $item.id }
+        button(click.trigger="changeItem()") change item
 
-      grid-col(heading="Name", field="name")
-        button.btn.btn-primary(click.delegate="itemClicked($item)")
-          | Click me I'm ... ${ $item.name }!
+        grid(read.call="getData($event)", height="150", style="width: 900px", pageable.bind="true")
+          grid-row
+            grid-col(heading="ID", field="id", width="200", filter="input")
+              | This is a
+              i column template
+              | : 
+              strong ${ $item.id }
 
-      grid-col(heading="Test", field="name")
-        a(href="#") Jump to somewhere
+            grid-col(heading="Name", field="name")
+              button.btn.btn-primary(click.delegate="itemClicked($item)")
+                | Click me I'm ... ${ $item.name }!
+
+            grid-col(heading="Test", field="name")
+              a(href="#") Jump to somewhere

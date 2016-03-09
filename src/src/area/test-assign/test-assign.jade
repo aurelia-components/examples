@@ -1,22 +1,30 @@
 template
-  assign(left-items.bind="unassignedItems",
-    right-items.bind="assignedItems",
-    move-left-handler.bind="moveLeftHandler.bind($this)",
-    move-right-handler.bind="moveRightHandler.bind($this)",
-    move-all-left-handler.bind="moveAllLeftHandler.bind($this)",
-    move-all-right-handler.bind="moveAllRightHandler.bind($this)")
+  div.container
+    div.card
+      div.card-header
+        h3 Assign samples
+      div.card-block
+        p Assign items in the left and right panel with the respective attributes
+        p Using:
+          code.language-js &lt;assign left-items.bind="array" right-items.bind="array" &gt;&lt;/assign&gt;
+        assign(left-items.bind="unassignedItems",
+          right-items.bind="assignedItems",
+          move-left-handler.bind="moveLeftHandler.bind($this)",
+          move-right-handler.bind="moveRightHandler.bind($this)",
+          move-all-left-handler.bind="moveAllLeftHandler.bind($this)",
+          move-all-right-handler.bind="moveAllRightHandler.bind($this)")
 
-  //assign(unassigned-items.bind="unassignedItems",
-    assigned-items.bind="assignedItems",
-    move-handlers.bind="moveHandlers")
+        //assign(unassigned-items.bind="unassignedItems",
+          assigned-items.bind="assignedItems",
+          move-handlers.bind="moveHandlers")
 
-  //div.content-host
-    div.col-xl-6.content-full-height
-      ul
-        li(repeat.for="x of unassignedItems")
-          | ${x.name}
+        //div.content-host
+          div.col-xl-6.content-full-height
+            ul 
+              li(repeat.for="x of unassignedItems")
+                | ${x.name}
 
-    div.col-xl-6.content-full-height
-      ul
-        li(repeat.for="x of unassignedItems")
-          | ${x.name}
+          div.col-xl-6.content-full-height
+            ul
+              li(repeat.for="x of unassignedItems")
+                | ${x.name}
