@@ -1,4 +1,13 @@
 template
+  div.card
+    div.card-header
+      h3 Splitter samples
+    div.card-block
+      ul Use the respective tag with the sizes attribute bound with array of two values representing the percentage of the element used within
+        li 
+          code.language-js &lt;split-horizontal sizes.one-time="[70, 30]" right-items.bind="array" &gt;&lt;/split-horizontal&gt;
+        li
+          code.language-js &lt;split-vertical sizes.one-times="[40, 60]" right-items.bind="array" &gt;&lt;/split-vertcal&gt;
   div(style="overflow: hidden; height: 100%;")
     split-horizontal(sizes.one-time="[70, 30]")
       split-vertical(sizes.one-time="[40, 60]")

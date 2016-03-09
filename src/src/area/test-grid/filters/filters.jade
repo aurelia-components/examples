@@ -1,40 +1,63 @@
 template
-  h1 Grid Test
-  button(click.trigger="toggleFilter()") Toggle filter
-  div
-    | ID: 
-    input(value.bind="num", type="number")
-    | &nbsp; &nbsp; &nbsp;
-    | Active Binded: 
-    label
-      input(type="radio" name="tacos", model.bind="true", checked.bind="boolValue")
-      | True
-      input(type="radio" name="tacos", model.bind="false", checked.bind="boolValue")
-      | False
-      input(type="radio" name="tacos", model.bind="undefined", checked.bind="boolValue")
-      | All
-    | &nbsp; &nbsp; &nbsp;
-    | Date From:
-    datepicker(value.bind="filterDateFrom", style="width:200px")
+  div.container
+    div.card
+      div.card-header
+        h3 Grid Filtering
+      div.card-block
+        ul 
+          li To show grid filters apply the respective attribute
+            p Usage:
+              code.language-js &lt;grid show-filters.bind="true"&gt;&lt;/grid&gt;
+          li Setting fitler type
+            p Usage:
+              code.language-js &lt;grid filter="input"&gt;&lt;/grid&gt;
+              | <br/>  Possible filter types: input, date-from-to, boolean, select
+          li Setting filters inittal value
+              ul Usage:
+                li Input
+                  code.language-js &lt;grid-col filter="input" filter-value.bind="value"&gt;&lt;/grid-col&gt;
+                li Boolean:
+                  code.language-js &lt;grid-col filter="boolean" filter-value.bind="value"&gt;&lt;/grid-col&gt;
+                li Date
+                  code.language-js &lt;grid-col filter="date-from-tom" from.bind="value" to.bind="value"&gt;&lt;/grid-col&gt;
+                li Select
+                  code.language-js &lt;grid-col filter="select" filter-items.bind="value"&gt;&lt;/grid-col&gt;
 
-  hr
-  grid(show-filters.bind="showFilters", data.bind="data", sort-options.bind="sortOptions")
-    grid-row
-      grid-col(heading="ID", field="id", width="200", filter="input", filter-value.bind="num")
-        i column template: 
-          strong ${ $item.id }
+        button(click.trigger="toggleFilter()") Toggle filter
+        div
+        | ID: 
+        input(value.bind="num", type="number")
+        | &nbsp; &nbsp; &nbsp;
+        | Active Binded: 
+        label
+          input(type="radio" name="tacos", model.bind="true", checked.bind="boolValue")
+          | True
+          input(type="radio" name="tacos", model.bind="false", checked.bind="boolValue")
+          | False
+          input(type="radio" name="tacos", model.bind="undefined", checked.bind="boolValue")
+          | All
+        | &nbsp; &nbsp; &nbsp;
+        | Date From:
+        datepicker(value.bind="filterDateFrom", style="width:200px")
 
-      grid-col(heading="Active", field="isActive", filter="boolean")
-        | ${$item.isActive}
+      hr
+      grid(show-filters.bind="showFilters", data.bind="data", sort-options.bind="sortOptions")
+        grid-row
+          grid-col(heading="ID", field="id", width="200", filter="input", filter-value.bind="num")
+            i column template: 
+              strong ${ $item.id }
 
-      grid-col(heading="Active Binded", field="isActive", filter="boolean", filter-value.bind="boolValue")
-        | ${$item.isActive}
+          grid-col(heading="Active", field="isActive", filter="boolean")
+            | ${$item.isActive}
 
-      grid-col(heading="Name", field="name", filter="input", filter-value="le")
-        | I'm ... ${ $item.name }!
+          grid-col(heading="Active Binded", field="isActive", filter="boolean", filter-value.bind="boolValue")
+            | ${$item.isActive}
 
-      grid-col(heading="Test", field="date", filter="date-from-to", from.bind="filterDateFrom", to="2020-12-12")
-        | ${$item.date | shortDateFormat } 
+          grid-col(heading="Name", field="name", filter="input", filter-value="le")
+            | I'm ... ${ $item.name }!
 
-      grid-col(heading="Select", field="type", filter="select", filter-items.bind="selectItems", filter-value.bind="selectedType")
-        | ${$item.id}-${$item.type}
+          grid-col(heading="Test", field="date", filter="date-from-to", from.bind="filterDateFrom", to="2020-12-12")
+            | ${$item.date | shortDateFormat } 
+
+          grid-col(heading="Select", field="type", filter="select", filter-items.bind="selectItems", filter-value.bind="selectedType")
+            | ${$item.id}-${$item.type}

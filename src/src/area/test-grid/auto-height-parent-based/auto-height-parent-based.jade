@@ -14,21 +14,21 @@ template
                 | with red border)
                 p Usage:
                   code.language-js  
-                    b grid(height="auto")  
+                    b &lt;grid height="auto" &gt;&lt;grid&gt;  
               li Grid popover bound to the grid row
                 p Usage:
                   code.language-js
-                    b grid-row(popover="your options here...")  
+                    b &lt;grid-row popover="your options here..."&gt;&lt;grid&gt;  
                   | - check 
                   a(href='#/test-popover') popover page 
                   | for available options
               li Manipulating grid data - whenever an item is added, removed or changed in the initialy bound  array to the data.bind attribute, the grid is rerendered reflecting the changes
                 p Usage(locally manipulated data): 
                   code.language-js
-                    b grid(data.bind="your array...")
+                    b &lt;gridl data.bind="your array..."&gt;&lt;grid&gt;
                   | <br/> Usage(remotelly manipulated data): 
                   code.language-js
-                    b grid(read.call="your function...")
+                    b &lt;grid read.call="your function..."&gt;&lt;grid&gt;
 
         div(style="height: 300px;border:1px solid red;")
           grid(show-filters.bind="true", height="auto", data.bind="data")
