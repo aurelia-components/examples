@@ -104,7 +104,49 @@ export class Select3 {
   }
 
   filteredDataChanged() {
+    this.refillFilteredDataShort();
     this.valueChanged();
+  }
+
+  refillFilteredDataShort() {
+    const halfCount = 5;
+    const fullCount = halfCount * 2 + 1;
+    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
+    let isInFirstHalfCount = hoveredDatumIndex < halfCount;
+    let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
+    let start, end;
+    //if (isInFirstHalfCount && isInLastHalfCount) {
+    //  // take all
+    //  start = 0;
+    //  end = this.filteredData.length;
+    //} else if (isInFirstHalfCount && !isInLastHalfCount) {
+    //  // take first fullCount
+    //  start = 0;
+    //  end = fullCount;
+    //} else if (!isInFirstHalfCount && isInLastHalfCount) {
+    //  // take last fullCount
+    //  end = this.filteredData.length;
+    //  start = end - fullCount;
+    //} else {// !isInFirstHalfCount && !isInLastHalfCount
+    //  //take halfCount before and halfCount after
+    //  start = hoveredDatumIndex - halfCount;
+    //  end = hoveredDatumIndex + halfCount + 1;
+    //}
+
+    start = isInFirstHalfCount ? 0 : isInLastHalfCount ? Math.max(this.filteredData.length - fullCount, 0) : hoveredDatumIndex - halfCount;
+    end = start + fullCount;
+
+    this.filteredDataShort = this.filteredData.slice(start, end);
+  }
+
+  scrollDropdown(e) {
+    let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
+    let newHoveredIndex = hoveredDatumIndex - delta;
+    newHoveredIndex = Math.max(0, newHoveredIndex);
+    newHoveredIndex = Math.min(newHoveredIndex, this.filteredData.length - 1);
+    this.hoveredDatum = this.filteredData[newHoveredIndex];
+    this.refillFilteredDataShort();
   }
 
   searchedItemChanged() {
@@ -224,6 +266,7 @@ export class Select3 {
       // first is hovered -> hover last
       this.hoveredDatum = this.filteredData[this.filteredData.length - 1];
 
+      this.refillFilteredDataShort();
       this.taskQueue.queueMicroTask(()=> {
         this.scrollHoveredLiIntoView(false);
       });
@@ -234,6 +277,7 @@ export class Select3 {
       this.hoveredDatum = this.filteredData[hoveredIndex - 1];
     }
 
+    this.refillFilteredDataShort();
     this.scrollHoveredLiIntoView(false);
   }
 
@@ -250,6 +294,7 @@ export class Select3 {
       // last is hovered -> hover first
       this.hoveredDatum = this.filteredData[0];
 
+      this.refillFilteredDataShort();
       this.taskQueue.queueMicroTask(()=> {
         this.scrollHoveredLiIntoView(true);
       });
@@ -259,6 +304,7 @@ export class Select3 {
       this.hoveredDatum = this.filteredData[hoveredIndex + 1];
     }
 
+    this.refillFilteredDataShort();
     this.scrollHoveredLiIntoView(true);
   }
 
