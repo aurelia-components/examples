@@ -21,7 +21,7 @@ export class Assign {
     this._selectedItem = null;
   }
 
-  unbind(){
+  unbind() {
     this._unsubscribe(this.leftItemsCollectionSubscription);
     this._unsubscribe(this.rightItemsCollectionSubscription);
   }
@@ -47,16 +47,16 @@ export class Assign {
     this.recalculateMoveLeftRightDisabled();
   }
 
-  leftItemsChanged(){
-    if(!(this.leftItems instanceof Array)){
+  leftItemsChanged() {
+    if (!(this.leftItems instanceof Array)) {
       this.leftItems = [];
     }
     this._subscribeToLeftItemsCollectionChanges();
     this.recalculateMoveLeftRightDisabled();
   }
 
-  rightItemsChanged(){
-    if(!(this.rightItems instanceof Array)){
+  rightItemsChanged() {
+    if (!(this.rightItems instanceof Array)) {
       this.rightItems = [];
     }
     this._subscribeToRightItemsCollectionChanges();
@@ -66,7 +66,7 @@ export class Assign {
   select(item, noEventNeeded) {
     this._selectedItem = item;
 
-    if(noEventNeeded !== true) {
+    if (noEventNeeded !== true) {
       customElementHelper.dispatchEvent(this.element, 'select-assign-item', {
         item: item
       });
@@ -76,7 +76,7 @@ export class Assign {
   deselect(item, noEventNeeded) {
     this._selectedItem = null;
 
-    if(noEventNeeded !== true) {
+    if (noEventNeeded !== true) {
       customElementHelper.dispatchEvent(this.element, 'deselect-assign-item', {
         item: item
       });
@@ -171,8 +171,8 @@ export class Assign {
       });
   }
 
-  _unsubscribe(subscription){
-    if(subscription !== undefined){
+  _unsubscribe(subscription) {
+    if (subscription !== undefined) {
       subscription.dispose();
     }
   }

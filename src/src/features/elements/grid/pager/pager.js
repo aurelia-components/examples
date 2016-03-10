@@ -56,14 +56,14 @@ export class Pager {
     this.page = this.cap(this.page);
 
     // Cap the number of pages to render if the count is less than number to show at once
-    var numToRender = this.pageCount < this.numToShow ? this.pageCount : this.numToShow;
+    let numToRender = this.pageCount < this.numToShow ? this.pageCount : this.numToShow;
 
     // The current page should try to appear in the middle, so get the median 
     // of the number of pages to show at once - this will be our adjustment factor
-    var indicatorPosition = Math.ceil(numToRender / 2);
+    let indicatorPosition = Math.ceil(numToRender / 2);
 
     // Subtract the pos from the current page to get the first page no
-    var firstPageNumber = this.page - indicatorPosition + 1;
+    let firstPageNumber = this.page - indicatorPosition + 1;
 
     // If the first page is less than 1, make it 1
     if (firstPageNumber < 1) {
@@ -72,22 +72,22 @@ export class Pager {
 
     // Add the number of pages to render
     // remember to subtract 1 as this represents the first page number
-    var lastPageNumber = firstPageNumber + numToRender - 1;
+    let lastPageNumber = firstPageNumber + numToRender - 1;
 
     // If the last page is greater than the page count
     // add the difference to the first/last page
     if (lastPageNumber > this.pageCount) {
-      var dif = this.pageCount - lastPageNumber;
+      let dif = this.pageCount - lastPageNumber;
 
       firstPageNumber += dif;
       lastPageNumber += dif;
     }
 
-    var pages = [];
+    let pages = [];
 
     for (var i = firstPageNumber; i <= lastPageNumber; i++) {
       pages.push(i);
-    };
+    }
 
     this.pages = pages;
 

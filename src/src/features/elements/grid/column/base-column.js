@@ -28,13 +28,13 @@ export class BaseColumn {
     this.filter = config.filter || false;
 
     if (!this.field && (this.sort || this.filter)) {
-      throw new Error("field is required");
+      throw new Error('field is required');
     }
 
     this.filterValue = config['filter-value'] || '';
   }
 
-  hasFilter(){
+  hasFilter() {
     return this.filter;
   }
 
@@ -92,7 +92,7 @@ export class BaseColumn {
     });
   }
 
-  setSortDirection(sortDirection){
+  setSortDirection(sortDirection) {
     this.sortDirection = sortDirection;
     let sort = {
       name: this.field,

@@ -1,7 +1,7 @@
 //import ajax from './ajax';
 import Promise from 'bluebird';
 
-function fakeQuery(subject){
+function fakeQuery(subject) {
   let events = {};
 
   if (subject && subject === subject.window) {
@@ -15,32 +15,33 @@ function fakeQuery(subject){
 
   return {
     0: subject,
-    unbind(event, handler){
+    unbind(event, handler) {
       let handlers = events[event] || [];
 
-      if (handler){
+      if (handler) {
         let idx = handlers.indexOf(handler);
-        if (idx !== -1) handlers.splice(idx, 1)
+        if (idx !== -1) handlers.splice(idx, 1);
       } else {
         handlers = [];
       }
 
       events[event] = handlers;
     },
-    bind(event, handler){
+    bind(event, handler) {
       let current = events[event] || [];
       events[event] = current.concat(handler);
     },
-    triggerHandler(event, args){
+    triggerHandler(event, args) {
       let handlers = events[event] || [];
-      handlers.forEach( fn => fn.call({ type: event }, ...args));
+      handlers.forEach(fn => fn.call({type: event}, ...args));
     }
-  }
+  };
 }
 
 window.jQuery = Object.assign(fakeQuery, {
   //ajax,
-  noop(){},
+  noop() {
+  },
   isFunction: o => typeof o === 'function',
   isArray: arr => Array.isArray(arr),
   type: obj => typeof obj,
@@ -49,14 +50,14 @@ window.jQuery = Object.assign(fakeQuery, {
   each: (arr, cb) => arr.forEach((v, i)=> cb(i, v)),
   isEmptyObject: obj => !obj || Object.keys(obj).length === 0,
   makeArray: arr => [].slice.call(arr, 0),
-  Deferred(){
+  Deferred() {
     var resolve, reject;
     var promise = new Promise(function() {
       resolve = arguments[0];
       reject = arguments[1];
     });
 
-    return { resolve, reject, promise: ()=> promise };
+    return {resolve, reject, promise: ()=> promise};
   },
   support: {
     cors: ('withCredentials' in new XMLHttpRequest())

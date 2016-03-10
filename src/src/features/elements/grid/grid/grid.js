@@ -37,14 +37,14 @@ export class Grid {
   isWithDeselect = true;
 
   // Misc
-  @bindable noRowsMessage = "";
+  @bindable noRowsMessage = '';
 
   // Data ....
   @bindable read = null;
   @bindable data = null;
   @bindable autoLoad = true;
   loading = false;
-  @bindable loadingMessage = "Loading...";
+  @bindable loadingMessage = 'Loading...';
   rowData = [];
 
   // Pagination
@@ -129,11 +129,11 @@ export class Grid {
 
 
     // The table body element will host the rows
-    var tbody = this.element.querySelector("table>tbody");
+    var tbody = this.element.querySelector('table>tbody');
     this.viewSlot = new ViewSlot(tbody, true, this);
 
     // Get the row template too and add a repeater
-    var row = tbody.querySelector("tr");
+    var row = tbody.querySelector('tr');
     this._addRowAttributes(row);
 
     this.rowTemplate = document.createDocumentFragment();
@@ -172,7 +172,7 @@ export class Grid {
   }
 
   _addRowAttributes(row) {
-    row.setAttribute("repeat.for", "$item of rowData");
+    row.setAttribute('repeat.for', '$item of rowData');
     // Copy any user specified row attributes to the row template
     for (var prop in this.rowAttrs) {
       if (this.rowAttrs.hasOwnProperty(prop)) {
@@ -247,12 +247,12 @@ export class Grid {
     var timeout;
 
     // the debounced function
-    return function () {
+    return function() {
       var context = this,
         args = arguments;
 
       // nulls out timer and calls original function
-      var later = function () {
+      var later = function() {
         timeout = null;
         func.apply(context, args);
       };
@@ -389,14 +389,13 @@ export class Grid {
   }
 
   noRowsMessageChanged() {
-    this.showNoRowsMessage = this.noRowsMessage !== "";
+    this.showNoRowsMessage = this.noRowsMessage !== '';
   }
 
   heightChanged() {
-    var cont = this.element.querySelector(".grid-content-container");
+    var cont = this.element.querySelector('.grid-content-container');
 
     if (this.height === 'auto' || window.isNaN(window.Number(this._height)) === false) {
-      //cont.setAttribute("style", "height:" + this.height + "px");
       cont.setAttribute('style', `height: ${this._height}px`);
     } else {
       cont.removeAttribute('style');
@@ -425,9 +424,9 @@ export class Grid {
 
   syncColumnHeadersWithColumns() {
     // todo: find if there is need for filters to be synced too
-    let headers = this.element.querySelectorAll("table>thead>tr:first-child>th");
-    let filters = this.element.querySelectorAll("table>thead>tr:last-child>th");
-    let cells = this.element.querySelectorAll("table>tbody>tr:first-child>td"); // first row is enough
+    let headers = this.element.querySelectorAll('table>thead>tr:first-child>th');
+    let filters = this.element.querySelectorAll('table>thead>tr:last-child>th');
+    let cells = this.element.querySelectorAll('table>tbody>tr:first-child>td'); // first row is enough
     let isOverflowing = this.isBodyOverflowing();
 
     // set initially the min-width attribute to both tables
@@ -494,7 +493,7 @@ export class Grid {
   }
 
   isBodyOverflowing() {
-    var body = this.element.querySelector(".grid-content-container");
+    var body = this.element.querySelector('.grid-content-container');
     return body.offsetHeight < body.scrollHeight || body.offsetWidth < body.scrollWidth;
   }
 }

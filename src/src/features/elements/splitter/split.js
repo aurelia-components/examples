@@ -1,5 +1,5 @@
 import {Split} from 'nathancahill/Split.js';
-import {customElementHelper} from 'utils'
+import {customElementHelper} from 'utils';
 
 export function split(childs, direction, sizes, minSizes) {
   if (direction === 'horizontal') {

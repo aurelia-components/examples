@@ -5,7 +5,7 @@ import {SelectColumn} from '../column/select-column';
 import {gridFilter} from '../grid-filter';
 
 export class ColumnDefinitionFactory {
-  constructor (gridDefinition, grid) {
+  constructor(gridDefinition, grid) {
     this.colDefinitions = gridDefinition.cols;
     this.rowAttrs = gridDefinition.rowAttrs;
     this.grid = grid;

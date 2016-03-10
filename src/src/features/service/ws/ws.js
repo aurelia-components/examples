@@ -48,18 +48,18 @@ export class WS {
 
     socket.onopen = () => {
       connectionAttempt = 1;
-      socket.send("subscribe");
+      socket.send('subscribe');
       resolve(socket);
     };
 
     socket.onclose = () => {
       if (connectionAttempt <= 3) {
-        console.warn("WARNING: Lost server connection, attempting to reconnect. Attempt number " + connectionAttempt);
+        console.warn('WARNING: Lost server connection, attempting to reconnect. Attempt number ' + connectionAttempt);
         window.setTimeout(() => {
           this._connect(connectionAttempt + 1);
         }, 5000);
       } else {
-        console.warn("The connection with the server was lost.");
+        console.warn('The connection with the server was lost.');
       }
     };
   }

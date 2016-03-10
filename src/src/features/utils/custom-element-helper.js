@@ -26,12 +26,12 @@ export const customElementHelper = {
     var timeout;
 
     // the debounced function
-    return function () {
+    return function() {
       var context = this,
         args = arguments;
 
       // nulls out timer and calls original function
-      var later = function () {
+      var later = function() {
         timeout = null;
         func.apply(context, args);
       };

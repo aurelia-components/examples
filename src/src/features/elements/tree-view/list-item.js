@@ -38,7 +38,7 @@ export class ListItem {
   applyFilter() {
     if (this.filter) {
       this.filtered = !this.filter(this.item);
-      
+
       if (this.filtered === true) {
         this.collapse();
       }

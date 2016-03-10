@@ -16,7 +16,7 @@
           minutes = 0;
         }
       }
-    } else if (timespan.constructor.name === 'Moment'){
+    } else if (timespan.constructor.name === 'Moment') {
       hours = timespan.hours();
       minutes = timespan.minutes();
     }

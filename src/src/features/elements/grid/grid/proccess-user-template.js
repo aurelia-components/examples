@@ -14,7 +14,7 @@ export function processUserTemplate(viewCompiler, viewResources, element, instru
 
   // Pull any row attrs into a hash object
   let rowAttrs = getAttributesHash(rowElement.attributes);
-  let paginationAttrs = paginationElement === null ? null: getAttributesHash(paginationElement.attributes);
+  let paginationAttrs = paginationElement === null ? null : getAttributesHash(paginationElement.attributes);
 
   instruction.gridDefinition = {
     paginationAttrs: paginationAttrs,

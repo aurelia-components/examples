@@ -15,7 +15,7 @@ export class NavigationButton {
   }
 
   buttonClicked() {
-    if(this.disabled === true){
+    if (this.disabled === true) {
       return;
     }
 

@@ -12,7 +12,7 @@ export class RemoteStore extends BaseStore {
 
   getFiltersValuesAsQueryString() {
     var filters = [];
-    for (var i = this.columnDefinitions.length - 1; i >= 0; i--) {
+    for (let i = this.columnDefinitions.length - 1; i >= 0; i--) {
       let col = this.columnDefinitions[i];
       let filterQueryString = col.getQueryString();
       if (filterQueryString !== undefined) {
@@ -25,7 +25,7 @@ export class RemoteStore extends BaseStore {
 
   getFiltersValues() {
     let filters = [];
-    for (var i = this.columnDefinitions.length - 1; i >= 0; i--) {
+    for (let i = this.columnDefinitions.length - 1; i >= 0; i--) {
       let col = this.columnDefinitions[i];
       filters = filters.concat(col.getFilterValue());
     }
@@ -57,7 +57,7 @@ export class RemoteStore extends BaseStore {
       this.count = result.count;
       this.updatePager();
 
-      return(this.data);
+      return (this.data);
     });
   }
 }

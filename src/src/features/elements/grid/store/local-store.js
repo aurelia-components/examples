@@ -48,14 +48,14 @@ export class LocalStore extends BaseStore {
   }
 
   applyPagination(data) {
-    var start = (Number(this.page) - 1) * Number(this.pageSize);
+    let start = (Number(this.page) - 1) * Number(this.pageSize);
     data = data.slice(start, start + Number(this.pageSize));
 
     return data;
   }
 
   filterAndSortPage(data) {
-    var tempData = data;
+    let tempData = data;
 
     if (this.isFilterable()) {
       tempData = this.applyFilter(tempData);

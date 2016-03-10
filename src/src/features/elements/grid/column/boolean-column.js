@@ -103,9 +103,9 @@ export class BooleanColumn extends BaseColumn {
 
   compare(x, y) {
     if (this.isSortDirectionDesc()) {
-      return (x === y)? 0 : x? -1 : 1;
+      return (x === y) ? 0 : x ? -1 : 1;
     } else {
-      return (x === y)? 0 : x? 1 : -1;
+      return (x === y) ? 0 : x ? 1 : -1;
     }
   }
 }

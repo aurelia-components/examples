@@ -1,7 +1,7 @@
 import {ViewSlot} from 'aurelia-framework';
 
 let currentZIndex = 1040;
-let transitionEvent = (function () {
+let transitionEvent = (function() {
   let t;
   let el = document.createElement('fakeelement');
 

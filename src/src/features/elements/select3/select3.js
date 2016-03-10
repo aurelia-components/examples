@@ -128,7 +128,6 @@ export class Select3 {
       searchInput.focus();
       searchInput.select();
     });
-
   }
 
   closeDropdown() {
@@ -149,7 +148,7 @@ export class Select3 {
   toggleDropdown() {
     if (!this.disabled) {
       if (this.isDropdownOpen) {
-        this.closeDropdown()
+        this.closeDropdown();
       } else {
         this.openDropdown();
       }
@@ -181,12 +180,12 @@ export class Select3 {
     event = window.event ? window.event : event;
     let keyCode = event.keyCode ? event.keyCode : event.which;
     switch (keyCode) {
-      case KEYS.ENTER:
-        this.openDropdown();
-        break;
-      default:
-        // bubble up
-        return true;
+    case KEYS.ENTER:
+      this.openDropdown();
+      break;
+    default:
+      // bubble up
+      return true;
     }
   }
 
@@ -194,21 +193,21 @@ export class Select3 {
     event = window.event ? window.event : event;
     let keyCode = event.keyCode ? event.keyCode : event.which;
     switch (keyCode) {
-      case KEYS.UP:
-        this.moveSelectionUp();
-        break;
-      case KEYS.DOWN:
-        this.moveSelectionDown();
-        break;
-      case KEYS.ENTER:
-        this.selectHoveredItem();
-        break;
-      case KEYS.ESC:
-        this.closeDropdown();
-        break;
-      default:
-        // bubble up
-        return true;
+    case KEYS.UP:
+      this.moveSelectionUp();
+      break;
+    case KEYS.DOWN:
+      this.moveSelectionDown();
+      break;
+    case KEYS.ENTER:
+      this.selectHoveredItem();
+      break;
+    case KEYS.ESC:
+      this.closeDropdown();
+      break;
+    default:
+      // bubble up
+      return true;
     }
   }
 
@@ -357,7 +356,6 @@ export class Select3 {
     this.taskQueue.queueTask(() => {
       this.scrollHoveredLiIntoView(true);
     });
-
   }
 
   _queryTokenizer(query) {
@@ -372,7 +370,7 @@ export class Select3 {
       return {
         indexes: indexesOfTokensWithSameValue,
         value: uniqueToken.value
-      }
+      };
     });
 
     return tokensGroupedByValue;
@@ -402,7 +400,7 @@ export class Select3 {
   }
 
   _arrayUniqueByField(a, field) {
-    return a.reduce(function (p, c) {
+    return a.reduce(function(p, c) {
       if (p.every(x => x[field] !== c[field])) p.push(c);
       return p;
     }, []);

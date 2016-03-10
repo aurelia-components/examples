@@ -3,4 +3,4 @@ export const gridFilter = {
   dateFromTo: 'date-from-to',
   boolean: 'boolean',
   select: 'select'
-}
+};
