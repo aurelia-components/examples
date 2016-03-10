@@ -1,33 +1,38 @@
 template
-  a(popover="title.bind: title; content.bind: content; placement: top") Hover me for popover
-  button(click.trigger="click()") Change Value to Content2
+  div.container
+    div.card
+      div.card-header
+        h3 Popover as element
+      div.card-block
+        p Usage:
+          code.language-js &lt;popover title.bind="popoverTitle", placement.bind="placement.name", trigger.bind="trigger""&gt;&lt;popover&gt;
+        p Trigger types: click, hover, focus, insideClick
+        a(popover="title.bind: title; content.bind: content; placement: top") Hover me for popover
+        button(click.trigger="click()") Change Value to Content2
 
-  table
-    tbody
-      tr(popover="title.bind: title; content.bind: content; placement: left")
-        td aloha
+        table
+          tbody
+            tr(popover="title.bind: title; content.bind: content; placement: left")
+              td aloha
 
-  div.row
-    div.col-lg-6
-      h3 Popover as element
-  div.row
-    div.col-lg-6
-      div.form-group.row
-        label.form-control-label.col-lg-3 Popover Title
-        div.col-lg-8
-          select3(items.bind="items", value.bind="popoverTitle", options.bind="{caption: 'none'}")
-      div.form-group.row
-        label.form-control-label.col-lg-3 Popover Placement
-        div.col-lg-8
-          select3(items.bind="placements", value.bind="placement", options.bind="{modelValueBind:true, disableClear:true}")
-      div.form-group.row
-        label.form-control-label.col-lg-3 Popover Trigger
-        div.col-lg-8
-          select3(items.bind="triggers", value.bind="trigger")
-      div.form-group.row
-        div.col-lg-12
-          button.btn.btn-success ${trigger} me
-            popover(title.bind="popoverTitle", placement.bind="placement.name", trigger.bind="trigger")
-              h2 Hi i'm popover
-              h5 I'm on the ${placement}
+        div.row
+          div.col-lg-6
+            div.form-group.row
+              label.form-control-label.col-lg-3 Popover Title
+              div.col-lg-8
+                select3(items.bind="items", value.bind="popoverTitle", options.bind="{caption: 'none'}")
+            div.form-group.row
+              label.form-control-label.col-lg-3 Popover Placement
+              div.col-lg-8
+                select3(items.bind="placements", value.bind="placement", options.bind="{modelValueBind:true, disableClear:true}")
+            div.form-group.row
+              label.form-control-label.col-lg-3 Popover Trigger
+              div.col-lg-8
+                select3(items.bind="triggers", value.bind="trigger")
+            div.form-group.row
+              div.col-lg-12
+                button.btn.btn-success ${trigger} me
+                  popover(title.bind="popoverTitle", placement.bind="placement.name", trigger.bind="trigger")
+                    h2 Hi i'm popover
+                    h5 I'm on the ${placement}
 

@@ -1,8 +1,17 @@
 template
-  section
-    br
-    br
-    p
-      a(popover="view: ./popover-view.html; title.bind: title; placement: right") Hover me for popover
+  div.container
+    div.card
+      div.card-header
+        h3 Popover attribute samples
+      div.card-block
+        p Popover can be set by applying the respective attribute to the element with the options required
+        p Usage:
+          code.language-js &lt;a popover="view: ./popover-view.html; title.bind: title; placement: righ; ancestorLevels: 1"&gt;&lt;a&gt;
+        p  Placement types: top, bottom, left, right
+        section
+          br
+          br
+          p
+            a(popover="view: ./popover-view.html; title.bind: title; placement: right; ") Hover me for popover
 
-    input(type="text", value.bind="popoverTestBinding")
+          input(type="text", value.bind="popoverTestBinding")

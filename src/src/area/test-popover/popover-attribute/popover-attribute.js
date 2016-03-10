@@ -21,7 +21,7 @@ export class TestPopover {
     ];
 
     this.placement = this.placements[0];
-    this.trigger = 'hover';
+    this.trigger = 'click';
     this.triggers = [
       {id:"click", name:"click"},
       {id:"hover", name:"hover"},
