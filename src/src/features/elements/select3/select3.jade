@@ -26,9 +26,9 @@ template
       input.select3-search-box.form-control(type="text", value.bind="searchedItem",
         keydown.trigger="onSearchInputKeyPressed($event)",
         focusout.trigger="closeDropdown()")
-      ul
+      ul(mousewheel.trigger="scrollDropdown($event)")
         li.select3-no-results-message(if.bind="filteredData.length === 0") ${opts.noResultsMessage}
-        li(repeat.for="datum of filteredData",
+        li(repeat.for="datum of filteredDataShort",
           mousedown.trigger="selectItem(datum)",
           innerhtml.bind="datum.highlightedName",
           mouseenter.trigger="setHover(datum)",

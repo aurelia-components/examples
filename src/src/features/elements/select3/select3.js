@@ -28,7 +28,8 @@ export class Select3 {
     sortField: '',
     disableClear: false,
     emptyValue: null, // ??? or undefined???
-    selectHoveredOnCloseDropdown: false
+    selectHoveredOnCloseDropdown: false,
+    debounce: 150
   };
 
   constructor(element, bindingEngine, taskQueue) {
@@ -104,11 +105,50 @@ export class Select3 {
   }
 
   filteredDataChanged() {
-    this.valueChanged();
+    this.refillFilteredDataShort();
+    //this.valueChanged();
+  }
+
+  refillFilteredDataShort() {
+    const halfCount = 5;
+    const fullCount = halfCount * 2 + 1;
+    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
+    let isInFirstHalfCount = hoveredDatumIndex < halfCount;
+    let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
+    let start, end;
+
+    //if (isInFirstHalfCount && isInLastHalfCount) {
+    //  // take all
+    //  start = 0;
+    //  end = this.filteredData.length;
+    //} else if (isInFirstHalfCount && !isInLastHalfCount) {
+    //  // take first fullCount
+    //  start = 0;
+    //  end = fullCount;
+    //} else if (!isInFirstHalfCount && isInLastHalfCount) {
+    //  // take last fullCount
+    //  end = this.filteredData.length;
+    //  start = end - fullCount;
+    //} else {// !isInFirstHalfCount && !isInLastHalfCount
+    //  //take halfCount before and halfCount after
+    //  start = hoveredDatumIndex - halfCount;
+    //  end = hoveredDatumIndex + halfCount + 1;
+    //}
+
+    start = isInFirstHalfCount ? 0 : isInLastHalfCount ? Math.max(this.filteredData.length - fullCount, 0) : hoveredDatumIndex - halfCount;
+    end = start + fullCount;
+
+    this.filteredDataShort = this.filteredData.slice(start, end);
   }
 
   searchedItemChanged() {
-    this.search(this.searchedItem);
+    if (!this.debounce) {
+      this.debounce = customElementHelper.debounce(() => {
+        this.search(this.searchedItem);
+      }, this.opts.debounce); 
+    }
+
+    this.debounce();
   }
 
   clearValue() {
@@ -138,7 +178,7 @@ export class Select3 {
     }
 
     if (this.value !== this.opts.emptyValue) {
-      this.taskQueue.queueTask(()=> {
+      this.taskQueue.queueTask(() => {
         let valueInput = this.element.getElementsByClassName('select3-value-box')[0];
         valueInput.focus();
       });
@@ -223,18 +263,12 @@ export class Select3 {
     } else if (hoveredIndex === 0) {
       // first is hovered -> hover last
       this.hoveredDatum = this.filteredData[this.filteredData.length - 1];
-
-      this.taskQueue.queueMicroTask(()=> {
-        this.scrollHoveredLiIntoView(false);
-      });
-
-      return;
     } else {
       // hover previous
       this.hoveredDatum = this.filteredData[hoveredIndex - 1];
     }
 
-    this.scrollHoveredLiIntoView(false);
+    this.refillFilteredDataShort();
   }
 
   moveSelectionDown() {
@@ -249,42 +283,26 @@ export class Select3 {
     } else if (hoveredIndex === this.filteredData.length - 1) {
       // last is hovered -> hover first
       this.hoveredDatum = this.filteredData[0];
-
-      this.taskQueue.queueMicroTask(()=> {
-        this.scrollHoveredLiIntoView(true);
-      });
-      return;
     } else {
       // hover next
       this.hoveredDatum = this.filteredData[hoveredIndex + 1];
     }
 
-    this.scrollHoveredLiIntoView(true);
+    this.refillFilteredDataShort();
   }
 
-  /* todo: separate methods for when the previous hovered li is visible and not
-   if visible -> only change the scrollTop of parent by one li height
-   else -> this method as is
-   */
-  scrollHoveredLiIntoView(scrollToTop) {
-    let hoveredLis = this.element.getElementsByClassName('hovered');
-    if (hoveredLis.length > 0) {
-      let target = hoveredLis[0];
+  scrollDropdown(e) {
+    let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
-      let parentScrollTop = target.offsetTop - target.parentNode.offsetTop;
+    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
 
-      if (scrollToTop === true) {
-        parentScrollTop += target.offsetHeight;
-      } else {
-        parentScrollTop -= target.offsetHeight;
-      }
+    let newHoveredIndex = hoveredDatumIndex - delta;
 
-      // todo: remove hack! (currently 11 LIs are visible)
-      // hovered item to be in the center of the dropdown
-      parentScrollTop -= 5 * target.offsetHeight;
+    newHoveredIndex = Math.max(0, newHoveredIndex);
+    newHoveredIndex = Math.min(newHoveredIndex, this.filteredData.length - 1);
 
-      target.parentNode.scrollTop = parentScrollTop;
-    }
+    this.hoveredDatum = this.filteredData[newHoveredIndex];
+    this.refillFilteredDataShort();
   }
 
   selectHoveredItem() {
@@ -352,10 +370,6 @@ export class Select3 {
     this.filteredData = filteredData;
     // hover first datum
     this.hoveredDatum = this.filteredData.length > 0 ? this.filteredData[0] : null;
-
-    this.taskQueue.queueTask(() => {
-      this.scrollHoveredLiIntoView(true);
-    });
   }
 
   _queryTokenizer(query) {
