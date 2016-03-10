@@ -87,7 +87,7 @@ export class TestSelect3 {
 
     this.selectedPerson = this.people[2];
 
-    this.manyPeople = this._generateTestData(10000);
+    this.manyPeople = this._generateTestData(100000);
   }
 
   changeArray() {
