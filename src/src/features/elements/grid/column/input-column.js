@@ -25,8 +25,8 @@ export class InputColumn extends BaseColumn {
     }
 
     if (this.hasFilterValue()) {
-      return filteredValue.toString()
-        .indexOf(this.filterValue) > -1;
+      return filteredValue.toString().toLowerCase()
+        .indexOf(this.filterValue.toLowerCase()) > -1;
     }
 
     // no filter value -> match everything
