@@ -35,7 +35,7 @@ template
             mouseenter.trigger="setHover(datum)",
             class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
                   "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
-        div.select3-scrollbar
+        div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
           button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()")
             span.fa.fa-caret-up
           div.select3-scrollbar-dragger-container

@@ -117,38 +117,45 @@ export class Select3 {
     this.scrollToHoveredDatum();
   }
 
-  refillFilteredDataShort() {
+  _refillFilteredDataShort() {
     this.filteredDataShort = this.filteredData.slice(this.filteredDataShortStartIndex, this.filteredDataShortEndIndex + 1);
 
     this.taskQueue.queueTask(()=> {
-      this.calculateDraggerPosition();
+      this._calculateDraggerPosition();
     });
   }
 
-  calculateDraggerPosition() {
-    const minDraggerHeight = 15;
-    let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
-    let draggerHeight = availableHeight * (this.opts.visibleItemsCount / this.filteredData.length);
-    let draggerTop = availableHeight * (this.filteredDataShortStartIndex / this.filteredData.length);
+  _calculateDraggerPosition() {
+    let scrollbar = this.element.querySelector('.select3-scrollbar');
 
-    const isDraggerHeightInsufficient = draggerHeight < minDraggerHeight;
-    if (isDraggerHeightInsufficient) {
-      draggerHeight = minDraggerHeight;
+    if (this.filteredDataShort.length === this.filteredData.length) {
+      scrollbar.style.display = 'none';
+    } else {
+      scrollbar.style.display = '';
+      const minDraggerHeight = 15;
+      let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+      let draggerHeight = availableHeight * (this.opts.visibleItemsCount / this.filteredData.length);
+      let draggerTop = availableHeight * (this.filteredDataShortStartIndex / this.filteredData.length);
 
-      const isDraggerOnTop = draggerTop - minDraggerHeight / 2 < 0;
-      const isDraggerOnBottom = draggerTop + minDraggerHeight / 2 > availableHeight;
+      const isDraggerHeightInsufficient = draggerHeight < minDraggerHeight;
+      if (isDraggerHeightInsufficient) {
+        draggerHeight = minDraggerHeight;
 
-      if (isDraggerOnTop) {
-        draggerTop = 0;
-      } else if (isDraggerOnBottom) {
-        draggerTop = availableHeight - minDraggerHeight;
-      } else {
-        draggerTop -= minDraggerHeight / 2;
+        const isDraggerOnTop = draggerTop - minDraggerHeight / 2 < 0;
+        const isDraggerOnBottom = draggerTop + minDraggerHeight / 2 > availableHeight;
+
+        if (isDraggerOnTop) {
+          draggerTop = 0;
+        } else if (isDraggerOnBottom) {
+          draggerTop = availableHeight - minDraggerHeight;
+        } else {
+          draggerTop -= minDraggerHeight / 2;
+        }
       }
-    }
 
-    this.draggerHeight = `${draggerHeight}px`;
-    this.draggerTop = `${draggerTop}px`;
+      this.draggerHeight = `${draggerHeight}px`;
+      this.draggerTop = `${draggerTop}px`;
+    }
   }
 
   scrollToHoveredDatum() {
@@ -158,36 +165,58 @@ export class Select3 {
     let isInFirstHalfCount = hoveredDatumIndex < halfCount;
     let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
 
-    this.filteredDataShortStartIndex = isInFirstHalfCount ? 0 : isInLastHalfCount ?
-      Math.max(this.filteredData.length - fullCount, 0) : hoveredDatumIndex - halfCount;
-    this.filteredDataShortEndIndex = this.filteredDataShortStartIndex + fullCount - 1;
+    let start, end;
+    if (this.filteredData.length <= this.opts.visibleItemsCount) {
+      // take all
+      start = 0;
+      end = this.filteredData.length - 1;
+    } else if (isInFirstHalfCount && !isInLastHalfCount) {
+      // take first fullCount
+      start = 0;
+      end = fullCount - 1;
+    } else if (!isInFirstHalfCount && isInLastHalfCount) {
+      // take last fullCount
+      end = this.filteredData.length - 1;
+      start = end - fullCount;
+    } else {// !isInFirstHalfCount && !isInLastHalfCount
+      //take halfCount before and halfCount after
+      start = hoveredDatumIndex - halfCount;
+      end = hoveredDatumIndex + halfCount;
+    }
 
-    this.refillFilteredDataShort();
+    this.filteredDataShortStartIndex = start;
+    this.filteredDataShortEndIndex = end;
+
+    this._refillFilteredDataShort();
   }
 
   scrollUp(count = 1) {
-    if (this.filteredDataShortStartIndex - count >= 0) {
-      this.filteredDataShortStartIndex -= count;
-      this.filteredDataShortEndIndex -= count;
-      this.refillFilteredDataShort();
-    } else if (this.filteredDataShortStartIndex === 0) {
-      return;
-    } else {
-      count = this.filteredDataShortStartIndex;
-      this.scrollUp(count);
+    // can scroll at least once
+    if (this.filteredDataShortStartIndex > 0) {
+      // can scroll desired times
+      if (this.filteredDataShortStartIndex - count >= 0) {
+        this.filteredDataShortStartIndex -= count;
+        this.filteredDataShortEndIndex -= count;
+        this._refillFilteredDataShort();
+      } else { // scroll as many times as possible
+        count = this.filteredDataShortStartIndex;
+        this.scrollUp(count);
+      }
     }
   }
 
   scrollDown(count = 1) {
-    if (this.filteredDataShortEndIndex + count < this.filteredData.length) {
-      this.filteredDataShortStartIndex += count;
-      this.filteredDataShortEndIndex += count;
-      this.refillFilteredDataShort();
-    } else if (this.filteredDataShortEndIndex === this.filteredData.length - 1) {
-      return;
-    } else {
-      count = this.filteredData.length - this.filteredDataShortEndIndex;
-      this.scrollDown(count);
+    // can scroll at least once
+    if (this.filteredDataShortEndIndex < this.filteredData.length - 1) {
+      // can scroll desired times
+      if (this.filteredDataShortEndIndex + count < this.filteredData.length) {
+        this.filteredDataShortStartIndex += count;
+        this.filteredDataShortEndIndex += count;
+        this._refillFilteredDataShort();
+      } else { // scroll as many times as possible
+        count = this.filteredData.length - this.filteredDataShortEndIndex;
+        this.scrollDown(count);
+      }
     }
   }
 
@@ -212,9 +241,9 @@ export class Select3 {
 
     // focus on search box when opened
     this.taskQueue.queueTask(()=> {
-      this.reorientDropdownIfNeeded();
-
-      let searchInput = this.element.getElementsByClassName('select3-search-box')[0];
+      this._reorientDropdownIfNeeded();
+      this._calculateDraggerPosition();
+      let searchInput = this.element.querySelector('.select3-search-box');
       searchInput.focus();
       searchInput.select();
     });
@@ -359,7 +388,7 @@ export class Select3 {
     this.hoveredDatum = datum;
   }
 
-  reorientDropdownIfNeeded() {
+  _reorientDropdownIfNeeded() {
     // todo: use query selector, maybe keep this element in this?
     let dropdown = this.element.getElementsByClassName('select3-dropdown')[0];
     let currentBottomStyle = dropdown.style.bottom;
