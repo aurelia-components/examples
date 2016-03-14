@@ -258,7 +258,7 @@ export class Select3 {
 
     if (this.value !== this.opts.emptyValue) {
       this.taskQueue.queueTask(() => {
-        let valueInput = this.element.getElementsByClassName('select3-value-box')[0];
+        let valueInput = this.element.querySelector('.select3-value-box');
         valueInput.focus();
       });
     }
@@ -274,7 +274,7 @@ export class Select3 {
     }
   }
 
-  onValueInputFocus(e) {
+  onValueInputFocus() {
     if (this.value === this.opts.emptyValue) {
       this.openDropdown();
     } else {
