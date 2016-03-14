@@ -17,6 +17,11 @@ export class Select3 {
   isDropdownOpen = false;
   selectedItemName = '';
   hoveredDatum = null;
+  filteredDataShort = [];
+  filteredDataShortStartIndex = 0;
+  filteredDataShortEndIndex = 0;
+  draggerTop = 0;
+  draggerHeight = 0;
 
   opts = {
     id: 'id',
@@ -79,17 +84,44 @@ export class Select3 {
     }
 
     customElementHelper.dispatchEvent(this.element, 'change', {
-      value: this.value
+      newValue: newValue,
+      oldValue: oldValue
     });
   }
 
   itemsChanged() {
     this._subscribeToItemsCollectionChanges();
-    this.reconstructItems();
+    this._reconstructItems();
     this.valueChanged();
   }
 
-  reconstructItems() {
+  searchedItemChanged() {
+    if (!this.debounce) {
+      this.debounce = customElementHelper.debounce(() => {
+        this.search(this.searchedItem);
+      }, this.opts.debounce);
+    }
+
+    this.debounce();
+  }
+
+  filteredDataChanged() {
+    this.scrollToHoveredDatum();
+  }
+
+  _subscribeToItemsCollectionChanges() {
+    if (this.itemsCollectionSubscription !== undefined) {
+      this.itemsCollectionSubscription.dispose();
+    }
+
+    this.itemsCollectionSubscription = this.bindingEngine
+      .collectionObserver(this.items)
+      .subscribe(items => {
+        this._reconstructItems();
+      });
+  }
+
+  _reconstructItems() {
     this.items.forEach(i => {
       i._escapedName = this._escapeHtml(i[this.opts.name]);
     });
@@ -101,20 +133,79 @@ export class Select3 {
     }
   }
 
-  _subscribeToItemsCollectionChanges() {
-    if (this.itemsCollectionSubscription !== undefined) {
-      this.itemsCollectionSubscription.dispose();
-    }
 
-    this.itemsCollectionSubscription = this.bindingEngine
-      .collectionObserver(this.items)
-      .subscribe(items => {
-        this.reconstructItems();
-      });
+  // scrolling
+
+  scrollDropdown(e) {
+    let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+    if (delta < 0) {
+      this.scrollDown();
+    } else {
+      this.scrollUp();
+    }
   }
 
-  filteredDataChanged() {
-    this.scrollToHoveredDatum();
+  scrollUp(count = 1) {
+    // can scroll at least once
+    if (this.filteredDataShortStartIndex > 0) {
+      // can scroll desired times
+      if (this.filteredDataShortStartIndex - count >= 0) {
+        this.filteredDataShortStartIndex -= count;
+        this.filteredDataShortEndIndex -= count;
+        this._refillFilteredDataShort();
+      } else { // scroll as many times as possible
+        count = this.filteredDataShortStartIndex;
+        this.scrollUp(count);
+      }
+    }
+  }
+
+  scrollDown(count = 1) {
+    // can scroll at least once
+    if (this.filteredDataShortEndIndex < this.filteredData.length - 1) {
+      // can scroll desired times
+      if (this.filteredDataShortEndIndex + count < this.filteredData.length) {
+        this.filteredDataShortStartIndex += count;
+        this.filteredDataShortEndIndex += count;
+        this._refillFilteredDataShort();
+      } else { // scroll as many times as possible
+        count = this.filteredData.length - this.filteredDataShortEndIndex;
+        this.scrollDown(count);
+      }
+    }
+  }
+
+  scrollToHoveredDatum() {
+    const halfCount = Math.floor(this.opts.visibleItemsCount / 2);
+    const fullCount = this.opts.visibleItemsCount;
+    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
+    let isInFirstHalfCount = hoveredDatumIndex < halfCount;
+    let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
+
+    let start, end;
+    if (this.filteredData.length <= this.opts.visibleItemsCount) {
+      // take all
+      start = 0;
+      end = this.filteredData.length - 1;
+    } else if (isInFirstHalfCount && !isInLastHalfCount) {
+      // take first fullCount
+      start = 0;
+      end = fullCount - 1;
+    } else if (!isInFirstHalfCount && isInLastHalfCount) {
+      // take last fullCount
+      end = this.filteredData.length - 1;
+      start = end - fullCount;
+    } else {// !isInFirstHalfCount && !isInLastHalfCount
+      //take halfCount before and halfCount after
+      start = hoveredDatumIndex - halfCount;
+      end = hoveredDatumIndex + halfCount;
+    }
+
+    this.filteredDataShortStartIndex = start;
+    this.filteredDataShortEndIndex = end;
+
+    this._refillFilteredDataShort();
   }
 
   _refillFilteredDataShort() {
@@ -158,177 +249,8 @@ export class Select3 {
     }
   }
 
-  scrollToHoveredDatum() {
-    const halfCount = Math.floor(this.opts.visibleItemsCount / 2);
-    const fullCount = this.opts.visibleItemsCount;
-    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
-    let isInFirstHalfCount = hoveredDatumIndex < halfCount;
-    let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
 
-    let start, end;
-    if (this.filteredData.length <= this.opts.visibleItemsCount) {
-      // take all
-      start = 0;
-      end = this.filteredData.length - 1;
-    } else if (isInFirstHalfCount && !isInLastHalfCount) {
-      // take first fullCount
-      start = 0;
-      end = fullCount - 1;
-    } else if (!isInFirstHalfCount && isInLastHalfCount) {
-      // take last fullCount
-      end = this.filteredData.length - 1;
-      start = end - fullCount;
-    } else {// !isInFirstHalfCount && !isInLastHalfCount
-      //take halfCount before and halfCount after
-      start = hoveredDatumIndex - halfCount;
-      end = hoveredDatumIndex + halfCount;
-    }
-
-    this.filteredDataShortStartIndex = start;
-    this.filteredDataShortEndIndex = end;
-
-    this._refillFilteredDataShort();
-  }
-
-  scrollUp(count = 1) {
-    // can scroll at least once
-    if (this.filteredDataShortStartIndex > 0) {
-      // can scroll desired times
-      if (this.filteredDataShortStartIndex - count >= 0) {
-        this.filteredDataShortStartIndex -= count;
-        this.filteredDataShortEndIndex -= count;
-        this._refillFilteredDataShort();
-      } else { // scroll as many times as possible
-        count = this.filteredDataShortStartIndex;
-        this.scrollUp(count);
-      }
-    }
-  }
-
-  scrollDown(count = 1) {
-    // can scroll at least once
-    if (this.filteredDataShortEndIndex < this.filteredData.length - 1) {
-      // can scroll desired times
-      if (this.filteredDataShortEndIndex + count < this.filteredData.length) {
-        this.filteredDataShortStartIndex += count;
-        this.filteredDataShortEndIndex += count;
-        this._refillFilteredDataShort();
-      } else { // scroll as many times as possible
-        count = this.filteredData.length - this.filteredDataShortEndIndex;
-        this.scrollDown(count);
-      }
-    }
-  }
-
-  searchedItemChanged() {
-    if (!this.debounce) {
-      this.debounce = customElementHelper.debounce(() => {
-        this.search(this.searchedItem);
-      }, this.opts.debounce);
-    }
-
-    this.debounce();
-  }
-
-  clearValue() {
-    if (!this.opts.disableClear) {
-      this.value = this.opts.emptyValue;
-    }
-  }
-
-  openDropdown() {
-    this.isDropdownOpen = true;
-
-    // focus on search box when opened
-    this.taskQueue.queueTask(()=> {
-      this._reorientDropdownIfNeeded();
-      this._calculateDraggerPosition();
-      let searchInput = this.element.querySelector('.select3-search-box');
-      searchInput.focus();
-      searchInput.select();
-    });
-  }
-
-  closeDropdown() {
-    this.isDropdownOpen = false;
-
-    if (this.opts.selectHoveredOnCloseDropdown === true) {
-      this.selectHoveredItem();
-    }
-
-    if (this.value !== this.opts.emptyValue) {
-      this.taskQueue.queueTask(() => {
-        let valueInput = this.element.querySelector('.select3-value-box');
-        valueInput.focus();
-      });
-    }
-  }
-
-  toggleDropdown() {
-    if (!this.disabled) {
-      if (this.isDropdownOpen) {
-        this.closeDropdown();
-      } else {
-        this.openDropdown();
-      }
-    }
-  }
-
-  onValueInputFocus() {
-    if (this.value === this.opts.emptyValue) {
-      this.openDropdown();
-    } else {
-      if (this.isDropdownOpen) {
-        this.closeDropdown();
-      }
-    }
-  }
-
-  selectItem(datum) {
-    if (datum === null || datum === undefined) {
-      return;
-    }
-
-    this.value = this.opts.modelValueBind ? datum.item : datum.item[this.opts.id];
-    if (this.isDropdownOpen === true) {
-      this.closeDropdown();
-    }
-  }
-
-  onValueInputKeyPressed(event) {
-    event = window.event ? window.event : event;
-    let keyCode = event.keyCode ? event.keyCode : event.which;
-    switch (keyCode) {
-    case KEYS.ENTER:
-      this.openDropdown();
-      break;
-    default:
-      // bubble up
-      return true;
-    }
-  }
-
-  onSearchInputKeyPressed(event) {
-    event = window.event ? window.event : event;
-    let keyCode = event.keyCode ? event.keyCode : event.which;
-    switch (keyCode) {
-    case KEYS.UP:
-      this.moveSelectionUp();
-      break;
-    case KEYS.DOWN:
-      this.moveSelectionDown();
-      break;
-    case KEYS.ENTER:
-      this.selectHoveredItem();
-      break;
-    case KEYS.ESC:
-      this.closeDropdown();
-      break;
-    default:
-      // bubble up
-      return true;
-    }
-  }
+  // hovering
 
   moveSelectionUp() {
     if (this.filteredData.length === 0) {
@@ -370,13 +292,21 @@ export class Select3 {
     this.scrollToHoveredDatum();
   }
 
-  scrollDropdown(e) {
-    let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+  setHover(datum) {
+    this.hoveredDatum = datum;
+  }
 
-    if (delta < 0) {
-      this.scrollDown();
-    } else {
-      this.scrollUp();
+
+  // selecting
+
+  selectItem(datum) {
+    if (datum === null || datum === undefined) {
+      return;
+    }
+
+    this.value = this.opts.modelValueBind ? datum.item : datum.item[this.opts.id];
+    if (this.isDropdownOpen === true) {
+      this.closeDropdown();
     }
   }
 
@@ -384,8 +314,51 @@ export class Select3 {
     this.selectItem(this.hoveredDatum);
   }
 
-  setHover(datum) {
-    this.hoveredDatum = datum;
+  clearValue() {
+    if (!this.opts.disableClear) {
+      this.value = this.opts.emptyValue;
+    }
+  }
+
+
+  // control dropdown
+
+  openDropdown() {
+    this.isDropdownOpen = true;
+
+    // focus on search box when opened
+    this.taskQueue.queueTask(()=> {
+      this._reorientDropdownIfNeeded();
+      this._calculateDraggerPosition();
+      let searchInput = this.element.querySelector('.select3-search-box');
+      searchInput.focus();
+      searchInput.select();
+    });
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
+
+    if (this.opts.selectHoveredOnCloseDropdown === true) {
+      this.selectHoveredItem();
+    }
+
+    if (this.value !== this.opts.emptyValue) {
+      this.taskQueue.queueTask(() => {
+        let valueInput = this.element.querySelector('.select3-value-box');
+        valueInput.focus();
+      });
+    }
+  }
+
+  toggleDropdown() {
+    if (!this.disabled) {
+      if (this.isDropdownOpen) {
+        this.closeDropdown();
+      } else {
+        this.openDropdown();
+      }
+    }
   }
 
   _reorientDropdownIfNeeded() {
@@ -406,6 +379,54 @@ export class Select3 {
       }
     }
   }
+
+  onValueInputFocus() {
+    if (this.value === this.opts.emptyValue) {
+      this.openDropdown();
+    } else {
+      if (this.isDropdownOpen) {
+        this.closeDropdown();
+      }
+    }
+  }
+
+  onValueInputKeyPressed(event) {
+    event = window.event ? window.event : event;
+    let keyCode = event.keyCode ? event.keyCode : event.which;
+    switch (keyCode) {
+    case KEYS.ENTER:
+      this.openDropdown();
+      break;
+    default:
+      // bubble up
+      return true;
+    }
+  }
+
+  onSearchInputKeyPressed(event) {
+    event = window.event ? window.event : event;
+    let keyCode = event.keyCode ? event.keyCode : event.which;
+    switch (keyCode) {
+    case KEYS.UP:
+      this.moveSelectionUp();
+      break;
+    case KEYS.DOWN:
+      this.moveSelectionDown();
+      break;
+    case KEYS.ENTER:
+      this.selectHoveredItem();
+      break;
+    case KEYS.ESC:
+      this.closeDropdown();
+      break;
+    default:
+      // bubble up
+      return true;
+    }
+  }
+
+
+  // search
 
   search(query) {
     // todo: check for empty or null or not an array? maybe in items changed and throw error?
@@ -488,6 +509,9 @@ export class Select3 {
 
     return 0;
   }
+
+
+  // utils
 
   _arrayUniqueByField(a, field) {
     return a.reduce(function (p, c) {
