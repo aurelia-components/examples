@@ -22,15 +22,23 @@ template
           disabled.bind="disabled",
           mousedown.trigger="toggleDropdown()")
           i.fa(class.bind="isDropdownOpen? 'fa-caret-up' : 'fa-caret-down'")
-    div.select3-dropdown(show.bind="isDropdownOpen")
+    div.select3-dropdown(show.bind="isDropdownOpen || opts.alwaysOpen")
       input.select3-search-box.form-control(type="text", value.bind="searchedItem",
         keydown.trigger="onSearchInputKeyPressed($event)",
         focusout.trigger="closeDropdown()")
-      ul(mousewheel.trigger="scrollDropdown($event)")
-        li.select3-no-results-message(if.bind="filteredData.length === 0") ${opts.noResultsMessage}
-        li(repeat.for="datum of filteredDataShort",
-          mousedown.trigger="selectItem(datum)",
-          innerhtml.bind="datum.highlightedName",
-          mouseenter.trigger="setHover(datum)",
-          class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
-                "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
+      div.select3-dropdown-results-container
+        div.select3-dropdown-results(mousewheel.trigger="scrollDropdown($event)")
+          div.select3-result.select3-no-results-message(if.bind="filteredData.length === 0") ${opts.noResultsMessage}
+          div.select3-result(repeat.for="datum of filteredDataShort",
+            mousedown.trigger="selectItem(datum)",
+            innerhtml.bind="datum.highlightedName",
+            mouseenter.trigger="setHover(datum)",
+            class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
+                  "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
+        div.select3-scrollbar
+          button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()")
+            span.fa.fa-caret-up
+          div.select3-scrollbar-dragger-container
+            div.select3-scrollbar-dragger(style.bind="{height: draggerHeight, top: draggerTop}")
+          button.select3-scrollbar-up-btn(mousedown.trigger="scrollDown()")
+            span.fa.fa-caret-down

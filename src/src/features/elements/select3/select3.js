@@ -29,7 +29,8 @@ export class Select3 {
     disableClear: false,
     emptyValue: null, // ??? or undefined???
     selectHoveredOnCloseDropdown: false,
-    debounce: 150
+    debounce: 150,
+    visibleItemsCount: 11
   };
 
   constructor(element, bindingEngine, taskQueue) {
@@ -113,47 +114,88 @@ export class Select3 {
   }
 
   filteredDataChanged() {
-    this.refillFilteredDataShort();
-    //this.valueChanged();
+    this.scrollToHoveredDatum();
   }
 
   refillFilteredDataShort() {
-    const halfCount = 5;
-    const fullCount = halfCount * 2 + 1;
+    this.filteredDataShort = this.filteredData.slice(this.filteredDataShortStartIndex, this.filteredDataShortEndIndex + 1);
+
+    this.taskQueue.queueTask(()=> {
+      this.calculateDraggerPosition();
+    });
+  }
+
+  calculateDraggerPosition() {
+    const minDraggerHeight = 15;
+    let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+    let draggerHeight = availableHeight * (this.opts.visibleItemsCount / this.filteredData.length);
+    let draggerTop = availableHeight * (this.filteredDataShortStartIndex / this.filteredData.length);
+
+    const isDraggerHeightInsufficient = draggerHeight < minDraggerHeight;
+    if (isDraggerHeightInsufficient) {
+      draggerHeight = minDraggerHeight;
+
+      const isDraggerOnTop = draggerTop - minDraggerHeight / 2 < 0;
+      const isDraggerOnBottom = draggerTop + minDraggerHeight / 2 > availableHeight;
+
+      if (isDraggerOnTop) {
+        draggerTop = 0;
+      } else if (isDraggerOnBottom) {
+        draggerTop = availableHeight - minDraggerHeight;
+      } else {
+        draggerTop -= minDraggerHeight / 2;
+      }
+    }
+
+    this.draggerHeight = `${draggerHeight}px`;
+    this.draggerTop = `${draggerTop}px`;
+  }
+
+  scrollToHoveredDatum() {
+    const halfCount = Math.floor(this.opts.visibleItemsCount / 2);
+    const fullCount = this.opts.visibleItemsCount;
     let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
     let isInFirstHalfCount = hoveredDatumIndex < halfCount;
     let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
-    let start, end;
 
-    //if (isInFirstHalfCount && isInLastHalfCount) {
-    //  // take all
-    //  start = 0;
-    //  end = this.filteredData.length;
-    //} else if (isInFirstHalfCount && !isInLastHalfCount) {
-    //  // take first fullCount
-    //  start = 0;
-    //  end = fullCount;
-    //} else if (!isInFirstHalfCount && isInLastHalfCount) {
-    //  // take last fullCount
-    //  end = this.filteredData.length;
-    //  start = end - fullCount;
-    //} else {// !isInFirstHalfCount && !isInLastHalfCount
-    //  //take halfCount before and halfCount after
-    //  start = hoveredDatumIndex - halfCount;
-    //  end = hoveredDatumIndex + halfCount + 1;
-    //}
+    this.filteredDataShortStartIndex = isInFirstHalfCount ? 0 : isInLastHalfCount ?
+      Math.max(this.filteredData.length - fullCount, 0) : hoveredDatumIndex - halfCount;
+    this.filteredDataShortEndIndex = this.filteredDataShortStartIndex + fullCount - 1;
 
-    start = isInFirstHalfCount ? 0 : isInLastHalfCount ? Math.max(this.filteredData.length - fullCount, 0) : hoveredDatumIndex - halfCount;
-    end = start + fullCount;
+    this.refillFilteredDataShort();
+  }
 
-    this.filteredDataShort = this.filteredData.slice(start, end);
+  scrollUp(count = 1) {
+    if (this.filteredDataShortStartIndex - count >= 0) {
+      this.filteredDataShortStartIndex -= count;
+      this.filteredDataShortEndIndex -= count;
+      this.refillFilteredDataShort();
+    } else if (this.filteredDataShortStartIndex === 0) {
+      return;
+    } else {
+      count = this.filteredDataShortStartIndex;
+      this.scrollUp(count);
+    }
+  }
+
+  scrollDown(count = 1) {
+    if (this.filteredDataShortEndIndex + count < this.filteredData.length) {
+      this.filteredDataShortStartIndex += count;
+      this.filteredDataShortEndIndex += count;
+      this.refillFilteredDataShort();
+    } else if (this.filteredDataShortEndIndex === this.filteredData.length - 1) {
+      return;
+    } else {
+      count = this.filteredData.length - this.filteredDataShortEndIndex;
+      this.scrollDown(count);
+    }
   }
 
   searchedItemChanged() {
     if (!this.debounce) {
       this.debounce = customElementHelper.debounce(() => {
         this.search(this.searchedItem);
-      }, this.opts.debounce); 
+      }, this.opts.debounce);
     }
 
     this.debounce();
@@ -276,7 +318,7 @@ export class Select3 {
       this.hoveredDatum = this.filteredData[hoveredIndex - 1];
     }
 
-    this.refillFilteredDataShort();
+    this.scrollToHoveredDatum();
   }
 
   moveSelectionDown() {
@@ -296,21 +338,17 @@ export class Select3 {
       this.hoveredDatum = this.filteredData[hoveredIndex + 1];
     }
 
-    this.refillFilteredDataShort();
+    this.scrollToHoveredDatum();
   }
 
   scrollDropdown(e) {
     let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
-    let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
-
-    let newHoveredIndex = hoveredDatumIndex - delta;
-
-    newHoveredIndex = Math.max(0, newHoveredIndex);
-    newHoveredIndex = Math.min(newHoveredIndex, this.filteredData.length - 1);
-
-    this.hoveredDatum = this.filteredData[newHoveredIndex];
-    this.refillFilteredDataShort();
+    if (delta < 0) {
+      this.scrollDown();
+    } else {
+      this.scrollUp();
+    }
   }
 
   selectHoveredItem() {
@@ -375,9 +413,10 @@ export class Select3 {
     // sort datums by matching query
     filteredData.sort(this._sortData.bind(this));
 
-    this.filteredData = filteredData;
     // hover first datum
-    this.hoveredDatum = this.filteredData.length > 0 ? this.filteredData[0] : null;
+    this.hoveredDatum = filteredData.length > 0 ? filteredData[0] : null;
+
+    this.filteredData = filteredData;
   }
 
   _queryTokenizer(query) {
@@ -422,7 +461,7 @@ export class Select3 {
   }
 
   _arrayUniqueByField(a, field) {
-    return a.reduce(function(p, c) {
+    return a.reduce(function (p, c) {
       if (p.every(x => x[field] !== c[field])) p.push(c);
       return p;
     }, []);
