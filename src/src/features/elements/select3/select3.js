@@ -49,7 +49,12 @@ export class Select3 {
     }
   }
 
-  valueChanged() {
+  valueChanged(newValue, oldValue) {
+    // todo: check why this is needed
+    if (newValue === oldValue) {
+      return;
+    }
+
     if (this.value === undefined || this.value === this.opts.emptyValue) {
       this.selectedItemName = null;
     } else {
