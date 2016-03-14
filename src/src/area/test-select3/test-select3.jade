@@ -14,7 +14,7 @@ template
               div.form-group.row
                 label.col-sm-4 Select a person
                 div.col-sm-8
-                  select3(items.bind="people", value.bind="selectedPersonId")
+                  select3(items.bind="people", value.bind="selectedPersonId", change.trigger="onChange($event.detail.value)")
               div.form-group.row
                 label.col-sm-4 Selected value
                 div.col-sm-8

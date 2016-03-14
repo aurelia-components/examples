@@ -88,6 +88,8 @@ export class TestSelect3 {
     this.selectedPerson = this.people[2];
 
     this.manyPeople = this._generateTestData(100000);
+
+    window.test = this;
   }
 
   changeArray() {
@@ -98,6 +100,9 @@ export class TestSelect3 {
 
   }
 
+  onChange(newValue){
+    console.log(newValue);
+  }
 
   _generateTestData(count) {
     var data = [];

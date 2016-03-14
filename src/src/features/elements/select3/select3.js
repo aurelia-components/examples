@@ -52,26 +52,29 @@ export class Select3 {
   valueChanged() {
     if (this.value === undefined || this.value === this.opts.emptyValue) {
       this.selectedItemName = null;
-      return;
-    }
-
-    let valueId = this.opts.modelValueBind ? this.value[this.opts.id] : this.value;
-
-    //todo: optimize check for "are all ids numbers?"
-    if (isNaN(valueId) === false && this.filteredData.every(x => Number.isInteger(x.item[this.opts.id]))) {
-      valueId = parseInt(valueId, 10);
-    }
-
-    let selectedDatum = this.filteredData.find(datum => {
-      return datum.item[this.opts.id] === valueId;
-    });
-
-    if (selectedDatum) {
-      this.selectedItemName = selectedDatum.item[this.opts.name];
     } else {
-      this.selectedItemName = null;
-      this.value = this.opts.emptyValue;
+      let valueId = this.opts.modelValueBind ? this.value[this.opts.id] : this.value;
+
+      //todo: optimize check for "are all ids numbers?"
+      if (isNaN(valueId) === false && this.filteredData.every(x => Number.isInteger(x.item[this.opts.id]))) {
+        valueId = parseInt(valueId, 10);
+      }
+
+      let selectedDatum = this.filteredData.find(datum => {
+        return datum.item[this.opts.id] === valueId;
+      });
+
+      if (selectedDatum) {
+        this.selectedItemName = selectedDatum.item[this.opts.name];
+      } else {
+        this.selectedItemName = null;
+        this.value = this.opts.emptyValue;
+      }
     }
+
+    customElementHelper.dispatchEvent(this.element, 'change', {
+      value: this.value
+    });
   }
 
   itemsChanged() {
