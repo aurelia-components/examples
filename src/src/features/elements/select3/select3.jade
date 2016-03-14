@@ -36,9 +36,9 @@ template
             class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
                   "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
-          button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()")
+          button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()", disabled.bind="filteredDataShortStartIndex === 0")
             span.fa.fa-caret-up
           div.select3-scrollbar-dragger-container
             div.select3-scrollbar-dragger(style.bind="{height: draggerHeight, top: draggerTop}")
-          button.select3-scrollbar-up-btn(mousedown.trigger="scrollDown()")
+          button.select3-scrollbar-up-btn(mousedown.trigger="scrollDown()", disabled.bind="filteredDataShortEndIndex === filteredData.length - 1")
             span.fa.fa-caret-down

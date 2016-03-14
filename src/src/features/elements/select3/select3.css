@@ -59,6 +59,15 @@
   color: black;
 }
 
+.select3-scrollbar button:enabled:hover {
+  background-color: gainsboro;
+  color: black;
+}
+
+.select3-scrollbar button:disabled {
+  color: gainsboro;
+}
+
 .select3-scrollbar-dragger-container {
   background-color: #f5f5f5;
   width: 100%;
