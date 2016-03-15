@@ -39,7 +39,7 @@ template
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
           button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()", class="${filteredDataShortStartIndex === 0 ? 'disabled': 'enabled'}")
             span.fa.fa-caret-up
-          div.select3-scrollbar-dragger-container
+          div.select3-scrollbar-dragger-container(mousedown.trigger="onDraggerContainerClick($event)")
             div.select3-scrollbar-dragger(style.bind="{height: draggerHeight + 'px', top: draggerTop + 'px'}",
             mousedown.trigger="startScrollbarDragging()")
           button.select3-scrollbar-down-btn(mousedown.trigger="scrollDown()", class="${filteredDataShortEndIndex === filteredData.length - 1 ? 'disabled': 'enabled'}")

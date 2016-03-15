@@ -318,6 +318,22 @@ export class Select3 {
     }
   }
 
+  onDraggerContainerClick(event) {
+    const dragger = this.element.querySelector('.select3-scrollbar-dragger');
+    if (event.target === dragger) {
+      return;
+    }
+    const availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+    var draggerPosition = dragger.getBoundingClientRect();
+    let diff = event.clientY - (draggerPosition.top + (draggerPosition.height / 2));
+    const minDraggerTop = 0;
+    const maxDraggerTop = availableHeight - this.draggerHeight;
+    let newDraggerTop = this.draggerTop + diff;
+    newDraggerTop = Math.min(maxDraggerTop, Math.max(minDraggerTop, newDraggerTop));
+    this.draggerTop = newDraggerTop;
+    this._calculateVisibleItemsPosition();
+  }
+
 
   // hovering
 
