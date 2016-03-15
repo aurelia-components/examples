@@ -22,6 +22,8 @@ export class Select3 {
   filteredDataShortEndIndex = 0;
   draggerTop = 0;
   draggerHeight = 0;
+  isScrollbarDragging = false;
+  previousMouseEvent = undefined;
 
   opts = {
     id: 'id',
@@ -55,6 +57,19 @@ export class Select3 {
     if (this.itemsCollectionSubscription !== undefined) {
       this.itemsCollectionSubscription.dispose();
     }
+  }
+
+  attached() {
+    this.documentMousemoveHandler = this.onDraggerMove.bind(this);
+    this.documentMouseupHandler = this.stopScrollbarDragging.bind(this);
+
+    document.addEventListener('mousemove', this.documentMousemoveHandler);
+    document.addEventListener('mouseup', this.documentMouseupHandler);
+  }
+
+  detached() {
+    document.removeEventListener('mousemove', this.documentMousemoveHandler);
+    document.removeEventListener('mouseup', this.documentMouseupHandler);
   }
 
   valueChanged(newValue, oldValue) {
@@ -213,7 +228,7 @@ export class Select3 {
   _refillFilteredDataShort() {
     this.filteredDataShort = this.filteredData.slice(this.filteredDataShortStartIndex, this.filteredDataShortEndIndex + 1);
 
-    this.taskQueue.queueTask(()=> {
+    this.taskQueue.queueTask(() => {
       this._calculateDraggerPosition();
     });
   }
@@ -246,8 +261,59 @@ export class Select3 {
         }
       }
 
-      this.draggerHeight = `${draggerHeight}px`;
-      this.draggerTop = `${draggerTop}px`;
+      this.draggerHeight = draggerHeight;
+      this.draggerTop = draggerTop;
+    }
+  }
+
+  _calculateVisibleItemsPosition() {
+    let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+    let itemsByPixel = this.filteredData.length / (availableHeight - this.draggerHeight);
+    let newStartIndex = Math.ceil(itemsByPixel * this.draggerTop);
+
+    let diff = newStartIndex - this.filteredDataShortStartIndex;
+    let newEndIndex = this.filteredDataShortEndIndex + diff;
+
+    if (newStartIndex < 0) {
+      newEndIndex = newEndIndex + (0 - newStartIndex);
+      newStartIndex = 0;
+    }
+
+    if (newEndIndex > this.filteredData.length - 1) {
+      newStartIndex = newStartIndex + (this.filteredData.length - 1 - newEndIndex);
+      newEndIndex = this.filteredData.length - 1;
+    }
+
+    this.filteredDataShortStartIndex = newStartIndex;
+    this.filteredDataShortEndIndex = newEndIndex;
+    this.filteredDataShort = this.filteredData.slice(this.filteredDataShortStartIndex, this.filteredDataShortEndIndex + 1);
+  }
+
+  startScrollbarDragging() {
+    this.isScrollbarDragging = true;
+  }
+
+  stopScrollbarDragging() {
+    this.isScrollbarDragging = false;
+    this.previousMouseEvent = undefined;
+  }
+
+  onDraggerMove(event) {
+    if (this.isScrollbarDragging) {
+      const movementY = event.movementY || (this.previousMouseEvent !== undefined ? event.screenY - this.previousMouseEvent.screenY : 0);
+
+      let newDraggerTop = this.draggerTop + movementY;
+
+      const availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+      const minDraggerTop = 0;
+      const maxDraggerTop = availableHeight - this.draggerHeight;
+
+      newDraggerTop = Math.min(maxDraggerTop, Math.max(minDraggerTop, newDraggerTop));
+
+      this.draggerTop = newDraggerTop;
+      this._calculateVisibleItemsPosition();
+
+      this.previousMouseEvent = event;
     }
   }
 

@@ -58,13 +58,14 @@
   color: black;
 }
 
-.select3-scrollbar button:enabled:hover {
+.select3-scrollbar button.enabled:hover {
   background-color: gainsboro;
   color: black;
 }
 
-.select3-scrollbar button:disabled {
+.select3-scrollbar button.disabled {
   color: gainsboro;
+  cursor: default;
 }
 
 .select3-scrollbar-dragger-container {

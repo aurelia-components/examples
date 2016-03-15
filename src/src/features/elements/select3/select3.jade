@@ -25,7 +25,7 @@ template
     div.select3-dropdown(show.bind="isDropdownOpen || opts.alwaysOpen")
       input.select3-search-box.form-control(type="text", value.bind="searchedItem",
         keydown.trigger="onSearchInputKeyPressed($event)",
-        focusout.trigger="closeDropdown()")
+        blur.trigger="closeDropdown()")
       div.select3-dropdown-results-container
         div.select3-dropdown-results(mousewheel.trigger="scrollDropdown($event)")
           div.select3-result.select3-no-results-message(if.bind="filteredData.length === 0") ${opts.noResultsMessage}
@@ -37,9 +37,10 @@ template
                   "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] || " +
             "parseInt(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
-          button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()", disabled.bind="filteredDataShortStartIndex === 0")
+          button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()", class="${filteredDataShortStartIndex === 0 ? 'disabled': 'enabled'}")
             span.fa.fa-caret-up
           div.select3-scrollbar-dragger-container
-            div.select3-scrollbar-dragger(style.bind="{height: draggerHeight, top: draggerTop}")
-          button.select3-scrollbar-down-btn(mousedown.trigger="scrollDown()", disabled.bind="filteredDataShortEndIndex === filteredData.length - 1")
+            div.select3-scrollbar-dragger(style.bind="{height: draggerHeight + 'px', top: draggerTop + 'px'}",
+            mousedown.trigger="startScrollbarDragging()")
+          button.select3-scrollbar-down-btn(mousedown.trigger="scrollDown()", class="${filteredDataShortEndIndex === filteredData.length - 1 ? 'disabled': 'enabled'}")
             span.fa.fa-caret-down
