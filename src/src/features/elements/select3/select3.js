@@ -60,7 +60,7 @@ export class Select3 {
   }
 
   attached() {
-    this.documentMousemoveHandler = this.onDraggerMove.bind(this);
+    this.documentMousemoveHandler = this.onScrollbarDragging.bind(this);
     this.documentMouseupHandler = this.stopScrollbarDragging.bind(this);
 
     document.addEventListener('mousemove', this.documentMousemoveHandler);
@@ -298,7 +298,7 @@ export class Select3 {
     this.previousMouseEvent = undefined;
   }
 
-  onDraggerMove(event) {
+  onScrollbarDragging(event) {
     if (this.isScrollbarDragging) {
       const movementY = event.movementY || (this.previousMouseEvent !== undefined ? event.screenY - this.previousMouseEvent.screenY : 0);
 
