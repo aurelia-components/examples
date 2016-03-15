@@ -2,7 +2,7 @@
   position: relative;
 }
 
-.select3 .select3-value-box {
+.select3 .select3-value-box[readonly] {
   background-color: white;
 }
 
