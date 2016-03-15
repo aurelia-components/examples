@@ -34,7 +34,8 @@ template
             innerhtml.bind="datum.highlightedName",
             mouseenter.trigger="setHover(datum)",
             class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
-                  "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
+                  "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] || " +
+            "parseInt(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
           button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()", disabled.bind="filteredDataShortStartIndex === 0")
             span.fa.fa-caret-up

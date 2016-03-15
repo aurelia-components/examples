@@ -42,6 +42,8 @@ export class Select3 {
     this.element = element;
     this.bindingEngine = bindingEngine;
     this.taskQueue = taskQueue;
+
+    this.parseInt = parseInt;
   }
 
   bind() {

@@ -18,22 +18,21 @@
 }
 
 .select3-dropdown .select3-dropdown-results {
-
   background-color: white;
   cursor: pointer;
   display: inline-block;
   flex-grow: 1;
 }
 
-.select3-dropdown .select3-dropdown-results div.select3-result.hovered {
+.select3-dropdown .select3-dropdown-results .select3-result.hovered {
   background-color: deepskyblue;
 }
 
-.select3-dropdown .select3-dropdown-results div.select3-result.selected {
+.select3-dropdown .select3-dropdown-results .select3-result.selected {
   background-color: gainsboro;
 }
 
-.select3-no-results-message {
+.select3-dropdown .select3-dropdown-results .select3-result.select3-no-results-message {
   font-weight: bold;
 }
 
