@@ -268,8 +268,9 @@ export class Select3 {
 
   _calculateVisibleItemsPosition() {
     let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
-    let itemsByPixel = this.filteredData.length / (availableHeight - this.draggerHeight);
-    let newStartIndex = Math.ceil(itemsByPixel * this.draggerTop);
+
+    let itemsByPixel = (this.filteredData.length - this.opts.visibleItemsCount) / (availableHeight - this.draggerHeight);
+    let newStartIndex = Math.round(itemsByPixel * this.draggerTop);
 
     let diff = newStartIndex - this.filteredDataShortStartIndex;
     let newEndIndex = this.filteredDataShortEndIndex + diff;
