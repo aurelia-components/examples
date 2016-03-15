@@ -38,7 +38,6 @@
 
 .select3-dropdown .select3-dropdown-results-container {
   width: 100%;
-  max-height: 200px;
   display: flex;
   align-items: stretch;
 }
