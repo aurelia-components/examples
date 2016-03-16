@@ -75,9 +75,12 @@
 
 .select3-scrollbar-dragger {
   width: 100%;
-  background-color: gainsboro;
+  background-color: #c1c1c1;
   height: 20px;
   position: relative;
+}
+.select3-scrollbar-dragger:hover {
+  background-color: #a9a9a9;
 }
 
 

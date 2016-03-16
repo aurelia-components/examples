@@ -25,7 +25,7 @@ template
     div.select3-dropdown(show.bind="isDropdownOpen || opts.alwaysOpen")
       input.select3-search-box.form-control(type="text", value.bind="searchedItem",
         keydown.trigger="onSearchInputKeyPressed($event)",
-        blur.trigger="closeDropdown()")
+        blur.trigger="closeDropdown(false)")
       div.select3-dropdown-results-container
         div.select3-dropdown-results(mousewheel.trigger="scrollDropdown($event)")
           div.select3-result.select3-no-results-message(if.bind="filteredData.length === 0") ${opts.noResultsMessage}
@@ -37,7 +37,9 @@ template
                   "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] || " +
             "parseInt(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
-          button.select3-scrollbar-up-btn(class="${filteredDataShortStartIndex === 0 ? 'disabled': 'enabled'}",
+          button.select3-scrollbar-up-btn(tabindex="-1",
+          type="button",
+          class="${filteredDataShortStartIndex === 0 ? 'disabled': 'enabled'}",
           mousedown.trigger="startScrollUp()",
           mouseup.trigger="stopScrollUp()",
           mouseleave.trigger="stopScrollUp()")
@@ -45,7 +47,9 @@ template
           div.select3-scrollbar-dragger-container(mousedown.trigger="onDraggerContainerClick($event)")
             div.select3-scrollbar-dragger(style.bind="{height: draggerHeight + 'px', top: draggerTop + 'px'}",
             mousedown.trigger="startScrollbarDragging()")
-          button.select3-scrollbar-down-btn(class="${filteredDataShortEndIndex === filteredData.length - 1 ? 'disabled': 'enabled'}",
+          button.select3-scrollbar-down-btn(tabindex="-1",
+          type="button",
+          class="${filteredDataShortEndIndex === filteredData.length - 1 ? 'disabled': 'enabled'}",
           mousedown.trigger="startScrollDown()",
           mouseup.trigger="stopScrollDown()",
           mouseleave.trigger="stopScrollDown()")

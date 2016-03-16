@@ -464,14 +464,14 @@ export class Select3 {
     });
   }
 
-  closeDropdown() {
+  closeDropdown(focusOnValue = true) {
     this.isDropdownOpen = false;
 
     if (this.opts.selectHoveredOnCloseDropdown === true) {
       this.selectHoveredItem();
     }
 
-    if (this.value !== this.opts.emptyValue) {
+    if (focusOnValue && this.value !== this.opts.emptyValue) {
       this.taskQueue.queueTask(() => {
         this.valueInput.focus();
       });
