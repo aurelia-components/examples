@@ -184,7 +184,9 @@ export class Select3 {
         this._refillFilteredDataShort();
       } else { // scroll as many times as possible
         count = this.filteredDataShortStartIndex;
-        this.scrollUp(count);
+        if (count > 0) {
+          this.scrollUp(count);
+        }
       }
     }
   }
@@ -202,8 +204,10 @@ export class Select3 {
         this.filteredDataShortEndIndex += count;
         this._refillFilteredDataShort();
       } else { // scroll as many times as possible
-        count = this.filteredData.length - this.filteredDataShortEndIndex;
-        this.scrollDown(count);
+        count = this.filteredData.length - 1 - this.filteredDataShortEndIndex;
+        if (count > 0) {
+          this.scrollDown(count);
+        }
       }
     }
   }
@@ -562,7 +566,7 @@ export class Select3 {
     let queryTokensGroupedByValue = this._getTokensGroupedByValue(queryTokens);
 
     // map every item to Datum object
-    let data = this.items.map(item => new Datum(item, this.opts, queryTokens));
+    let data = this.items.map((item, index) => new Datum(item, index, this.opts, queryTokens));
 
     // filter only datums that match query
     let filteredData = data.filter(datum => {
@@ -628,7 +632,7 @@ export class Select3 {
       return 0;
     }
 
-    return 0;
+    return a.index > b.index ? 1 : a.index < b.index ? -1 : 0;
   }
 
 

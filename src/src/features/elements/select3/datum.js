@@ -1,10 +1,11 @@
 import {Tokenizers} from './tokenizers';
 
 export class Datum {
-  constructor(item, opts, queryTokens) {
+  constructor(item, index, opts, queryTokens) {
     this.highlightTag = 'strong';
 
     this.item = item;
+    this.index = index;
     this.queryTokens = queryTokens;
 
     this.opts = opts;
@@ -19,14 +20,17 @@ export class Datum {
     // queryTokensMatches[i] == the index of query token that the i-th data token matches
     this.queryTokensMatches = this.tokens.map(token => {
       let tokenLower = token.value.toLowerCase();
-      let matchedQueryToken = this.queryTokens.find(queryToken => {
+      let matchedQueryTokens = this.queryTokens.filter(queryToken => {
         let queryTokenLower = queryToken.value.toLowerCase();
         let result = tokenLower.startsWith(queryTokenLower);
         return result;
+      }).sort((a, b) => {
+        return a.value.length > b.value.length ? -1 : a.value.length < b.value.length ? 1 : 0;
       });
 
-      let matchedQueryTokenIndex = matchedQueryToken ? this.queryTokens.indexOf(matchedQueryToken) : -1;
+      let matchedQueryTokenIndex = matchedQueryTokens.length > 0 ? this.queryTokens.indexOf(matchedQueryTokens[0]) : -1;
       if (matchedQueryTokenIndex > -1) {
+        let matchedQueryToken = matchedQueryTokens[0];
         // substitute name part with highlighted
         let partForHighlighting = token.value.substring(0, matchedQueryToken.value.length);
         let highlightedPart = '<' + this.highlightTag + '>' + partForHighlighting + '</' + this.highlightTag + '>';
