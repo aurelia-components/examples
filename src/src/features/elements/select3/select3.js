@@ -125,13 +125,13 @@ export class Select3 {
   }
 
   searchedItemChanged() {
-    if (!this.debounce) {
-      this.debounce = customElementHelper.debounce(() => {
+    if (!this.debounceSearch) {
+      this.debounceSearch = customElementHelper.debounce(() => {
         this.search(this.searchedItem);
       }, this.opts.debounceSearch);
     }
 
-    this.debounce();
+    this.debounceSearch();
   }
 
   filteredDataChanged() {
