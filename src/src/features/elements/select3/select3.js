@@ -553,6 +553,7 @@ export class Select3 {
 
   // search
 
+  // todo: check if query.startsWith(previousQuery) and match only the already matched elements
   search(query) {
     // todo: check for empty or null or not an array? maybe in items changed and throw error?
     if (this.items === undefined) {
@@ -566,6 +567,7 @@ export class Select3 {
     let queryTokensGroupedByValue = this._getTokensGroupedByValue(queryTokens);
 
     // map every item to Datum object
+    // todo: create only once for every item and call method to match current query
     let data = this.items.map((item, index) => new Datum(item, index, this.opts, queryTokens));
 
     // filter only datums that match query
