@@ -11,13 +11,13 @@ template
         mousedown.trigger="toggleDropdown()",
         keydown.trigger="onValueInputKeyPressed($event)")
       div.input-group-btn
-        button.btn.btn-secondary(tabindex="-1",
+        button.btn.btn-secondary.btn-default(tabindex="-1",
           type="button",
           disabled.bind="disabled",
           show.bind="!opts.disableClear && value !== opts.emptyValue",
           mousedown.trigger="clearValue()")
           i.fa.fa-times
-        button.btn.btn-secondary(tabindex="-1",
+        button.btn.btn-secondary.btn-default(tabindex="-1",
           type="button",
           disabled.bind="disabled",
           mousedown.trigger="toggleDropdown()")
@@ -37,10 +37,16 @@ template
                   "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] || " +
             "parseInt(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
-          button.select3-scrollbar-up-btn(mousedown.trigger="scrollUp()", class="${filteredDataShortStartIndex === 0 ? 'disabled': 'enabled'}")
+          button.select3-scrollbar-up-btn(class="${filteredDataShortStartIndex === 0 ? 'disabled': 'enabled'}",
+          mousedown.trigger="startScrollUp()",
+          mouseup.trigger="stopScrollUp()",
+          mouseleave.trigger="stopScrollUp()")
             span.fa.fa-caret-up
           div.select3-scrollbar-dragger-container(mousedown.trigger="onDraggerContainerClick($event)")
             div.select3-scrollbar-dragger(style.bind="{height: draggerHeight + 'px', top: draggerTop + 'px'}",
             mousedown.trigger="startScrollbarDragging()")
-          button.select3-scrollbar-down-btn(mousedown.trigger="scrollDown()", class="${filteredDataShortEndIndex === filteredData.length - 1 ? 'disabled': 'enabled'}")
+          button.select3-scrollbar-down-btn(class="${filteredDataShortEndIndex === filteredData.length - 1 ? 'disabled': 'enabled'}",
+          mousedown.trigger="startScrollDown()",
+          mouseup.trigger="stopScrollDown()",
+          mouseleave.trigger="stopScrollDown()")
             span.fa.fa-caret-down

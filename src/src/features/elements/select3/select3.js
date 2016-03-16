@@ -24,6 +24,8 @@ export class Select3 {
   draggerHeight = 0;
   isScrollbarDragging = false;
   previousMouseEvent = undefined;
+  scrollUpIntervalId = null;
+  scrollDownIntervalId = null;
 
   opts = {
     id: 'id',
@@ -37,7 +39,9 @@ export class Select3 {
     emptyValue: null, // ??? or undefined???
     selectHoveredOnCloseDropdown: false,
     debounce: 150,
-    visibleItemsCount: 11
+    visibleItemsCount: 11,
+    scrollStep: 1,
+    scrollInterval: 30
   };
 
   constructor(element, bindingEngine, taskQueue) {
@@ -163,7 +167,11 @@ export class Select3 {
     }
   }
 
-  scrollUp(count = 1) {
+  scrollUp(count) {
+    if (count === undefined) {
+      count = this.opts.scrollStep;
+    }
+
     // can scroll at least once
     if (this.filteredDataShortStartIndex > 0) {
       // can scroll desired times
@@ -178,7 +186,11 @@ export class Select3 {
     }
   }
 
-  scrollDown(count = 1) {
+  scrollDown(count) {
+    if (count === undefined) {
+      count = this.opts.scrollStep;
+    }
+
     // can scroll at least once
     if (this.filteredDataShortEndIndex < this.filteredData.length - 1) {
       // can scroll desired times
@@ -332,6 +344,34 @@ export class Select3 {
     newDraggerTop = Math.min(maxDraggerTop, Math.max(minDraggerTop, newDraggerTop));
     this.draggerTop = newDraggerTop;
     this._calculateVisibleItemsPosition();
+  }
+
+  startScrollUp() {
+    this.stopScrollDown();
+    this.stopScrollUp();
+    if (this.filteredDataShortStartIndex > 0) {
+      this.scrollUpIntervalId = window.setInterval(() => {
+        this.scrollUp();
+      }, this.opts.scrollInterval);
+    }
+  }
+
+  stopScrollUp() {
+    this.scrollUpIntervalId = window.clearInterval(this.scrollUpIntervalId);
+  }
+
+  startScrollDown() {
+    this.stopScrollUp();
+    this.stopScrollDown();
+    if (this.filteredDataShortStartIndex < this.filteredData.length - 1) {
+      this.scrollDownIntervalId = window.setInterval(() => {
+        this.scrollDown();
+      }, this.opts.scrollInterval);
+    }
+  }
+
+  stopScrollDown() {
+    this.scrollDownIntervalId = window.clearInterval(this.scrollDownIntervalId);
   }
 
 
@@ -614,6 +654,6 @@ export class Select3 {
       "'": '&#039;'
     };
 
-    return text.replace(/[&<>"']/g, m => map[m]);
+    return text.toString().replace(/[&<>"']/g, m => map[m]);
   }
 }

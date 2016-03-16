@@ -46,7 +46,7 @@ template
                 div.col-sm-8
                   select3(items.bind="manyPeople",
                   value.bind="selectedManyPerson",
-                  options.bind="{modelValueBind: true}")
+                  options.bind="{modelValueBind: true, scrollStep: 10, name: 'id'}")
               div.form-group.row
                 label.col-sm-4 Selected person
                 div.col-sm-8
