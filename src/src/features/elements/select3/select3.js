@@ -38,8 +38,8 @@ export class Select3 {
     disableClear: false,
     emptyValue: null, // ??? or undefined???
     selectHoveredOnCloseDropdown: false,
-    debounce: 150,
-    visibleItemsCount: 11,
+    debounceSearch: 150,
+    visibleItemsCount: 11, // better if odd number
     scrollStep: 1,
     scrollInterval: 30
   };
@@ -69,6 +69,17 @@ export class Select3 {
 
     document.addEventListener('mousemove', this.documentMousemoveHandler);
     document.addEventListener('mouseup', this.documentMouseupHandler);
+
+    this.scrollbar = this.element.querySelector('.select3-scrollbar');
+    this.draggerContainer = this.element.querySelector('.select3-scrollbar-dragger-container');
+    this.dragger = this.element.querySelector('.select3-scrollbar-dragger');
+    this.searchInput = this.element.querySelector('.select3-search-box');
+    this.valueInput = this.element.querySelector('.select3-value-box');
+    this.dropdown = this.element.querySelector('.select3-dropdown');
+
+    if (this.opts.hasFocus && this.items.length > 0) {
+      this.openDropdown();
+    }
   }
 
   detached() {
@@ -77,11 +88,6 @@ export class Select3 {
   }
 
   valueChanged(newValue, oldValue) {
-    // todo: check why this is needed
-    if (newValue === oldValue) {
-      return;
-    }
-
     if (this.value === undefined || this.value === this.opts.emptyValue) {
       this.selectedItemName = null;
     } else {
@@ -104,9 +110,11 @@ export class Select3 {
       }
     }
 
-    customElementHelper.dispatchEvent(this.element, 'change', {
-      newValue: newValue,
-      oldValue: oldValue
+    this.taskQueue.queueMicroTask(()=> {
+      customElementHelper.dispatchEvent(this.element, 'change', {
+        value: newValue,
+        oldValue: oldValue
+      });
     });
   }
 
@@ -120,7 +128,7 @@ export class Select3 {
     if (!this.debounce) {
       this.debounce = customElementHelper.debounce(() => {
         this.search(this.searchedItem);
-      }, this.opts.debounce);
+      }, this.opts.debounceSearch);
     }
 
     this.debounce();
@@ -147,11 +155,6 @@ export class Select3 {
       i._escapedName = this._escapeHtml(i[this.opts.name]);
     });
     this.search(this.searchedItem);
-
-    // todo: figure out smarter way for opening dropdown initially
-    if (this.opts.hasFocus && this.items.length > 0) {
-      this.openDropdown();
-    }
   }
 
 
@@ -246,14 +249,12 @@ export class Select3 {
   }
 
   _calculateDraggerPosition() {
-    let scrollbar = this.element.querySelector('.select3-scrollbar');
-
     if (this.filteredDataShort.length === this.filteredData.length) {
-      scrollbar.style.display = 'none';
+      this.scrollbar.style.display = 'none';
     } else {
-      scrollbar.style.display = '';
+      this.scrollbar.style.display = '';
       const minDraggerHeight = 15;
-      let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+      let availableHeight = this.draggerContainer.offsetHeight;
       let draggerHeight = availableHeight * (this.opts.visibleItemsCount / this.filteredData.length);
       let draggerTop = availableHeight * (this.filteredDataShortStartIndex / this.filteredData.length);
 
@@ -279,7 +280,7 @@ export class Select3 {
   }
 
   _calculateVisibleItemsPosition() {
-    let availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+    let availableHeight = this.draggerContainer.offsetHeight;
 
     let itemsByPixel = (this.filteredData.length - this.opts.visibleItemsCount) / (availableHeight - this.draggerHeight);
     let newStartIndex = Math.round(itemsByPixel * this.draggerTop);
@@ -317,7 +318,7 @@ export class Select3 {
 
       let newDraggerTop = this.draggerTop + movementY;
 
-      const availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
+      const availableHeight = this.draggerContainer.offsetHeight;
       const minDraggerTop = 0;
       const maxDraggerTop = availableHeight - this.draggerHeight;
 
@@ -331,12 +332,12 @@ export class Select3 {
   }
 
   onDraggerContainerClick(event) {
-    const dragger = this.element.querySelector('.select3-scrollbar-dragger');
-    if (event.target === dragger) {
+    if (event.target === this.dragger) {
       return;
     }
-    const availableHeight = this.element.querySelector('.select3-scrollbar-dragger-container').offsetHeight;
-    var draggerPosition = dragger.getBoundingClientRect();
+
+    const availableHeight = this.draggerContainer.offsetHeight;
+    var draggerPosition = this.dragger.getBoundingClientRect();
     let diff = event.clientY - (draggerPosition.top + (draggerPosition.height / 2));
     const minDraggerTop = 0;
     const maxDraggerTop = availableHeight - this.draggerHeight;
@@ -451,13 +452,11 @@ export class Select3 {
   openDropdown() {
     this.isDropdownOpen = true;
 
-    // focus on search box when opened
     this.taskQueue.queueTask(()=> {
       this._reorientDropdownIfNeeded();
       this._calculateDraggerPosition();
-      let searchInput = this.element.querySelector('.select3-search-box');
-      searchInput.focus();
-      searchInput.select();
+      this.searchInput.focus();
+      this.searchInput.select();
     });
   }
 
@@ -470,8 +469,7 @@ export class Select3 {
 
     if (this.value !== this.opts.emptyValue) {
       this.taskQueue.queueTask(() => {
-        let valueInput = this.element.querySelector('.select3-value-box');
-        valueInput.focus();
+        this.valueInput.focus();
       });
     }
   }
@@ -487,20 +485,18 @@ export class Select3 {
   }
 
   _reorientDropdownIfNeeded() {
-    // todo: use query selector, maybe keep this element in this?
-    let dropdown = this.element.getElementsByClassName('select3-dropdown')[0];
-    let currentBottomStyle = dropdown.style.bottom;
-    let rect = dropdown.getBoundingClientRect();
+    let currentBottomStyle = this.dropdown.style.bottom;
+    let rect = this.dropdown.getBoundingClientRect();
     if (currentBottomStyle == 'auto' || !currentBottomStyle) {
       let viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-      let enoughRoomBelow = viewportHeight >= dropdown.clientHeight + rect.top;
+      let enoughRoomBelow = viewportHeight >= this.dropdown.clientHeight + rect.top;
       if (!enoughRoomBelow) {
-        dropdown.style.bottom = '25px';
+        this.dropdown.style.bottom = '25px';
       }
     } else {
-      let enoughRoomAbove = rect.bottom - dropdown.clientHeight >= 0;
+      let enoughRoomAbove = rect.bottom - this.dropdown.clientHeight >= 0;
       if (!enoughRoomAbove) {
-        dropdown.style.bottom = 'auto';
+        this.dropdown.style.bottom = 'auto';
       }
     }
   }
