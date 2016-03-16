@@ -45,15 +45,53 @@ export class Datum {
       return matchedQueryTokenIndex;
     });
 
+    //let usedTokens = [];
+    //this.queryTokensMatchesUnique = this.queryTokensMatches.map((queryIndex, datumIndex) => {
+    //  if (usedTokens.indexOf(queryIndex) > -1) {
+    //    return -queryIndex - 2;
+    //  }
+    //  usedTokens.push(queryIndex);
+    //  return queryIndex;
+    //});
+
     this._setHighlightedName();
   }
 
   static compare(a, b) {
+    //let aQtm = a.queryTokensMatchesUnique;
+    //let bQtm = b.queryTokensMatchesUnique;
     let aQtm = a.queryTokensMatches;
     let bQtm = b.queryTokensMatches;
-    for (let i = 0; i < Math.min(aQtm.length, bQtm.length); i++) {
-      if (aQtm[i] !== bQtm[i]) {
-        return bQtm[i] - aQtm[i];
+    const length = Math.min(aQtm.length, bQtm.length);
+    for (let i = 0; i < length; i++) {
+      const ai = aQtm[i];
+      const bi = bQtm[i];
+      if (ai !== bi) {
+        if (ai === -1) {
+          return 1;
+        }
+
+        if (bi === -1) {
+          return -1;
+        }
+
+        //if(ai > -1 && bi > -1){
+        //  return ai > bi ? 1 : -1;
+        //}
+        //
+        //if(ai < -1 && bi < -1){
+        //  return  ai < bi ? 1 : -1;
+        //}
+        //
+        //if(ai > -1 && bi < -1){
+        //  return -1;
+        //}
+        //
+        //if(ai < -1 && bi > -1){
+        //  return 1;
+        //}
+
+        return ai > bi ? 1 : -1;
       }
     }
 
