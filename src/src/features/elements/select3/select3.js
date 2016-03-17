@@ -41,7 +41,8 @@ export class Select3 {
     debounceSearch: 150,
     visibleItemsCount: 11, // better if odd number
     scrollStep: 1,
-    scrollInterval: 30
+    scrollInterval: 30,
+    scrollTimeout: 300
   };
 
   constructor(element, bindingEngine, taskQueue) {
@@ -186,8 +187,12 @@ export class Select3 {
         count = this.filteredDataShortStartIndex;
         if (count > 0) {
           this.scrollUp(count);
+        } else {
+          this.stopScrollUp();
         }
       }
+    } else {
+      this.stopScrollUp();
     }
   }
 
@@ -207,8 +212,12 @@ export class Select3 {
         count = this.filteredData.length - 1 - this.filteredDataShortEndIndex;
         if (count > 0) {
           this.scrollDown(count);
+        } else {
+          this.stopScrollDown();
         }
       }
+    } else {
+      this.stopScrollDown();
     }
   }
 
@@ -355,13 +364,19 @@ export class Select3 {
     this.stopScrollDown();
     this.stopScrollUp();
     if (this.filteredDataShortStartIndex > 0) {
-      this.scrollUpIntervalId = window.setInterval(() => {
-        this.scrollUp();
-      }, this.opts.scrollInterval);
+      this.scrollUp();
+
+      this.scrollUpIntervalId = window.setTimeout(() => {
+        this.stopScrollUp();
+        this.scrollUpIntervalId = window.setInterval(() => {
+          this.scrollUp();
+        }, this.opts.scrollInterval);
+      }, this.opts.scrollTimeout);
     }
   }
 
   stopScrollUp() {
+    this.scrollUpIntervalId = window.clearTimeout(this.scrollUpIntervalId);
     this.scrollUpIntervalId = window.clearInterval(this.scrollUpIntervalId);
   }
 
@@ -369,13 +384,19 @@ export class Select3 {
     this.stopScrollUp();
     this.stopScrollDown();
     if (this.filteredDataShortStartIndex < this.filteredData.length - 1) {
-      this.scrollDownIntervalId = window.setInterval(() => {
-        this.scrollDown();
-      }, this.opts.scrollInterval);
+      this.scrollDown();
+
+      this.scrollDownIntervalId = window.setTimeout(() => {
+        this.stopScrollDown();
+        this.scrollDownIntervalId = window.setInterval(() => {
+          this.scrollDown();
+        }, this.opts.scrollInterval);
+      }, this.opts.scrollTimeout);
     }
   }
 
   stopScrollDown() {
+    this.scrollDownIntervalId = window.clearTimeout(this.scrollDownIntervalId);
     this.scrollDownIntervalId = window.clearInterval(this.scrollDownIntervalId);
   }
 
