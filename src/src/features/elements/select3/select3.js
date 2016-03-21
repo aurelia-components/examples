@@ -225,15 +225,34 @@ export class Select3 {
   }
 
   scrollToHoveredDatum() {
+    const halfCount = Math.floor(this.opts.visibleItemsCount / 2);
+    const fullCount = this.opts.visibleItemsCount;
     let hoveredDatumIndex = this.filteredData.indexOf(this.hoveredDatum);
-    if (hoveredDatumIndex < this.filteredDataShortStartIndex) {
-      this.filteredDataShortStartIndex = hoveredDatumIndex;
-      this.filteredDataShortEndIndex = this.filteredDataShortStartIndex + this.opts.visibleItemsCount - 1;
-    } else if (hoveredDatumIndex > this.filteredDataShortEndIndex) {
-      this.filteredDataShortEndIndex = hoveredDatumIndex;
-      this.filteredDataShortStartIndex = this.filteredDataShortEndIndex - (this.opts.visibleItemsCount - 1);
+    let isInFirstHalfCount = hoveredDatumIndex < halfCount;
+    let isInLastHalfCount = hoveredDatumIndex > this.filteredData.length - 1 - halfCount;
+
+    let start, end;
+    if (this.filteredData.length <= this.opts.visibleItemsCount) {
+      // take all
+      start = 0;
+      end = this.filteredData.length - 1;
+    } else if (isInFirstHalfCount && !isInLastHalfCount) {
+      // take first fullCount
+      start = 0;
+      end = fullCount - 1;
+    } else if (!isInFirstHalfCount && isInLastHalfCount) {
+      // take last fullCount
+      end = this.filteredData.length - 1;
+      start = end - (fullCount - 1);
+    } else {// !isInFirstHalfCount && !isInLastHalfCount
+      //take halfCount before and halfCount after
+      start = hoveredDatumIndex - halfCount;
+      end = hoveredDatumIndex + halfCount;
     }
-    
+
+    this.filteredDataShortStartIndex = start;
+    this.filteredDataShortEndIndex = end;
+
     this._refillFilteredDataShort();
   }
 
