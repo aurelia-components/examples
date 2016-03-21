@@ -21,9 +21,8 @@ export class Datum {
     this.queryTokensMatches = this.tokens.map(token => {
       let tokenLower = token.value.toLowerCase();
       let matchedQueryTokens = this.queryTokens.filter(queryToken => {
-        let queryTokenLower = queryToken.value.toLowerCase();
-        let result = tokenLower.startsWith(queryTokenLower);
-        return result;
+        //let queryTokenLower = queryToken.value.toLowerCase();
+        return tokenLower.startsWith(queryToken.value);
       }).sort((a, b) => {
         return a.value.length > b.value.length ? -1 : a.value.length < b.value.length ? 1 : 0;
       });
@@ -118,8 +117,6 @@ export class Datum {
   _setHighlightedName() {
     this.highlightedName = '';
     let keys = Object.keys(this.highlightedNameParts).sort((a, b)=> {
-      let aNum = parseInt(a);
-      let bNum = parseInt(b);
       return a - b;
     });
     keys.forEach(position => {
@@ -129,7 +126,6 @@ export class Datum {
 
   _datumTokenizer(item) {
     // add here if we want matching by more fields
-    let nameTokens = Tokenizers.nonword(item._escapedName);
-    return nameTokens;
+    return /*let nameTokens = */ Tokenizers.nonword(item._escapedName);
   }
 }

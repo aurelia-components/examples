@@ -35,6 +35,7 @@ export class Select3 {
     noResultsMessage: 'Няма намерени резултати',
     sort: false,
     sortField: '',
+    //sortDirection: 'asc', // todo: implement
     disableClear: false,
     emptyValue: null, // ??? or undefined???
     selectHoveredOnCloseDropdown: false,
@@ -584,6 +585,9 @@ export class Select3 {
 
     // get only non-empty tokens
     let queryTokens = this._queryTokenizer(query).filter(qt => qt.value.length > 0);
+    queryTokens.forEach(qt => {
+      qt.value = qt.value.toLowerCase();
+    });
     // group tokens by value -> to know how many matches of each token we need
     let queryTokensGroupedByValue = this._getTokensGroupedByValue(queryTokens);
 
@@ -599,13 +603,12 @@ export class Select3 {
         .map(queryTokenIndex => queryTokens[queryTokenIndex]);
       // group query tokens (in case we have matched a token more than once)
       let matchingQueryTokensGroupedByValue = this._getTokensGroupedByValue(matchingQueryTokens);
-      let isMatchingQuery = queryTokensGroupedByValue.every(queryTokenGroup => {
+      return /*let isMatchingQuery = */queryTokensGroupedByValue.every(queryTokenGroup => {
         // find token that corresponds to current query token
         let matchingQueryTokenGroup = matchingQueryTokensGroupedByValue.find(x => x.value === queryTokenGroup.value);
         // evaluate if we have more matches than needed for current query token
         return matchingQueryTokenGroup && (matchingQueryTokenGroup.indexes.length >= queryTokenGroup.indexes.length);
       });
-      return isMatchingQuery;
     });
 
     // sort datums by matching query
@@ -623,7 +626,7 @@ export class Select3 {
 
   _getTokensGroupedByValue(tokensArray) {
     let uniqueTokens = this._arrayUniqueByField(tokensArray, 'value');
-    let tokensGroupedByValue = uniqueTokens.map(uniqueToken => {
+    return /*let tokensGroupedByValue = */ uniqueTokens.map(uniqueToken => {
       let tokensWithSameValue = tokensArray.filter(token => token.value === uniqueToken.value);
       let indexesOfTokensWithSameValue = tokensWithSameValue.map(token => tokensArray.indexOf(token));
       return {
@@ -631,8 +634,6 @@ export class Select3 {
         value: uniqueToken.value
       };
     });
-
-    return tokensGroupedByValue;
   }
 
   _sortData(a, b) {
