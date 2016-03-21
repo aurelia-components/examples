@@ -25,6 +25,30 @@ export class TestSelect3 {
       {id: 20, name: "Yvonne Guzman Ella Cochran"}
     ];
 
+    this.peopleWithId = [
+      {id: 0, name: "Mccullough Montoya Goldie Bright"},
+      {id: 1, name: "Cheri Everett Hope Franks"},
+      {id: 2, name: "Yang Owen Janice Velez"},
+      {id: 3, name: "Jayne Savage Griffin Wilder"},
+      {id: 4, name: "Simmons Anderson Kelly Buchanan"},
+      {id: 5, name: "Ray Marshall Nielsen Charles"},
+      {id: 6, name: "Dora Robertson Kristin Gillespie"},
+      {id: 7, name: "Christensen Hansen Leblanc Sweeney"},
+      {id: 8, name: "Rosetta Madden Jan Vargas"},
+      {id: 9, name: "Lara Tanner Willa Turner"},
+      {id: 10, name: "Rena Holcomb Sarah Ortiz"},
+      {id: 11, name: "Christine Collier Jennings Frank"},
+      {id: 12, name: "Greta Rice Rosemary Salas"},
+      {id: 13, name: "Joni Mccullough Glass Holt"},
+      {id: 14, name: "Beach Chase Renee Gay"},
+      {id: 15, name: "Chrystal Pennington Neal Suarez"},
+      {id: 16, name: "Saundra Bean Melva Yates"},
+      {id: 17, name: "Dawson Ward Jarvis Byers"},
+      {id: 18, name: "Kris Roberts Harding Lancaster"},
+      {id: 19, name: "Smith Oneal Marjorie Dejesus"},
+      {id: 20, name: "Yvonne Guzman Ella Cochran"}
+    ];
+
     this.peopleWithGuids = [
       {id: "8d9db48a-49a6-4c03-935c-4422146ec625", name: "Consuelo Espinoza Katy Yates"},
       {id: "fcd4ee18-4bc0-4580-80b9-300d1f9d6f4e", name: "Guerra Baker Carly Mosley"},
