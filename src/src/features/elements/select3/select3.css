@@ -79,6 +79,7 @@
   height: 20px;
   position: relative;
 }
+
 .select3-scrollbar-dragger:hover {
   background-color: #a9a9a9;
 }

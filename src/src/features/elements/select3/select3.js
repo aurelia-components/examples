@@ -240,7 +240,7 @@ export class Select3 {
     } else if (!isInFirstHalfCount && isInLastHalfCount) {
       // take last fullCount
       end = this.filteredData.length - 1;
-      start = end - fullCount;
+      start = end - (fullCount - 1);
     } else {// !isInFirstHalfCount && !isInLastHalfCount
       //take halfCount before and halfCount after
       start = hoveredDatumIndex - halfCount;
