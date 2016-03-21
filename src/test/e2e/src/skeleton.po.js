@@ -9,7 +9,8 @@ export class PageObjectSkeleton {
     return browser.getTitle();
   }
 
-  navigateTo(href) {
+  navigateTo(href){ 
+    href = href ? href : '';
     href = this.routePrefix ? this.routePrefix + href : href;
     element(by.css('a[href="' + href + '"]'))
       .click();
@@ -34,6 +35,15 @@ export class PageObjectSkeleton {
 
     return element.all(by.eventName('click', handler));
   }
+
+  getBoundElements(boundProperty, viewModel, e){
+    if (e) {
+      return e.all(by.propBind(boundProperty, viewModel));
+    }
+
+    return element.all(by.propBind(boundProperty, viewModel));
+
+  } 
 
   changeSelectMenu(text) {
     element(by.cssContainingText('option', text))

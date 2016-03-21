@@ -1,9 +1,9 @@
 /* Aurelia Protractor Plugin */
 /* eslint-disable no-var, no-console */
 function addValueBindLocator() {
-  by.addLocator('valueBind', function(bindingModel, optParentElement) {
+  by.addLocator('propBind', function(prop, bindingModel, optParentElement) {
     var using = optParentElement || document;
-    var matches = using.querySelectorAll('*[value\\.bind="' + bindingModel + '"]');
+    var matches = using.querySelectorAll('*[' + prop  + '\\.bind="' + bindingModel + '"]');
     var result;
 
     if (matches.length === 0) {
@@ -21,9 +21,7 @@ function addValueBindLocator() {
 function addEventNameLocator() {
   by.addLocator('eventName', function(eventName, eventHandlerName, optParentElement) {
     var using = optParentElement || document;
-    var bracketIndex = eventHandlerName.indexOf('(');
-      eventHandlerName = bracketIndex !== -1 ? eventHandlerName :  eventHandlerName + "()";
-      var matches = using.querySelectorAll('*['+ eventName + '\\.delegate="' + eventHandlerName + '"]');
+    var matches = using.querySelectorAll('*['+ eventName + '\\.delegate="' + eventHandlerName + '"]');
 
       if (matches.length === 0) {
         matches = using.querySelectorAll('*['+ eventName + '\\.call="' + eventHandlerName + '"]');

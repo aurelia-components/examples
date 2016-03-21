@@ -1,7 +1,7 @@
 import { PageObjectGrid } from './grid.po.js';
 import { Constants } from '../constants.js';
 
-describe('aurelia grid pagination', () => {
+xdescribe('aurelia grid pagination', () => {
   let poGrid;
 
   beforeEach(() => {
@@ -71,7 +71,7 @@ describe('aurelia grid pagination', () => {
   });
 });
 
-describe('aurelia grid filtering', () => {
+xdescribe('aurelia grid filtering', () => {
   let poGrid;
 
   beforeEach(() => {
@@ -123,7 +123,7 @@ describe('aurelia grid filtering', () => {
     });
 });
 
-describe('aurelia grid sorting', () => {
+xdescribe('aurelia grid sorting', () => {
   let poGrid;
 
   beforeEach(() => {
@@ -173,7 +173,7 @@ describe('aurelia grid sorting', () => {
     });
 });
 
-describe('aurelia grid syncing', () => {
+xdescribe('aurelia grid syncing', () => {
   let poGrid;
 
   beforeEach(() => {

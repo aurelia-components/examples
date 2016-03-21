@@ -52,6 +52,7 @@ export class PageObjectGrid extends PageObjectSkeleton {
   clickPage(page) {
     element(by.cssContainingText('a', page))
       .click();
+    browser,sleep(Constants.VisualDelayTime);
   }
 
   getActivePage() {

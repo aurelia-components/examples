@@ -1,6 +1,10 @@
 node_modules
 jspm_packages
 bower_components
+AureliaComponentsTests/packages
+AureliaComponentsTests/TestResults
+AureliaComponentsTests/**/bin
+AureliaComponentsTests/**/obj
 .idea
 *.html
 *.css
@@ -15,6 +19,5 @@ src/backend/play-scala/form.pdf
 .tern-port
 
 .#*
-
 **/.sass-cache
 **/.sass-cache/*
