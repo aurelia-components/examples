@@ -22,7 +22,7 @@ template
           disabled.bind="disabled",
           mousedown.trigger="toggleDropdown()")
           i.fa(class.bind="isDropdownOpen? 'fa-caret-up' : 'fa-caret-down'")
-    div.select3-dropdown(show.bind="isDropdownOpen || opts.alwaysOpen")
+    div.select3-dropdown(show.bind="isDropdownOpen")
       input.select3-search-box.form-control(type="text", value.bind="searchedItem",
         keydown.trigger="onSearchInputKeyPressed($event)",
         blur.trigger="closeDropdown(false)")
