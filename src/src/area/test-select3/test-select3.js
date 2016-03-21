@@ -25,6 +25,29 @@ export class TestSelect3 {
       {id: 20, name: "Yvonne Guzman Ella Cochran"}
     ];
 
+    this.peopleWithId = [
+      {id: 0, name: "Mccullough Montoya Goldie Bright"},
+      {id: 1, name: "Cheri Everett Hope Franks"},
+      {id: 2, name: "Yang Owen Janice Velez"},
+      {id: 3, name: "Jayne Savage Griffin Wilder"},
+      {id: 4, name: "Simmons Anderson Kelly Buchanan"},
+      {id: 5, name: "Ray Marshall Nielsen Charles"},
+      {id: 6, name: "Dora Robertson Kristin Gillespie"},
+      {id: 7, name: "Christensen Hansen Leblanc Sweeney"},
+      {id: 8, name: "Rosetta Madden Jan Vargas"},
+      {id: 9, name: "Lara Tanner Willa Turner"},
+      {id: 10, name: "Rena Holcomb Sarah Ortiz"},
+      {id: 11, name: "Christine Collier Jennings Frank"},
+      {id: 12, name: "Greta Rice Rosemary Salas"},
+      {id: 13, name: "Joni Mccullough Glass Holt"},
+      {id: 14, name: "Beach Chase Renee Gay"},
+      {id: 15, name: "Chrystal Pennington Neal Suarez"},
+      {id: 16, name: "Saundra Bean Melva Yates"},
+      {id: 17, name: "Dawson Ward Jarvis Byers"},
+      {id: 18, name: "Kris Roberts Harding Lancaster"},
+      {id: 19, name: "Smith Oneal Marjorie Dejesus"},
+      {id: 20, name: "Yvonne Guzman Ella Cochran"}
+    ];
 
     this.peopleWithGuids = [
       {id: "8d9db48a-49a6-4c03-935c-4422146ec625", name: "Consuelo Espinoza Katy Yates"},
@@ -58,16 +81,16 @@ export class TestSelect3 {
     ];
 
     this.cats = [
-      { catId: 0, catName: "Hines" },
-      { catId: 1, catName: "Lora" },
-      { catId: 2, catName: "Laverne" },
-      { catId: 3, catName: "Alston" },
-      { catId: 4, catName: "Stewart" },
-      { catId: 5, catName: "Fannie" },
-      { catId: 6, catName: "Mai" },
-      { catId: 7, catName: "Manning" },
-      { catId: 8, catName: "Frank" },
-      { catId: 9, catName: "Blackwell" }
+      {catId: 0, catName: "Hines"},
+      {catId: 1, catName: "Lora"},
+      {catId: 2, catName: "Laverne"},
+      {catId: 3, catName: "Alston"},
+      {catId: 4, catName: "Stewart"},
+      {catId: 5, catName: "Fannie"},
+      {catId: 6, catName: "Mai"},
+      {catId: 7, catName: "Manning"},
+      {catId: 8, catName: "Frank"},
+      {catId: 9, catName: "Blackwell"}
     ];
 
     this.peopleWithB = [
@@ -87,7 +110,46 @@ export class TestSelect3 {
 
     this.selectedPerson = this.people[2];
 
-    this.manyPeople = this._generateTestData(100000);
+    this.manyPeople = this._generateTestData(10000);
+    this.manyManyPeople = this._generateTestData(100000);
+
+    this.peopleGenerated = this._generateTestData(1000);
+
+    this.peopleWithAge = [
+      {id: 1, age: 35, name: "Snider Valentine", birthDate: "1981-01-01T10:00:00.000Z", displayName: "Snider Valentine, Age: 35"},
+      {id: 2, age: 36, name: "Bentley Sears", birthDate: "1980-01-01T10:00:00.000Z", displayName: "Bentley Sears, Age: 36"},
+      {id: 3, age: 22, name: "Eve Vinson", birthDate: "1994-01-01T10:00:00.000Z", displayName: "Eve Vinson, Age: 22"},
+      {id: 4, age: 21, name: "Charlene Acosta", birthDate: "1995-01-01T10:00:00.000Z", displayName: "Charlene Acosta, Age: 21"},
+      {id: 5, age: 39, name: "Frazier Ballard", birthDate: "1977-01-01T10:00:00.000Z", displayName: "Frazier Ballard, Age: 39"},
+      {id: 6, age: 24, name: "Horton Wilkerson", birthDate: "1992-01-01T10:00:00.000Z", displayName: "Horton Wilkerson, Age: 24"},
+      {id: 7, age: 34, name: "Linda Fleming", birthDate: "1982-01-01T10:00:00.000Z", displayName: "Linda Fleming, Age: 34"},
+      {id: 8, age: 23, name: "Vazquez Martin", birthDate: "1993-01-01T10:00:00.000Z", displayName: "Vazquez Martin, Age: 23"},
+      {id: 9, age: 25, name: "Mckinney Spence", birthDate: "1991-01-01T10:00:00.000Z", displayName: "Mckinney Spence, Age: 25"},
+      {id: 10, age: 23, name: "Bright Delgado", birthDate: "1993-01-01T10:00:00.000Z", displayName: "Bright Delgado, Age: 23"},
+      {id: 11, age: 36, name: "Mara Collins", birthDate: "1980-01-01T10:00:00.000Z", displayName: "Mara Collins, Age: 36"},
+      {id: 12, age: 29, name: "Elvia Carroll", birthDate: "1987-01-01T10:00:00.000Z", displayName: "Elvia Carroll, Age: 29"},
+      {id: 13, age: 29, name: "Oliver Pickett", birthDate: "1987-01-01T10:00:00.000Z", displayName: "Oliver Pickett, Age: 29"},
+      {id: 14, age: 39, name: "Santos Middleton", birthDate: "1977-01-01T10:00:00.000Z", displayName: "Santos Middleton, Age: 39"},
+      {id: 15, age: 30, name: "Joyner Hays", birthDate: "1986-01-01T10:00:00.000Z", displayName: "Joyner Hays, Age: 30"}
+    ];
+
+    // set default empty values
+    for(let i = 1; i <= 17; i++){
+      this['selectedPerson' + i] = null;
+    }
+    this.selectedPersonId = null;
+    this.selectedPersonId2 = null;
+    this.selectedPersonId3 = null;
+    this.selectedPersonId4 = null;
+    this.selectedPersonGuid = null;
+    this.selectedManyPerson = null;
+    this.selectedManyManyPerson = null;
+    this.selectedCat = null;
+    this.selectedPersonWithB = null;
+    this.selectedPersonWithAge = null;
+
+    this.selectedPerson3 = undefined;
+    this.selectedPerson4 = undefined;
 
     window.test = this;
   }
@@ -100,7 +162,7 @@ export class TestSelect3 {
 
   }
 
-  onChange(newValue){
+  onChange(newValue) {
     console.log(newValue);
   }
 
@@ -110,7 +172,7 @@ export class TestSelect3 {
 
     for (var i = 0; i < count; i++) {
       let name = '';
-      for(let j = 0; j < 5; j++) {
+      for (let j = 0; j < 5; j++) {
         name = `${name} ${names[Math.floor(Math.random() * names.length)]}`;
       }
       data.push({

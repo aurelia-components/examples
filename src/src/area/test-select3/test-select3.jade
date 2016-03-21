@@ -14,11 +14,13 @@ template
               div.form-group.row
                 label.col-sm-4 Select a person
                 div.col-sm-8
-                  select3(items.bind="people", value.bind="selectedPersonId", change.trigger="onChange($event.detail.value)")
+                  select3(items.bind="people",
+                  value.bind="selectedPersonId",
+                  change.trigger="onChange($event.detail.newValue)")
               div.form-group.row
                 label.col-sm-4 Selected value
                 div.col-sm-8
-                  input.form-control(type="number", readonly, value.bind="selectedPersonId")
+                  input.form-control(type="number", readonly, value.one-way="selectedPersonId")
         div.col-lg-6
           div.card
             div.card-header
@@ -36,10 +38,10 @@ template
         div.col-lg-12
           div.card
             div.card-header
-              h4 Test with 10000 items
+              h4 Test with many items
             div.card-block
               div.form-group.row
-                label.col-sm-4 Select a person
+                label.col-sm-4 10 000 items
                 div.col-sm-8
                   select3(items.bind="manyPeople",
                   value.bind="selectedManyPerson",
@@ -48,6 +50,16 @@ template
                 label.col-sm-4 Selected person
                 div.col-sm-8
                   input.form-control(type="text", readonly, value.bind="selectedManyPerson.name")
+              div.form-group.row
+                label.col-sm-4 100 000 items
+                div.col-sm-8
+                  select3(items.bind="manyManyPeople",
+                  value.bind="selectedManyManyPerson",
+                  options.bind="{modelValueBind: true}")
+              div.form-group.row
+                label.col-sm-4 Selected person
+                div.col-sm-8
+                  input.form-control(type="text", readonly, value.bind="selectedManyManyPerson.name")
     div
       h2 Features
       div.row
@@ -117,7 +129,12 @@ template
                   |   sortField: '',
                   |   disableClear: false,
                   |   emptyValue: null,
-                  |   selectHoveredOnCloseDropdown: false
+                  |   selectHoveredOnCloseDropdown: false,
+                  |   debounceSearch: 150,
+                  |   visibleItemsCount: 11, // better if odd number
+                  |   scrollStep: 1,
+                  |   scrollInterval: 30,
+                  |   scrollTimeout: 300
                   | };
 
       div.row
@@ -165,26 +182,63 @@ template
                   input.form-control(type="text", readonly, value.bind="selectedPerson.name")
 
       div.row
-        div.col-lg-6
+        div.col-lg-12
           div.card
             div.card-header
-              h4 Select without sort option
+              h4 Select sort option
             div.card-block
-              div.form-group.row
-                label.col-sm-4 Select a person
-                div.col-sm-8
-                  select3(items.bind="peopleWithB", value.bind="selectedPersonWithB")
-        div.col-lg-6
-          div.card
-            div.card-header
-              h4 Select with sort option
-            div.card-block
-              div.form-group.row
-                label.col-sm-4 Select a person
-                div.col-sm-8
-                  select3(items.bind="peopleWithB",
-                  value.bind="selectedPersonWithB",
-                  options.bind="{sort: true}")
+
+              div.row
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Select without sort option
+                    div.card-block
+                      div.form-group.row
+                        label.col-sm-4 Select a person
+                        div.col-sm-8
+                          select3(items.bind="peopleWithB", value.bind="selectedPersonWithB")
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Select with sort option
+                    div.card-block
+                      div.form-group.row
+                        label.col-sm-4 Select a person
+                        div.col-sm-8
+                          select3(items.bind="peopleWithB",
+                          value.bind="selectedPersonWithB",
+                          options.bind="{sort: true}")
+              div.row
+                div.col-lg-12
+                  div.card
+                    div.card-header
+                      h4 Select with sortField option
+                    div.card-block
+                      p By default the field by which we sort is the name.
+                      p A different field can be set by the 'sortField' option.
+                      pre
+                        | peopleWithAge = [
+                        |   {
+                        |     id: 1,
+                        |     age: 35,
+                        |     name: "Snider Valentine",
+                        |     birthDate: "1981-01-01T10:00:00.000Z",
+                        |     displayName: "Snider Valentine, Age: 35"
+                        |   },
+                        | ...
+                        | ];
+                      pre
+                        | select3(items.bind="peopleWithAge", value.bind="selectedPersonWithAge",
+                        |         options.bind="{modelValueBind: true, sort: true, sortField: 'age', name: 'displayName'}")
+                      div.form-group.row
+                        label.col-sm-4 Select a person
+                        div.col-sm-8
+                          select3(items.bind="peopleWithAge",
+                          value.bind="selectedPersonWithAge",
+                          options.bind="{sort: true, sortField: 'age', name: 'displayName'}")
+
+
       div.row
         div.col-lg-12
           div.card
@@ -197,8 +251,186 @@ template
                 label.col-sm-4 Select a person
                 div.col-sm-8
                   select3(items.bind="people",
-                  value.bind="selectedPerson7",
+                  value.bind="selectedPerson2",
                   options.bind="{caption: 'Choose me please', noResultsMessage: 'No data matches your query.'}")
+      div.row
+        div.col-lg-12
+          div.card
+            div.card-header
+              h4 Clear the selected value
+            div.card-block
+              p A clear button (X) appears when a value different than the 'emptyValue' option is selected (either through user or through binding).
+              p When the user clicks the X button, the value is set to the specified emptyValue.
+              p An appropriate emptyValue should be specified for the clearing to be successful!
+              p
+                strong If the clear button appears even when no value is selected, then the emptyValue provided is not correct!
+
+              div.row
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Select with appropiate emptyValue
+                    div.card-block
+                      p By default the emptyValue is null.
+                      p Appropriate emptyValues may be:
+                      pre
+                        | options.bind="{emptyValue: undefined}"
+                        | options.bind="{emptyValue: {}}"
+                        | options.bind="{emptyValue: {children: []}}"
+                      p In this example we have set in the constructor:
+                      pre
+                        | this.selectedPerson = undefined;
+                      div.form-group.row
+                        label.col-sm-4
+                          span Appropriate emptyValue -
+                          pre undefined
+                        div.col-sm-8
+                          select3(items.bind="people",
+                          value.bind="selectedPerson3",
+                          options.bind="{emptyValue: undefined}")
+                      div.form-group.row
+                        label.col-sm-4
+                          span Inappropriate emptyValue -
+                          pre null
+                        div.col-sm-8
+                          select3(items.bind="people",
+                          value.bind="selectedPerson4")
+
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Disable clearing of selected value
+                    div.card-block
+                      p The clear button (x) will not be available - so no 'empty' value can be selected.
+                      p options.bind="{disableClear: true}"
+                      div.form-group.row
+                        label.col-sm-4 Enabled
+                        div.col-sm-8
+                          select3(items.bind="people",
+                          value.bind="selectedPerson5",
+                          options.bind="{disableClear: false}")
+                      div.form-group.row
+                        label.col-sm-4 Disabled
+                        div.col-sm-8
+                          select3(items.bind="people",
+                          value.bind="selectedPerson6",
+                          options.bind="{disableClear: true}")
+      div.row
+        div.col-lg-12
+          div.card
+            div.card-header
+              h4 Select with debounceSearch
+            div.card-block
+              p options.bind="{debounceSearch: 150}"
+              p Set timeout for search, so no unnecessary searches are executed.
+              p This option is useful when the items are many (more than 1000).
+              p You can set the debounceSearch option to 0, if you want instant searches.
+              div.row
+                div.col-lg-12
+                  p Array of 1000 elements
+                    div.form-group.row
+                      label.col-sm-4 debounceSearch: 150
+                      div.col-sm-8
+                        select3(items.bind="peopleGenerated",
+                        value.bind="selectedPerson7",
+                        options.bind="{debounceSearch: 150}")
+                    div.form-group.row
+                      label.col-sm-4 debounceSearch: 300
+                      div.col-sm-8
+                        select3(items.bind="peopleGenerated",
+                        value.bind="selectedPerson8",
+                        options.bind="{debounceSearch: 300}")
+                    div.form-group.row
+                      label.col-sm-4 debounceSearch: 0
+                      div.col-sm-8
+                        select3(items.bind="peopleGenerated",
+                        value.bind="selectedPerson9",
+                        options.bind="{debounceSearch: 0}")
+      div.row
+        div.col-lg-12
+          div.card
+            div.card-header
+              h4 Select with scroll options
+            div.card-block
+              div.row
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Visible items count option
+                    div.card-block
+                      p How many items will be visible in the dropdown
+                      p Default: 11
+                      div.form-group.row
+                        label.col-sm-4 Default
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson10",
+                          options.bind="{name: 'id'}")
+                      div.form-group.row
+                        label.col-sm-4 visibleItemsCount: 5
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson11",
+                          options.bind="{visibleItemsCount: 5, name: 'id'}")
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Scroll step option
+                    div.card-block
+                      p How many items will be skipped up or down when the scrollbar buttons are clicked or the mouse wheel is scrolled
+                      p Default: 1
+                      div.form-group.row
+                        label.col-sm-4 Default
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson12",
+                          options.bind="{name: 'id'}")
+                      div.form-group.row
+                        label.col-sm-4 scrollStep: 5
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson13",
+                          options.bind="{scrollStep: 5, name: 'id'}")
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Scroll timeout option
+                    div.card-block
+                      p When the scrollbar buttons are holded down, after what interval the items will be scrolled automatically
+                      p Default: 300
+                      div.form-group.row
+                        label.col-sm-4 Default
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson14",
+                          options.bind="{name: 'id'}")
+                      div.form-group.row
+                        label.col-sm-4 scrollTimeout: 800
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson15",
+                          options.bind="{scrollTimeout: 800, name: 'id'}")
+                div.col-lg-6
+                  div.card
+                    div.card-header
+                      h4 Scroll interval option
+                    div.card-block
+                      p When holding the scrollbar up and down buttons, on what interval of time the items will be scrolled
+                      p Default: 30
+                      div.form-group.row
+                        label.col-sm-4 Default
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson16",
+                          options.bind="{name: 'id'}")
+                      div.form-group.row
+                        label.col-sm-4 scrollInterval: 300
+                        div.col-sm-8
+                          select3(items.bind="peopleWithId",
+                          value.bind="selectedPerson17",
+                          options.bind="{scrollInterval: 300, name: 'id'}")
+
+
 
 
 
