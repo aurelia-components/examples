@@ -49,6 +49,7 @@
     <Compile Include="AssignPageObject.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GridPageObject.cs" />
+    <Compile Include="PopoverPageObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkeletonPageObject.cs" />
   </ItemGroup>

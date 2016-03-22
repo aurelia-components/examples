@@ -8,6 +8,7 @@
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Support.UI;
+    using OpenQA.Selenium.Interactions;
 
     public class SkeletonPageObject
     {
@@ -49,6 +50,7 @@
 
         public void Trigger(string eventName, string handler)
         {
+
             var items = this.driver.GetElementsByEventNameAndHandler(eventName, handler);
 
             foreach (var item in items)
@@ -67,6 +69,14 @@
         public void SetVisualDelay(int miliseconds)
         {
             Thread.Sleep(miliseconds);
+        }
+
+        public void MoveToElement(string selector)
+        {
+            Actions action = new Actions(this.driver);
+            var element = this.driver.FindElement(By.CssSelector(selector));
+            action.MoveToElement(element).Perform();
+            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds);
         }
     }
 }

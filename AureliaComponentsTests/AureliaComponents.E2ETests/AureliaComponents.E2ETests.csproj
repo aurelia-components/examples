@@ -68,6 +68,8 @@
     <Compile Include="Grid\GridFilteringTests.cs" />
     <Compile Include="Grid\GridPagingTests.cs" />
     <Compile Include="Grid\GrydSyncingTests.cs" />
+    <Compile Include="Popover\PopoverAttributeTests.cs" />
+    <Compile Include="Popover\PopoverElementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

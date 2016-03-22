@@ -14,6 +14,7 @@
             if (timeoutInSeconds > 0)
             {
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+                wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
                 return wait.Until(drv => drv.FindElement(by));
             }
             return driver.FindElement(by);
@@ -21,15 +22,15 @@
 
         public static IEnumerable<IWebElement> GetElementsByEventNameAndHandler(this ISearchContext driverOrElement, string eventName, string handler)
         {
-            var types = new [] { "delegate", "call", "trigger"};
+            var types = new[] { "delegate", "call", "trigger" };
             foreach (var type in types)
-	        {
+            {
                 var elems = driverOrElement.FindElements(By.CssSelector(string.Format("*[{0}\\.{1}=\"{2}\"]", eventName, type, handler)));
                 if (elems.Count > 0)
                 {
                     return elems;
                 }
-	        }
+            }
 
             return null;
         }
