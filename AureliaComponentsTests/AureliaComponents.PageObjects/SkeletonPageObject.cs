@@ -23,15 +23,15 @@
             this.driver = new ChromeDriver(driverPath);
             this.routePrefix = routePrefix;
             var href = string.IsNullOrEmpty(routePrefix) ? string.Empty : routePrefix + string.Empty;
-            driver.Navigate().GoToUrl(DefaultUrl + href);
-            driver.Manage().Window.Maximize();
+            this.driver.Navigate().GoToUrl(DefaultUrl + href);
+            this.driver.Manage().Window.Maximize();
         }
 
         public void NavigateTo(string href = "")
         {
             href = string.IsNullOrEmpty(this.routePrefix) ? href : this.routePrefix + href;
-            driver.Navigate().GoToUrl(DefaultUrl + href);
-            driver.FindElement(By.TagName("nav-bar"), DefaultRouterWatingTimeInSeconds);
+            this.driver.Navigate().GoToUrl(DefaultUrl + href);
+            this.driver.FindElement(By.TagName("nav-bar"), DefaultRouterWatingTimeInSeconds);
         }
 
         public void Quit()

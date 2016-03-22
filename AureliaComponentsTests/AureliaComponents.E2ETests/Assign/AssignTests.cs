@@ -30,6 +30,32 @@
         {
             pageObject.ClickMoveAllRight();
             pageObject.GetLeftItems().Should().Be(0);
+            pageObject.GetRightItems().Should().Be(6);
+
+            pageObject.ClickRow(0);
+            pageObject.ClickMoveLeft();
+            pageObject.GetLeftItems().Should().Be(1);
+            pageObject.GetRightItems().Should().Be(5);
+
+            pageObject.ClickRow(2);
+            pageObject.ClickMoveLeft();
+            pageObject.GetLeftItems().Should().Be(2);
+            pageObject.GetRightItems().Should().Be(4);
+
+            pageObject.ClickMoveAllLeft();
+            pageObject.GetLeftItems().Should().Be(6);
+            pageObject.GetRightItems().Should().Be(0);
+
+            pageObject.ClickRow(0);
+            pageObject.ClickMoveRight();
+            pageObject.GetLeftItems().Should().Be(5);
+            pageObject.GetRightItems().Should().Be(1);
+
+            pageObject.ClickRow(2);
+            pageObject.ClickMoveRight();
+            pageObject.GetLeftItems().Should().Be(4);
+            pageObject.GetRightItems().Should().Be(2);
+            
         }
 
         [TestFixtureTearDown]
