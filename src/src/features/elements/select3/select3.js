@@ -415,15 +415,18 @@ export class Select3 {
     if (hoveredIndex === -1) {
       // nothing is hovered -> hover last
       this.hoveredDatum = this.filteredData[this.filteredData.length - 1];
+      this.scrollToHoveredDatum();
     } else if (hoveredIndex === 0) {
       // first is hovered -> hover last
       this.hoveredDatum = this.filteredData[this.filteredData.length - 1];
+      this.scrollToHoveredDatum();
     } else {
       // hover previous
       this.hoveredDatum = this.filteredData[hoveredIndex - 1];
+      if (hoveredIndex - 1 < this.filteredDataShortStartIndex) {
+        this.scrollUp(1);
+      }
     }
-
-    this.scrollToHoveredDatum();
   }
 
   moveSelectionDown() {
@@ -435,15 +438,18 @@ export class Select3 {
     if (hoveredIndex === -1) {
       // nothing is hovered -> hover first
       this.hoveredDatum = this.filteredData[0];
+      this.scrollToHoveredDatum();
     } else if (hoveredIndex === this.filteredData.length - 1) {
       // last is hovered -> hover first
       this.hoveredDatum = this.filteredData[0];
+      this.scrollToHoveredDatum();
     } else {
       // hover next
       this.hoveredDatum = this.filteredData[hoveredIndex + 1];
+      if (hoveredIndex + 1 > this.filteredDataShortEndIndex) {
+        this.scrollDown(1);
+      }
     }
-
-    this.scrollToHoveredDatum();
   }
 
   setHover(datum) {
