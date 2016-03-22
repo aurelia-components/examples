@@ -1,10 +1,11 @@
 import {Tokenizers} from './tokenizers';
 
 export class Datum {
-  constructor(item, opts, queryTokens) {
+  constructor(item, index, opts, queryTokens) {
     this.highlightTag = 'strong';
 
     this.item = item;
+    this.index = index;
     this.queryTokens = queryTokens;
 
     this.opts = opts;
@@ -19,14 +20,16 @@ export class Datum {
     // queryTokensMatches[i] == the index of query token that the i-th data token matches
     this.queryTokensMatches = this.tokens.map(token => {
       let tokenLower = token.value.toLowerCase();
-      let matchedQueryToken = this.queryTokens.find(queryToken => {
-        let queryTokenLower = queryToken.value.toLowerCase();
-        let result = tokenLower.startsWith(queryTokenLower);
-        return result;
+      let matchedQueryTokens = this.queryTokens.filter(queryToken => {
+        //let queryTokenLower = queryToken.value.toLowerCase();
+        return tokenLower.startsWith(queryToken.value);
+      }).sort((a, b) => {
+        return a.value.length > b.value.length ? -1 : a.value.length < b.value.length ? 1 : 0;
       });
 
-      let matchedQueryTokenIndex = matchedQueryToken ? this.queryTokens.indexOf(matchedQueryToken) : -1;
+      let matchedQueryTokenIndex = matchedQueryTokens.length > 0 ? this.queryTokens.indexOf(matchedQueryTokens[0]) : -1;
       if (matchedQueryTokenIndex > -1) {
+        let matchedQueryToken = matchedQueryTokens[0];
         // substitute name part with highlighted
         let partForHighlighting = token.value.substring(0, matchedQueryToken.value.length);
         let highlightedPart = '<' + this.highlightTag + '>' + partForHighlighting + '</' + this.highlightTag + '>';
@@ -41,15 +44,53 @@ export class Datum {
       return matchedQueryTokenIndex;
     });
 
+    //let usedTokens = [];
+    //this.queryTokensMatchesUnique = this.queryTokensMatches.map((queryIndex, datumIndex) => {
+    //  if (usedTokens.indexOf(queryIndex) > -1) {
+    //    return -queryIndex - 2;
+    //  }
+    //  usedTokens.push(queryIndex);
+    //  return queryIndex;
+    //});
+
     this._setHighlightedName();
   }
 
   static compare(a, b) {
+    //let aQtm = a.queryTokensMatchesUnique;
+    //let bQtm = b.queryTokensMatchesUnique;
     let aQtm = a.queryTokensMatches;
     let bQtm = b.queryTokensMatches;
-    for (let i = 0; i < Math.min(aQtm.length, bQtm.length); i++) {
-      if (aQtm[i] !== bQtm[i]) {
-        return bQtm[i] - aQtm[i];
+    const length = Math.min(aQtm.length, bQtm.length);
+    for (let i = 0; i < length; i++) {
+      const ai = aQtm[i];
+      const bi = bQtm[i];
+      if (ai !== bi) {
+        if (ai === -1) {
+          return 1;
+        }
+
+        if (bi === -1) {
+          return -1;
+        }
+
+        //if(ai > -1 && bi > -1){
+        //  return ai > bi ? 1 : -1;
+        //}
+        //
+        //if(ai < -1 && bi < -1){
+        //  return  ai < bi ? 1 : -1;
+        //}
+        //
+        //if(ai > -1 && bi < -1){
+        //  return -1;
+        //}
+        //
+        //if(ai < -1 && bi > -1){
+        //  return 1;
+        //}
+
+        return ai > bi ? 1 : -1;
       }
     }
 
@@ -76,8 +117,6 @@ export class Datum {
   _setHighlightedName() {
     this.highlightedName = '';
     let keys = Object.keys(this.highlightedNameParts).sort((a, b)=> {
-      let aNum = parseInt(a);
-      let bNum = parseInt(b);
       return a - b;
     });
     keys.forEach(position => {
@@ -87,7 +126,6 @@ export class Datum {
 
   _datumTokenizer(item) {
     // add here if we want matching by more fields
-    let nameTokens = Tokenizers.nonword(item._escapedName);
-    return nameTokens;
+    return /*let nameTokens = */ Tokenizers.nonword(item._escapedName);
   }
 }

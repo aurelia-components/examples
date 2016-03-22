@@ -78,6 +78,7 @@ export class DialogRenderer {
       } else {
         modalContainer.onmousedown = ((event) => {
           modalContainer.style.zIndex = getNextZIndex();
+          event.preventDefault();
         }).bind(this);
 
         const modalHeader = modalContainer.firstElementChild.firstElementChild;

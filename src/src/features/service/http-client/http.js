@@ -42,7 +42,7 @@ export class Http {
     this.eventAggregator.publish(new HttpRequestFinishedMessage());
   }
 
-  get(url, data) {
+  get(url, data, opts) {
     this._showLoadingMask();
     let urlWithProps = url;
     if (data !== undefined) {
@@ -61,7 +61,11 @@ export class Http {
     }
     const promise = this.authHttp.get(urlWithProps).then(response => {
       this._hideLoadingMask();
-      return JSON.parse(response.response);
+      if (opts && opts.raw === true){
+        return response.response;
+      } else {
+        return JSON.parse(response.response);
+      }
     });
     promise.catch(this.errorHandler.bind(this));
     return promise;

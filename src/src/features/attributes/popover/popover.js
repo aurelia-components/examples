@@ -168,34 +168,34 @@ export class Popover {
 
   checkPlacement() {
     switch (this.placement) {
-      case 'top':
-      case 'bottom':
-      case 'left':
-      case 'right':
-        //case 'auto':
-        break;
-      default:
-        throw new Error('Invalid value for popover placement: ' + this.placement);
+    case 'top':
+    case 'bottom':
+    case 'left':
+    case 'right':
+      //case 'auto':
+      break;
+    default:
+      throw new Error('Invalid value for popover placement: ' + this.placement);
     }
   }
 
   checkTrigger() {
     switch (this.trigger) {
-      case 'click':
-      case 'hover':
-      case 'focus':
-      case 'insideClick':
-        break;
-      default:
-        throw new Error('Invalid value for popover trigger: ' + this.trigger);
+    case 'click':
+    case 'hover':
+    case 'focus':
+    case 'insideClick':
+      break;
+    default:
+      throw new Error('Invalid value for popover trigger: ' + this.trigger);
     }
   }
 
   checkContentAndView() {
     if (this.content && this.view) {
       throw new Error(`Popover cannot have content and view at the same time! Content: ${this.content}; View: ${this.view}`);
-    //} else if (!this.content && !this.view) {
-    //  throw new Error(`Popover should have content or view! Content: ${this.content}; View: ${this.view}`);
+      //} else if (!this.content && !this.view) {
+      //  throw new Error(`Popover should have content or view! Content: ${this.content}; View: ${this.view}`);
     }
   }
 }

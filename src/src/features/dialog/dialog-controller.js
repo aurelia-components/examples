@@ -9,7 +9,7 @@ export class DialogController {
   }
 
   ok(result) {
-    this.close(true, result);
+    return this.close(true, result);
   }
 
   cancel(result) {
