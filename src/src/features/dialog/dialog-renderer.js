@@ -78,13 +78,13 @@ export class DialogRenderer {
       } else {
         modalContainer.onmousedown = ((event) => {
           modalContainer.style.zIndex = getNextZIndex();
-          event.preventDefault();
         }).bind(this);
 
         const modalHeader = modalContainer.firstElementChild.firstElementChild;
         modalHeader.classList.add('draggable');
         modalHeader.onmousedown = ((event) => {
           modalContainer.classList.add('dragging');
+          event.preventDefault();
         }).bind(this);
 
         this.previousMouseEvent = undefined;
