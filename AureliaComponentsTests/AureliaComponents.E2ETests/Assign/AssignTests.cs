@@ -16,7 +16,6 @@
         public void Init()
         {
             pageObject = new AssignPageObject("C:\\");
-            pageObject.NavigateTo();
         }
 
         [Test]

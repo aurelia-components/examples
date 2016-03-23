@@ -26,13 +26,14 @@
             var href = string.IsNullOrEmpty(routePrefix) ? string.Empty : routePrefix + string.Empty;
             this.driver.Navigate().GoToUrl(DefaultUrl + href);
             this.driver.Manage().Window.Maximize();
+            this.WaitForElement("nav");
         }
 
         public void NavigateTo(string href = "")
         {
             href = string.IsNullOrEmpty(this.routePrefix) ? href : this.routePrefix + href;
             this.driver.Navigate().GoToUrl(DefaultUrl + href);
-            this.driver.FindElement(By.TagName("nav-bar"), DefaultRouterWatingTimeInSeconds);
+            this.WaitForElement(".nav-tabs");
         }
 
         public void Quit()
@@ -77,6 +78,11 @@
             var element = this.driver.FindElement(By.CssSelector(selector));
             action.MoveToElement(element).Perform();
             this.SetVisualDelay(DefaultVidsualDelayInMiliseconds);
+        }
+
+        public void WaitForElement(string selector)
+        {
+            this.driver.FindElement(By.CssSelector(selector), DefaultRouterWatingTimeInSeconds);
         }
     }
 }

@@ -29,14 +29,14 @@
         public void ClickGridsSelectedRows_ShouldCheckRelatedGridsContent()
         {
             //first splitter
-            var rolesBefore = pageObject.GetSyncedGridColumnsTexts(0, 1);
+            var rolesBefore = pageObject.GetSyncedGridColumnsTexts(0, 1).ToArray();
             pageObject.ChangeGridSelectedRow(0, 0, 2);
 
             var rolesAfter = pageObject.GetSyncedGridColumnsTexts(0, 1).ToArray();
             rolesBefore.Should().NotBeEquivalentTo(rolesAfter);
 
             //second splitter
-            var pirvillagesBefore = pageObject.GetSyncedGridColumnsTexts(1, 1);
+            var pirvillagesBefore = pageObject.GetSyncedGridColumnsTexts(1, 1).ToArray();
             pageObject.ChangeGridSelectedRow(1, 0, 2);
 
             var privillagesAfter = pageObject.GetSyncedGridColumnsTexts(1, 1).ToArray();
@@ -46,7 +46,7 @@
             var usersBefore = pageObject.GetSyncedGridColumnsTexts(2, 1).ToArray();
             pageObject.ChangeGridSelectedRow(2, 0, 2);
 
-            var usersAfter = pageObject.GetSyncedGridColumnsTexts(2, 1);
+            var usersAfter = pageObject.GetSyncedGridColumnsTexts(2, 1).ToArray();
             usersBefore.Should().NotBeEquivalentTo(usersAfter);
         }
 

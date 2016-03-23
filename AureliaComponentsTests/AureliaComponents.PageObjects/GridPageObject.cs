@@ -137,7 +137,7 @@
         {
             var splitter = this.driver.FindElements(By.TagName("split-vertical")).ToArray()[splitterIndex];
             var grid = splitter.FindElements(By.TagName("grid")).ToArray()[gridIndex];
-            return grid.FindElements(By.CssSelector("tbody tr")).Select(row => row.FindElement(By.TagName("td")).Text);
+            return grid.FindElements(By.CssSelector("tbody tr")).Select(row => row.FindElement(By.TagName("span")).Text);
         }
     }
 }

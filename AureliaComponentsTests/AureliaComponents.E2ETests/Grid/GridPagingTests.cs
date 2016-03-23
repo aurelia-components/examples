@@ -28,16 +28,16 @@
         [Test]
         public void ChangeGridPages_ShouldCheckActivePage()
         {
-            pageObject.GetActivePage().Should().Be("1");
+            //pageObject.WaitForElement(".page-item.active a");
 
-            for (int i = 2; i < 12; i++)
+            for (int i = 6; i < 16; i++)
             {
                 pageObject.ClickNextPage();
                 pageObject.GetActivePage().Should().Be(i.ToString());
             }
 
             pageObject.ClickPrevPage();
-            pageObject.GetActivePage().Should().Be("10");
+            pageObject.GetActivePage().Should().Be("14");
 
             pageObject.ClickLastPage();
             pageObject.GetActivePage().Should().Be("100");
