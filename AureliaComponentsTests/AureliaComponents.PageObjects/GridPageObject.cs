@@ -102,26 +102,26 @@
             {
                 filter.SendKeys(value);
             }
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds * 5);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds * 5);
         }
 
         public void ClickActiveFalse()
         {
             this.driver.GetElementsByEventNameAndHandler("click", "buttonClicked()").ToArray()[1].Click();
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds * 5);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds * 5);
         }
 
         public void ChangeNameSortDirection()
         {
 
             this.driver.GetElementsByEventNameAndHandler("click", "$column.changeDirectionSort()").ToArray()[3].Click();
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds * 5);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds * 5);
         }
 
         public void ChangeIdSortDirection()
         {
             this.driver.GetElementsByEventNameAndHandler("click", "$column.changeDirectionSort()").First().Click();
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds * 5);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds * 5);
         }
 
         public void ChangeGridSelectedRow(int splitterIndex, int gridIndex, int rowIndex)
@@ -130,7 +130,7 @@
             var grid = splitter.FindElements(By.TagName("grid")).ToArray()[gridIndex];
             var row = grid.GetElementsByEventNameAndHandler("click", "rowClicked($item)").ToArray()[rowIndex];
             row.Click();
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds * 5);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds * 5);
         }
 
         public IEnumerable<string> GetSyncedGridColumnsTexts(int splitterIndex, int gridIndex)

@@ -101,7 +101,7 @@
                 case "focus":
                     {
                         this.driver.FindElement(By.CssSelector(".btn-success")).Click();
-                        this.SetVisualDelay(DefaultVidsualDelayInMiliseconds);
+                        this.SetVisualDelay(DefaultVisualDelayInMiliseconds);
                         break;
                     }
                 case "hover": this.HoverPopover(".btn-success"); break;

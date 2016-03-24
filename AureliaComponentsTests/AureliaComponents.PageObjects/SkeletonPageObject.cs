@@ -14,7 +14,7 @@
     {
         private const string DefaultUrl = "http://localhost:9000/";
         protected const int DefaultRouterWatingTimeInSeconds = 10;
-        protected const int DefaultVidsualDelayInMiliseconds = 200;
+        protected const int DefaultVisualDelayInMiliseconds = 200;
 
         private readonly string routePrefix;
         protected readonly IWebDriver driver;
@@ -57,14 +57,14 @@
             foreach (var item in items)
             {
                 item.Click();
-                this.SetVisualDelay(DefaultVidsualDelayInMiliseconds);
+                this.SetVisualDelay(DefaultVisualDelayInMiliseconds);
             }
         }
 
         public void ChangeSelectMenu(string optionText)
         {
             this.driver.FindElement(By.CssSelector("select")).GetElementsContainingText("option", optionText).First().Click();
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds * 5);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds * 5);
         }
 
         public void SetVisualDelay(int miliseconds)
@@ -77,7 +77,15 @@
             Actions action = new Actions(this.driver);
             var element = this.driver.FindElement(By.CssSelector(selector));
             action.MoveToElement(element).Perform();
-            this.SetVisualDelay(DefaultVidsualDelayInMiliseconds);
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds);
+        }
+
+        public void DragAndDrop(string selector, int x, int y)
+        {
+            Actions action = new Actions(this.driver);
+            var element = this.driver.FindElement(By.CssSelector(selector));
+            action.ClickAndHold(element).MoveByOffset(x, y).Release().Build().Perform();
+            this.SetVisualDelay(DefaultVisualDelayInMiliseconds);
         }
 
         public void WaitForElement(string selector)
