@@ -1,0 +1,90 @@
+template
+  div.col-lg-6
+    div.card
+      div.card-header
+        h4 ViewModel
+      div.card-block
+        p Type: class
+        p Sets the view-model that will be displayed in the dialog container
+
+    div.card
+      div.card-header
+        h4 Model
+      div.card-block
+        p Type: Object
+        p Sets the model that will be given to the specified view-model at activate
+
+    div.card
+      div.card-header
+        h4 IsModal
+      div.card-block
+        p Type: boolean
+        p Determines if the dialog is modal or not.
+        p
+          strong The isModal option is set by the method that is used to open a dialog, so specifying it will not affect the dialogs.
+        div.row
+          div.col-sm-6
+            div When set to true:
+            ul
+              li The rest of the screen is covered by an overlay, so nothing except the dialog can be clicked.
+          div.col-sm-6
+            div When set to false:
+            ul
+              li The dialog is on top of the content, but the content can be clicked too.
+        div.row
+          div.col-sm-6
+            div isModal = true, when you use
+            ul
+              li openModalDialog
+              li openConfirmDialog
+              li openConfirmDeleteDialog
+          div.col-sm-6
+            div isModal = false, when you use
+            ul
+              li openDialog
+
+  div.col-lg-6
+    div.card
+      div.card-header
+        h4 Lock
+      div.card-block
+        p Type: boolean
+        p Determines if the dialog is can be closed.
+        div When set to false:
+        ul
+          li A close button will appear on the upper right corner of the dialog.
+          li The dialog will be closed on click on the overlay (for modal dialogs only)
+          li The last opened dialog will be closed on ESC key pressed
+        div When set to true, none of these things will happen
+        strong Default value: true
+
+    div.card
+      div.card-header
+        h4 IsDraggable
+      div.card-block
+        p Type: boolean
+        p Determines if the dialog can be dragged on the screen or not.
+        div When set to true:
+        ul
+          li The dialog can be moved on the screen by dragging the dialog header.
+        div When set to false:
+        ul
+          li The dialog cannot be moved.
+        strong Default value: true
+
+    div.card
+      div.card-header
+        h4 CenterHorizontalOnly
+      div.card-block
+        p Type: boolean
+        p Determines if the dialog is centered vertically or not.
+        div When set to true:
+        ul
+          li The dialog is positioned on top of the page in the middle.
+        div When set to false:
+        ul
+          li The dialog is positioned in the center of the page.
+        strong Default value: false
+        div
+          em Currently, when the screen is resized, the dialog is not re-centered.
+

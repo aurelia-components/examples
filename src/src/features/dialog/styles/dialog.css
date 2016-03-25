@@ -34,7 +34,7 @@ ai-dialog {
   box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
   border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 5px;
-  padding: 4px 0;
+  padding: 0;
   margin: auto;
   border-image-source: initial;
   border-image-slice: initial;
@@ -61,6 +61,18 @@ ai-dialog > ai-dialog-header {
 
 ai-dialog > ai-dialog-header.draggable {
   cursor: move;
+}
+
+ai-dialog > ai-dialog-header > button {
+  float: right;
+  border: none;
+  background: 0 0;
+  font-size: 22px;
+  position: relative;
+  top: -4px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 ai-dialog > ai-dialog-body {

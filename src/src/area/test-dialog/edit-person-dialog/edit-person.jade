@@ -14,5 +14,5 @@ template
             div.col-xs-8
               input.form-control(value.bind="person.lastName")
     ai-dialog-footer
-      button(click.trigger="controller.cancel()") Cancel
-      button(click.trigger="controller.ok(person)") Ok
+      base-button(on-click.call="controller.ok(person)", name="Ok", type="btn-success", icon="fa-check")
+      cancel-button(on-click.call="controller.cancel()", name="Cancel")

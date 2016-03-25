@@ -1,13 +1,12 @@
+import {inject} from 'aurelia-framework';
 import {DialogController} from 'dialog';
 
+@inject(DialogController)
 export class EditPerson {
-  static inject = [DialogController];
-  person = {firstName: ''};
+  person = {};
 
   constructor(controller) {
     this.controller = controller;
-
-    controller.settings.lock = true;
   }
 
   activate(person) {

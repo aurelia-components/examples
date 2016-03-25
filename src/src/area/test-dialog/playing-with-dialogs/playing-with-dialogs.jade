@@ -1,0 +1,97 @@
+template
+  div.col-lg-6
+    div.card
+      div.card-header
+        h4 Choose the settings
+      div.card-block
+        div.form-group.row
+          div.col-sm-3.form-control-label Apply defaults for
+          div.col-sm-9
+            div(repeat.for="defaultOption of defaultOptions")
+              label.c-input.c-radio
+                span ${defaultOption.type}
+                input(type="radio", name="useDefaultsRadios", model.bind="defaultOption", checked.bind="useDefaultOptionsFor")
+                span.c-indicator
+        hr
+        h4 Dialog settings (common for all dialogs)
+        div.form-group.row
+          div.col-sm-3.form-control-label isModal*
+          div.col-sm-9
+            label.c-input.c-radio(repeat.for="valueType of valueTypes")
+              span ${valueType.name}
+              input(type="radio", name="isModalRadios", model.bind="valueType.value", checked.bind="isModal", disabled.bind="useDefaults.isModal")
+              span.c-indicator
+            div
+              em The isModal option is set by the method that is used to open a dialog, so changing this will not affect the dialogs.
+        div.form-group.row
+          div.col-sm-3.form-control-label isDraggable
+          div.col-sm-9
+            label.c-input.c-radio(repeat.for="valueType of valueTypes")
+              span ${valueType.name}
+              input(type="radio", name="isDraggableRadios", model.bind="valueType.value", checked.bind="isDraggable", disabled.bind="useDefaults.isDraggable")
+              span.c-indicator
+        div.form-group.row
+          div.col-sm-3.form-control-label lock
+          div.col-sm-9
+            label.c-input.c-radio(repeat.for="valueType of valueTypes")
+              span ${valueType.name}
+              input(type="radio", name="lockRadios", model.bind="valueType.value", checked.bind="lock", disabled.bind="useDefaults.lock")
+              span.c-indicator
+        div.form-group.row
+          div.col-sm-3.form-control-label centerHorizontalOnly
+          div.col-sm-9
+            label.c-input.c-radio(repeat.for="valueType of valueTypes")
+              span ${valueType.name}
+              input(type="radio", name="centerHorizontalOnlyRadios", model.bind="valueType.value", checked.bind="centerHorizontalOnly", disabled.bind="useDefaults.centerHorizontalOnly")
+              span.c-indicator
+        hr
+        h4 Dialogs options (for confirm dialogs only)
+        div.form-group.row
+          div.col-sm-3.form-control-label showCancelButton
+          div.col-sm-9
+            label.c-input.c-radio(repeat.for="valueType of valueTypes")
+              span ${valueType.name}
+              input(type="radio", name="showCancelButtonRadios", model.bind="valueType.value", checked.bind="showCancelButton", disabled.bind="useDefaults.showCancelButton")
+              span.c-indicator
+        div.form-group.row
+          div.col-sm-3.form-control-label title
+          div.col-sm-9
+            input.form-control(value.bind="title", readonly.bind="useDefaults.title")
+        div.form-group.row
+          div.col-sm-3.form-control-label msg
+          div.col-sm-9
+            input.form-control(value.bind="msg")
+        div.form-group.row
+          div.col-sm-3.form-control-label
+            | icon
+            | &nbsp;
+            em (for okBtn)
+          div.col-sm-9
+            input.form-control(value.bind="icon", readonly.bind="useDefaults.icon")
+        div.form-group.row
+          div.col-sm-3.form-control-label okBtnClass
+          div.col-sm-9
+            input.form-control(value.bind="okBtnClass", readonly.bind="useDefaults.okBtnClass")
+        div.form-group.row
+          div.col-sm-3.form-control-label okBtnText
+          div.col-sm-9
+            input.form-control(value.bind="okBtnText", readonly.bind="useDefaults.okBtnText")
+        div.form-group.row
+          div.col-sm-3.form-control-label cancelBtnText
+          div.col-sm-9
+            input.form-control(value.bind="cancelBtnText", readonly.bind="useDefaults.cancelBtnText")
+  div.col-lg-6
+    div.card
+      div.card-header
+        h4 Open a dialog
+      div.card-block
+        p Choose the options from the left and click one of the buttons below to open a dialog
+        div.btn-group-vertical
+          button.btn.btn-info(click.trigger="openDialog()")
+            span Open Dialog
+          button.btn.btn-info(click.trigger="openModalDialog()")
+            span Open Modal Dialog
+          button.btn.btn-info(click.trigger="openConfirmDialog()")
+            span Open Confirm Dialog
+          button.btn.btn-info(click.trigger="openConfirmDeleteDialog()")
+            span Open Confirm Delete Dialog

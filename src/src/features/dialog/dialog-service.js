@@ -27,26 +27,43 @@ export class DialogService {
   }
 
   openDialog(settings) {
-    settings.isModal = false;
-    return this._open(settings);
+    const defaultSettings = {
+      lock: true
+    };
+
+    let options = Object.assign({}, defaultSettings, settings);
+    options.isModal = false; // explicitly hard-coded
+
+    return this._open(options);
   }
 
   openModalDialog(settings) {
-    settings.isModal = true;
-    settings.lock = true;
-    return this._open(settings);
+    const defaultSettings = {
+      lock: true
+    };
+
+    let options = Object.assign({}, defaultSettings, settings);
+    options.isModal = true; // explicitly hard-coded
+
+    return this._open(options);
   }
 
   openConfirmDeleteDialog(opts) {
-    return this.openConfirmDialog({
-      title: opts.title || 'Внимание!',
-      msg: opts.msg,
+    opts = opts || {};
+
+    const defaultOptions = {
+      title: 'Внимание!',
+      msg: '',
       icon: 'fa-trash-o',
       okBtnClass: 'btn-danger',
-      okBtnText: opts.okBtnText || 'Изтрий',
-      cancelBtnText: opts.cancelBtnText || 'Отказ',
-      showCancelButton: opts.showCancelButton || true
-    });
+      okBtnText: 'Изтрий',
+      cancelBtnText: 'Отказ',
+      showCancelButton: true
+    };
+
+    let options = Object.assign({}, defaultOptions, opts);
+
+    return this.openConfirmDialog(options);
   }
 
   openConfirmDialog(opts) {
@@ -56,27 +73,36 @@ export class DialogService {
       throw new Error('Argument Exception. Message is not defined.');
     }
 
-    let options = {
-      title: opts.title || 'Внимание!',
-      msg: opts.msg,
-      icon: opts.icon || '',
-      okBtnClass: opts.okBtnClass || 'btn-secondary',
-      okBtnText: opts.okBtnText || 'Oк',
-      cancelBtnText: opts.cancelBtnText || 'Отказ',
-      showCancelButton: opts.showCancelButton || true
+    // options for DialogOptions
+    const defaultOptions = {
+      title: 'Внимание!',
+      msg: '',
+      icon: '',
+      okBtnClass: 'btn-secondary',
+      okBtnText: 'Oк',
+      cancelBtnText: 'Отказ',
+      showCancelButton: true
     };
 
-    let resultPromise = this.openModalDialog({viewModel: DialogOptions, model: options}).then(result =>
-        new Promise(function(resolve, reject) {
-          if (!result.wasCancelled) {
-            resolve(result.output || true);
-          } else {
-            resolve(result.output || false);
-          }
-        })
-    );
+    let options =  Object.assign({}, defaultOptions, opts);
 
-    return resultPromise;
+    // settings for DialogRenderer
+    const defaultSettings = {
+      viewModel: DialogOptions,
+      model: options
+    };
+
+    let settings = Object.assign({}, opts, defaultSettings);
+
+    return this.openModalDialog(settings).then(result =>
+      new Promise((resolve, reject) => {
+        if (!result.wasCancelled) {
+          resolve(result.output || true);
+        } else {
+          resolve(result.output || false);
+        }
+      })
+    );
   }
 
 

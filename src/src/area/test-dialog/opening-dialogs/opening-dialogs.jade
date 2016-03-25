@@ -1,0 +1,143 @@
+template
+  div.col-lg-6
+    div.card
+      div.card-header
+        h4 A simple dialog
+      div.card-block
+        div.row
+          div.col-sm-10
+            div.form-group.row
+              label.col-xs-3.form-control-label.text-lg-right First Name
+              div.col-xs-9
+                input.form-control(value.bind="firstName", readonly)
+            div.form-group.row
+              label.col-xs-3.form-control-label.text-lg-right Last Name
+              div.col-xs-9
+                input.form-control(value.bind="lastName", readonly)
+            div.form-group.row
+              label.col-xs-3.form-control-label.text-lg-right Full Name
+              div.col-xs-9
+                input.form-control(value.bind="fullName", readonly)
+          div.col-sm-2
+            button.btn.btn-success(click.trigger="openDialog()")
+              span.fa.fa-pencil
+              span &nbsp;
+              span Edit
+        hr
+        h4 To open a dialog:
+        pre
+          |  let person = {
+          |    firstName: this.firstName,
+          |    lastName: this.lastName
+          |  };
+          |  &nbsp;
+          |  this.dialogService.openDialog({
+          |    viewModel: EditPerson,
+          |    model: person
+          |  }).then(response => {
+          |    if (!response.wasCancelled) {
+          |      // ok
+          |      this.firstName = response.output.firstName;
+          |      this.lastName = response.output.lastName;
+          |    } else {
+          |      // cancelled
+          |    }
+          |  });
+        hr
+        h4 In the dialog view-model:
+        pre
+          |  @inject(DialogController)
+          |  export class EditPerson {
+          |    person = {};
+          |   &nbsp;
+          |    constructor(controller) {
+          |      this.controller = controller;
+          |    }
+          |  &nbsp;
+          |    activate(person) {
+          |      this.person = person;
+          |    }
+          |  }
+        hr
+        h4 In the dialog view:
+        pre
+          | template
+          |   ai-dialog
+          |     ai-dialog-header
+          |       h2 Edit person names
+          |     ai-dialog-body
+          |       form
+          |         div.form-group.row
+          |           label.col-xs-4.control-label First name
+          |           div.col-xs-8
+          |             input.form-control(value.bind="person.firstName")
+          |         div.form-group.row
+          |           label.col-xs-4.control-label Last name
+          |           div.col-xs-8
+          |             input.form-control(value.bind="person.lastName")
+          |     ai-dialog-footer
+          |       button(click.trigger="controller.ok(person)") Ok
+          |       button(click.trigger="controller.cancel()") Cancel
+
+  div.col-lg-6
+    div.card
+      div.card-header
+        h4 Confirm dialog
+      div.card-block
+        p When you only need a dialog for a simple yes/no answer from the user, or for showing a message, you can use confirm dialogs.
+        p There is no need to provide a view-model and a view when using a confirm dialog, just a message you wish to show the user.
+        hr
+        h4 To open a confirm dialog:
+        pre
+          | this.dialogService.openConfirmDialog({
+          |   msg: 'Are you sure?'
+          | }).then(response => {
+          |   if (response === true){
+          |     // ok (yes)
+          |   } else {
+          |     // cancel (no)
+          |   }
+          | });
+        hr
+        h4 To open a confirm delete dialog:
+        pre
+          | this.dialogService.openConfirmDeleteDialog({
+          |   msg: 'Are you sure you want to delete?'
+          | }).then(response => {
+          |   if (response === true){
+          |     // ok (yes)
+          |   } else {
+          |     // cancel (no)
+          |   }
+          | });
+    div.card
+      div.card-header
+        h4 Customizing confirm dialogs
+      div.card-block
+        p The only required option is the 'msg' option.
+        hr
+        div Default options for Confirm Dialog:
+        pre
+          | options = {
+          |   title: 'Внимание!',
+          |   msg: opts.msg, // required
+          |   icon: '',
+          |   okBtnClass: 'btn-secondary',
+          |   okBtnText: 'Oк',
+          |   cancelBtnText: 'Отказ',
+          |   showCancelButton: true,
+          |   isDraggable: true
+          | };
+        hr
+        div Default options for Confirm Delete Dialog:
+        pre
+          | options = {
+          |   title: 'Внимание!',
+          |   msg: opts.msg, // required
+          |   icon: 'fa-trash-o',
+          |   okBtnClass: 'btn-danger',
+          |   okBtnText: 'Изтрий',
+          |   cancelBtnText: 'Отказ',
+          |   showCancelButton: true,
+          |   isDraggable: true
+          | }

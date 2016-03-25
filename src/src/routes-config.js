@@ -15,7 +15,7 @@ export class RoutesConfig {
     }, {
       route: 'test-dialog',
       name: 'test-dialog',
-      moduleId: './area/test-dialog/welcome',
+      moduleId: './area/test-dialog/test-dialog',
       nav: true,
       title: 'Test Dialog'
     }, {

@@ -1,7 +1,7 @@
 import {ViewSlot} from 'aurelia-framework';
 
 let currentZIndex = 1040;
-let transitionEvent = (function() {
+let transitionEvent = (function () {
   let t;
   let el = document.createElement('fakeelement');
 
@@ -25,7 +25,8 @@ function getNextZIndex() {
 
 export let globalSettings = {
   lock: true,
-  centerHorizontalOnly: false
+  centerHorizontalOnly: false,
+  isDraggable: true
 };
 
 export class DialogRenderer {
@@ -47,6 +48,8 @@ export class DialogRenderer {
     let settings = dialogController.settings;
     let body = document.body;
     let modalOverlay = undefined;
+    let documentMouseMoveListener = undefined;
+    let documentMouseUpListener = undefined;
 
     if (settings.isModal) {
       modalOverlay = document.createElement('ai-dialog-overlay');
@@ -75,11 +78,13 @@ export class DialogRenderer {
             return false;
           }
         };
-      } else {
-        modalContainer.onmousedown = ((event) => {
-          modalContainer.style.zIndex = getNextZIndex();
-        }).bind(this);
+      }
 
+      modalContainer.onmousedown = ((event) => {
+        modalContainer.style.zIndex = getNextZIndex();
+      }).bind(this);
+
+      if (settings.isDraggable === true) {
         const modalHeader = modalContainer.firstElementChild.firstElementChild;
         modalHeader.classList.add('draggable');
         modalHeader.onmousedown = ((event) => {
@@ -89,7 +94,7 @@ export class DialogRenderer {
 
         this.previousMouseEvent = undefined;
 
-        document.addEventListener('mousemove', ((event) => {
+        documentMouseMoveListener = ((event) => {
           let dragging = modalContainer.classList.contains('dragging');
           if (dragging) {
             const windowWidth = window.innerWidth || document.documentElement.clientWidth;
@@ -141,12 +146,16 @@ export class DialogRenderer {
               this.previousMouseEvent = undefined;
             }
           }
-        }).bind(this));
+        }).bind(this);
 
-        document.addEventListener('mouseup', (() => {
+        document.addEventListener('mousemove', documentMouseMoveListener);
+
+        documentMouseUpListener = (() => {
           modalContainer.classList.remove('dragging');
           this.previousMouseEvent = undefined;
-        }).bind(this));
+        }).bind(this);
+
+        document.addEventListener('mouseup', documentMouseUpListener);
       }
 
       return new Promise((resolve) => {
@@ -199,6 +208,11 @@ export class DialogRenderer {
         document.body.removeChild(modalOverlay);
       }
       document.body.removeChild(modalContainer);
+      if (settings.isDraggable) {
+        document.removeEventListener('mousemove', documentMouseMoveListener);
+        document.removeEventListener('mouseup', documentMouseUpListener);
+      }
+
       dialogController.slot.detached();
       return Promise.resolve();
     };
