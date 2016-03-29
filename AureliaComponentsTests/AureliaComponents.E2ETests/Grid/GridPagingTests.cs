@@ -12,8 +12,9 @@
     {
         private GridPageObject pageObject;
 
+        [Test]
         [TestFixtureSetUp]
-        public void Init()
+        public void Paging_Init()
         {
             pageObject = new GridPageObject("C:\\");
             pageObject.NavigateTo("pagination");
@@ -28,8 +29,6 @@
         [Test]
         public void ChangeGridPages_ShouldCheckActivePage()
         {
-            //pageObject.WaitForElement(".page-item.active a");
-
             for (int i = 6; i < 16; i++)
             {
                 pageObject.ClickNextPage();
@@ -58,6 +57,7 @@
             {
                 pageObject.ChangeSelectMenu(size.ToString());
                 pageObject.GetGridRowsCount.Should().Be(size);
+                pageObject.GetGridSummary().Should().Be(string.Format("Showing 1 - {0} of 1000 items", size));
             }
 
         }

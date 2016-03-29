@@ -77,6 +77,11 @@
             this.driver.GetElementsContainingText("a", page).First().Click();
         }
 
+        public string GetGridSummary()
+        {
+            return this.driver.FindElement(By.ClassName("grid-summary")).Text;
+        }
+
         public string GetActivePage()
         {
             return this.driver.FindElement(By.CssSelector(".page-item.active a")).Text;

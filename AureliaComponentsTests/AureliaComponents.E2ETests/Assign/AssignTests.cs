@@ -12,8 +12,9 @@
     {
         private AssignPageObject pageObject;
 
+        [Test]
         [TestFixtureSetUp]
-        public void Init()
+        public void Assign_Init()
         {
             pageObject = new AssignPageObject("C:\\");
         }

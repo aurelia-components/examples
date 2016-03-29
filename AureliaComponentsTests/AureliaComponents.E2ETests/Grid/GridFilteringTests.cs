@@ -12,8 +12,9 @@
     {
         private GridPageObject pageObject;
 
+        [Test]
         [TestFixtureSetUp]
-        public void Init()
+        public void Filtering_Init()
         {
             pageObject = new GridPageObject("C:\\");
             pageObject.NavigateTo("filters");
