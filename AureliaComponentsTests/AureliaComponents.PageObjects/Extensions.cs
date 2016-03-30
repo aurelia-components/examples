@@ -5,6 +5,7 @@
     using System.Linq;
 
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
     using OpenQA.Selenium.Support.UI;
 
     public static class Extensions
@@ -45,6 +46,11 @@
             return driverOrElement.FindElements(By.CssSelector(selector)).Where(e => e.Text.Contains(text));
         }
 
-
+        public static void MoveToElement(this ISearchContext driverOrElement, string selector)
+        {
+            Actions action = new Actions(driverOrElement as IWebDriver);
+            var element = driverOrElement.FindElement(By.CssSelector(selector));
+            action.MoveToElement(element).Perform();
+        }
     }
 }

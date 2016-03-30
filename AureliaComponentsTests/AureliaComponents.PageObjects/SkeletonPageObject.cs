@@ -74,17 +74,7 @@
 
         public void MoveToElement(string selector)
         {
-            Actions action = new Actions(this.driver);
-            var element = this.driver.FindElement(By.CssSelector(selector));
-            action.MoveToElement(element).Perform();
-            this.SetVisualDelay(DefaultVisualDelayInMiliseconds);
-        }
-
-        public void DragAndDrop(string selector, int x, int y)
-        {
-            Actions action = new Actions(this.driver);
-            var element = this.driver.FindElement(By.CssSelector(selector));
-            action.ClickAndHold(element).MoveByOffset(x, y).Release().Build().Perform();
+            this.driver.MoveToElement(selector);
             this.SetVisualDelay(DefaultVisualDelayInMiliseconds);
         }
 
