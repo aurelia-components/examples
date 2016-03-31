@@ -12,11 +12,10 @@
     {
         private GridPageObject pageObject;
 
-        [Test]
         [TestFixtureSetUp]
         public void Paging_Init()
         {
-            pageObject = new GridPageObject("C:\\");
+            pageObject = new GridPageObject();
             pageObject.NavigateTo("pagination");
         }
 

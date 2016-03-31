@@ -7,8 +7,8 @@
 
     public class GridPageObject : SkeletonPageObject
     {
-        public GridPageObject(string driverPath)
-            : base(driverPath, "#/test-grid/")
+        public GridPageObject()
+            : base("#/test-grid/")
         {
 
         }

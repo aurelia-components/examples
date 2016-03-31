@@ -7,8 +7,8 @@
 
     public class PopoverPageObject : SkeletonPageObject
     {
-        public PopoverPageObject(string driverPath)
-            : base(driverPath, "#/test-popover/")
+        public PopoverPageObject()
+            : base("#/test-popover/")
         {
 
         }

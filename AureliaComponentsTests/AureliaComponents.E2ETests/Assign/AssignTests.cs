@@ -12,11 +12,10 @@
     {
         private AssignPageObject pageObject;
 
-        [Test]
         [TestFixtureSetUp]
         public void Assign_Init()
         {
-            pageObject = new AssignPageObject("C:\\");
+            pageObject = new AssignPageObject();
         }
 
         [Test]

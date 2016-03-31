@@ -10,11 +10,10 @@
     {
         private PopoverPageObject pageObject;
 
-        [Test]
         [TestFixtureSetUp]
         public void PopoverAttr_Init()
         {
-            pageObject = new PopoverPageObject("C:\\");
+            pageObject = new PopoverPageObject();
             pageObject.NavigateTo("popover-attribute");
         }
 

@@ -7,8 +7,8 @@
 
     public class AssignPageObject : SkeletonPageObject
     {
-        public AssignPageObject(string driverPath)
-            : base(driverPath, "#/test-assign/")
+        public AssignPageObject()
+            : base("#/test-assign/")
         {
 
         }

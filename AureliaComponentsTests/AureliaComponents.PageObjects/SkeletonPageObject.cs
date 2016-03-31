@@ -19,9 +19,9 @@
         private readonly string routePrefix;
         protected readonly IWebDriver driver;
 
-        public SkeletonPageObject(string driverPath, string routePrefix)
+        public SkeletonPageObject(string routePrefix)
         {
-            this.driver = new ChromeDriver(driverPath);
+            this.driver = new ChromeDriver("../../");
             this.routePrefix = routePrefix;
             var href = string.IsNullOrEmpty(routePrefix) ? string.Empty : routePrefix + string.Empty;
             this.driver.Navigate().GoToUrl(DefaultUrl + href);
