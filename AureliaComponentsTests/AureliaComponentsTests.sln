@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AureliaComponents.PageObjec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AureliaComponents.E2ETests", "AureliaComponents.E2ETests\AureliaComponents.E2ETests.csproj", "{C7F4FF75-6FAD-4CF8-81BC-1E4CFF7E299F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AureliaComponents.PerformanceTests", "AureliaComponents.PerformanceTests\AureliaComponents.PerformanceTests.csproj", "{402E5C9A-1052-46C0-B2FC-7F9BF358304C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C7F4FF75-6FAD-4CF8-81BC-1E4CFF7E299F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7F4FF75-6FAD-4CF8-81BC-1E4CFF7E299F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7F4FF75-6FAD-4CF8-81BC-1E4CFF7E299F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{402E5C9A-1052-46C0-B2FC-7F9BF358304C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{402E5C9A-1052-46C0-B2FC-7F9BF358304C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{402E5C9A-1052-46C0-B2FC-7F9BF358304C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{402E5C9A-1052-46C0-B2FC-7F9BF358304C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
