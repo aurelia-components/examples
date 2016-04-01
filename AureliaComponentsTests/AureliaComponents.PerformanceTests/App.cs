@@ -20,8 +20,12 @@
         public const int WARMUP_COUNT = 5;
         private const int REPEAT_RUN = 12;
         private const int DROP_WORST_COUNT = 2;
-        private const string DefaultUrl = "http://localhost:8080";
-        private readonly static IBench[] benches = new IBench[] { new BenchRun(), new BenchRunHot(), new BenchUpdate(), new BenchSelect(), new BenchRemove() };
+        private const string DefaultUrl = "http://localhost:9001";
+        private readonly static IBench[] benches = 
+            new IBench[] { 
+                new BenchRun(), new BenchRunHot(), new BenchUpdate(), 
+                new BenchSelect(), 
+                new BenchRemove() };
 
         private class PLogEntry
         {
@@ -213,7 +217,7 @@
             Console.WriteLine(bench.GetName());
             ChromeOptions opts = new ChromeOptions();
             ChromePerformanceLoggingPreferences prefs = new ChromePerformanceLoggingPreferences();
-            prefs.AddTracingCategories(new [] {"browser", "devtools.tracing", "devtools" });
+            prefs.AddTracingCategories(new [] {"browser", "devtools.timeline", "devtools" });
             opts.PerformanceLoggingPreferences = prefs;
             opts.SetLoggingPreference("performance", LogLevel.All);
             ChromeDriver driver = new ChromeDriver("../../", opts);
@@ -257,7 +261,7 @@
                 driver.Quit();
             }
         }
-        string labels = string.Join("','", benches.Select(bench => bench.GetName().ToString()));
+        string labels = "'" + string.Join("','", benches.Select(bench => bench.GetName().ToString())) + "'";
         StringBuilder str = new StringBuilder("var data = { labels : ["+labels+"], datasets: [");
 
             str.Append(createChartData(0, "aurelia", benches, results));
@@ -277,7 +281,7 @@
             int g = (colors[idx % colors.Length] >> 8) & 0xff;
             int b = (colors[idx % colors.Length]) & 0xff;
 
-            string data = string.Join("','", benches.Select(bench => results[bench.GetName()].ToString()));
+            string data = "'" + string.Join("','", benches.Select(bench => results[bench.GetName()].ToString())) + "'";
             return "{"
                     + "label: '" + framework + "',"
                     + "fillColor: 'rgba(" + r + ", " + g + " ," + b + ", 0.5)',"
@@ -301,16 +305,17 @@
             ILogs logs = driver.Manage().Logs;
             if (print) Console.WriteLine("Log types: " + logs.AvailableLogTypes);
             List<PLogEntry> filtered = SubmitPerformanceResult(logs.GetLog("performance").ToList(), false);
-
+           
             // Chrome 49 reports a Paint very short after the Event Dispatch which I can't find in the timeline
             //   it also seems to have a performance regression that can be seen in the timeline
             //   we're using the last paint event to fix measurement
             PLogEntry evt = filtered.Where(pe => "EventDispatch".Equals(pe.GetName())).FirstOrDefault();
-            long tsEvent = evt.GetTs() + evt.GetDuration();
+
+            long tsEvent = evt == null ? 0 : (evt.GetTs() + evt.GetDuration());
             // First TimerFire
             PLogEntry evtTimer = filtered.Where(pe => "TimerFire".Equals(pe.GetName()) && pe.GetTs() > tsEvent).FirstOrDefault();
-            long tsEventFire = evtTimer.GetTs() + evtTimer.GetDuration();
-
+           
+            long tsEventFire = evtTimer == null ? 0 : (evtTimer.GetTs() + evtTimer.GetDuration());
             // First Paint after TimerFire only for Aurelia
             long tsAfter = isAurelia ? tsEventFire : tsEvent;
             PLogEntry lastPaint = filtered.Where(pe => "Paint".Equals(pe.GetName()) && pe.GetTs() > tsAfter)
@@ -341,11 +346,12 @@
 
                 }
 
-                string name = getAsString(obj, "message.params.name");
+                string name = getAsString(obj, "message.params.name");               
+
                 if (print) Console.WriteLine(entry.Message);
-                if ("EventDispatch".Contains(name)
-                        && "click".Contains(getAsString(obj, "message.params.args.data.type"))
-                    || "Paint".Contains(name)
+                if ("EventDispatch".Equals(name)    
+                        && "click".Equals(getAsString(obj, "message.params.args.data.type"))
+                    || "Paint".Equals(name)
                         || "TimerFire".Equals(name))
                 {
                     filtered.Add(new PLogEntry(name,
