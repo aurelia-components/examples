@@ -4,7 +4,7 @@
     {
         public static void Main()
         {
-            App app = new App();
+            TestRunner app = new TestRunner();
             app.RunTests();
         }
     }

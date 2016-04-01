@@ -53,7 +53,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
+    <Compile Include="TestRunner.cs" />
+    <Compile Include="Benches\BaseBench.cs" />
+    <Compile Include="Benches\BenchRemove.cs" />
+    <Compile Include="Benches\BenchRun.cs" />
+    <Compile Include="Benches\BenchRunHot.cs" />
+    <Compile Include="Benches\BenchSelect.cs" />
+    <Compile Include="Benches\BenchUpdate.cs" />
+    <Compile Include="Benches\IBench.cs" />
+    <Compile Include="PLogEntry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

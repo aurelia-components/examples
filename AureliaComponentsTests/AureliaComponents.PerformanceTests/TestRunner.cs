@@ -2,211 +2,29 @@
 {
     using System;
     using System.Linq;
-    using Newtonsoft.Json;
 
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using OpenQA.Selenium.Remote;
-    using OpenQA.Selenium.Support;
     using System.Collections.Generic;
     using OpenQA.Selenium.Chrome;
     using Newtonsoft.Json.Linq;
     using System.Threading;
     using System.Text;
     using System.IO;
+    using AureliaComponents.PerformanceTests.Benches;
 
-    public class App
+    public class TestRunner
     {
-        public const int WARMUP_COUNT = 5;
         private const int REPEAT_RUN = 12;
         private const int DROP_WORST_COUNT = 2;
-        private const string DefaultUrl = "http://localhost:9001";
         private readonly static IBench[] benches = 
             new IBench[] { 
-                new BenchRun(), new BenchRunHot(), new BenchUpdate(), 
-                new BenchSelect(), 
-                new BenchRemove() };
-
-        private class PLogEntry
-        {
-            private string name;
-            private long ts;
-            private long duration;
-            private string message;
-
-            public PLogEntry(String name, long ts, long duration, String message)
-            {
-                this.name = name;
-                this.ts = ts;
-                this.duration = duration;
-                this.message = message;
-            }
-
-            public String GetName()
-            {
-                return name;
-            }
-
-            public long GetTs()
-            {
-                return ts;
-            }
-
-            public long GetDuration()
-            {
-                return duration;
-            }
-
-            public string GetMessage()
-            {
-                return message;
-            }
-
-
-            public override string ToString()
-            {
-                return "PLogEntry{" +
-                        "name='" + name + '\'' +
-                        ", ts=" + ts +
-                        ", duration=" + duration +
-                        ", message='" + message + '\'' +
-                        '}';
-            }
-        }
-
-        private interface IBench
-        {
-            void Init(IWebDriver driver);
-            void Run(IWebDriver driver);
-            string GetName();
-        }
-
-        private class BenchRun : IBench
-        {
-            public void Init(IWebDriver driver)
-            {
-                driver.Navigate().GoToUrl(DefaultUrl);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("run")));
-            }
-
-            public void Run(IWebDriver driver)
-            {
-                IWebElement element = driver.FindElement(By.Id("run"));
-                element.Click();
-            }
-
-            public String GetName()
-            {
-                return "create 1000 rows";
-            }
-        }
-
-        private class BenchRunHot : IBench
-        {
-            public void Init(IWebDriver driver)
-            {
-                driver.Navigate().GoToUrl(DefaultUrl);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("run")));
-                for (int i = 0; i < WARMUP_COUNT; i++)
-                {
-                    driver.FindElement(By.Id("run")).Click();
-                    element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("run")));
-                }
-            }
-
-            public void Run(IWebDriver driver)
-            {
-                IWebElement element = driver.FindElement(By.Id("run"));
-                element.Click();
-            }
-
-            public String GetName()
-            {
-                return "update 1000 rows (hot)";
-            }
-        }
-
-        private class BenchUpdate : IBench
-        {
-            public void Init(IWebDriver driver)
-            {
-                driver.Navigate().GoToUrl(DefaultUrl);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("run")));
-                element.Click();
-                for (int i = 0; i < WARMUP_COUNT; i++)
-                {
-                    driver.FindElement(By.Id("update")).Click();
-                    element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("update")));
-                }
-            }
-
-            public void Run(IWebDriver driver)
-            {
-                driver.FindElement(By.Id("update")).Click();
-            }
-
-            public String GetName()
-            {
-                return "partial update";
-            }
-        }
-
-        private class BenchSelect : IBench
-        {
-            public void Init(IWebDriver driver)
-            {
-                driver.Navigate().GoToUrl(DefaultUrl);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("run")));
-                element.Click();
-                for (int i = 0; i < WARMUP_COUNT; i++)
-                {
-                    element = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//tbody/tr[" + (i + 1) + "]/td[2]/a")));
-                    element.Click();
-                }
-            }
-
-            public void Run(IWebDriver driver)
-            {
-                IWebElement element = driver.FindElement(By.XPath("//tbody/tr[1]/td[2]/a"));
-                element.Click();
-            }
-
-            public String GetName()
-            {
-                return "select row";
-            }
-        }
-
-        private class BenchRemove : IBench
-        {
-            public void Init(IWebDriver driver)
-            {
-                driver.Navigate().GoToUrl(DefaultUrl);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("run")));
-                element.Click();
-                for (int i = 3 + WARMUP_COUNT; i >= 3; i--)
-                {
-                    element = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//tbody/tr[" + i + "]/td[3]/a")));
-                    element.Click();
-                }
-            }
-
-            public void Run(IWebDriver driver)
-            {
-                IWebElement element = driver.FindElement(By.XPath("//tbody/tr[1]/td[3]/a"));
-                element.Click();
-            }
-
-            public String GetName()
-            {
-                return "remove row";
-            }
-        }
+            new BenchRun(), 
+            new BenchRunHot(), 
+            new BenchUpdate(), 
+            new BenchSelect(), 
+            new BenchRemove() 
+            };
 
         public void RunTests() {
 
