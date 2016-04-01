@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Benches\GridBenchRun.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Benches\BaseBench.cs" />
     <Compile Include="Benches\BenchRemove.cs" />
