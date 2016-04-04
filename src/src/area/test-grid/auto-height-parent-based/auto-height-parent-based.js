@@ -9,6 +9,11 @@ export class AutoHeight {
     window.x = this;
     this.popoverTestBinding = 'testing binsfrwjrwerhwrlwehrwklrwjrweklrjwrwelkerjwelrjwerlkewrjdig';
     this.data = this._generateTestData();
+    this.showGrid = false;
+  }
+
+  toggleShowGrid() {
+    this.showGrid = !this.showGrid;
   }
 
   _generateTestData() {

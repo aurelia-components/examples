@@ -29,8 +29,8 @@ template
                   | <br/> Usage(remotelly manipulated data): 
                   code.language-js
                     b &lt;grid read.call="your function..."&gt;&lt;grid&gt;
-
-        div(style="height: 300px;border:1px solid red;")
+        button.btn-success(click.trigger="toggleShowGrid()") TOGGLE GRID
+        div(style="height: 300px;border:1px solid red;", if.bind="showGrid")
           grid(show-filters.bind="true", height="auto", data.bind="data")
             grid-row(popover="view: ./popover-view.html; placement: top; trigger: insideClick; width: 250")
               grid-col(heading="ID", field="id", width="200", filter="input")

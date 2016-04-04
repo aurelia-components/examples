@@ -10,7 +10,7 @@ namespace AureliaComponents.PerformanceTests.Benches
 {
     public class GridBenchRun : BaseBench, IBench
     {
-        public By Locator { get { return By.CssSelector("*[click\\.trigger=\"addItem()\"]"); } }
+        public By Locator { get { return By.CssSelector("*[click\\.trigger=\"toggleShowGrid()\"]"); } }
 
         public void Init(IWebDriver driver)
         {

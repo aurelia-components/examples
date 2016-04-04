@@ -16,16 +16,16 @@
 
     public class TestRunner
     {
-        private const int REPEAT_RUN = 12;
+        private const int REPEAT_RUN = 4;
         private const int DROP_WORST_COUNT = 2;
         private readonly static IBench[] benches =
             new IBench[] { 
-            //new GridBenchRun(), 
-            new BenchRun(),
-            new BenchRunHot(), 
-            new BenchUpdate(), 
-            new BenchSelect(), 
-            new BenchRemove() 
+            new GridBenchRun(), 
+            //new BenchRun(),
+            //new BenchRunHot(), 
+            //new BenchUpdate(), 
+            //new BenchSelect(), 
+            //new BenchRemove() 
             };
 
         public void RunTests()
@@ -66,10 +66,12 @@
                         {
                             loc = (bench as GridBenchRun).Locator;
                         }
-
+                       
                         var element = wait.Until(ExpectedConditions.ElementToBeClickable(loc));
+                        
                         Thread.Sleep(1000 + (int)lastWait);
 
+                        
                         double? res = PrintLog(driver, true, true);
                         if (res != null)
                         {
@@ -159,7 +161,9 @@
             if (print) filtered.ForEach(e => Console.WriteLine(e));
             if (evt != null && lastPaint != null)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 if (print) Console.WriteLine("Duration " + (lastPaint.Timestamp + lastPaint.Duration - evt.Timestamp) / 1000.0);
+                Console.ResetColor();
                 return (lastPaint.Timestamp + lastPaint.Duration - evt.Timestamp) / 1000.0;
             }
             return null;
