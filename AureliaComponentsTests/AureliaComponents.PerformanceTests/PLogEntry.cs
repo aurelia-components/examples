@@ -4,47 +4,29 @@
 
     public class PLogEntry
     {
-        private string name;
-        private long ts;
-        private long duration;
         private string message;
 
         public PLogEntry(string name, long ts, long duration, string message)
         {
-            this.name = name;
-            this.ts = ts;
-            this.duration = duration;
+            this.Name = name;
+            this.Timestamp = ts;
+            this.Duration = duration;
             this.message = message;
         }
 
-        public string GetName()
-        {
-            return name;
-        }
+        public string Name { get; private set; }
 
-        public long GetTs()
-        {
-            return ts;
-        }
+        public long Timestamp { get; private set; }
 
-        public long GetDuration()
-        {
-            return duration;
-        }
-
-        public string GetMessage()
-        {
-            return message;
-        }
-
+        public long Duration { get; private set; }
 
         public override string ToString()
         {
             return "PLogEntry{" +
-                    "name='" + name + '\'' +
-                    ", ts=" + ts +
-                    ", duration=" + duration +
-                    ", message='" + message + '\'' +
+                    "name='" + this.Name + '\'' +
+                    ", ts=" + this.Timestamp +
+                    ", duration=" + this.Duration +
+                    ", message='" + this.message + '\'' +
                     '}';
         }
     }

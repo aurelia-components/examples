@@ -10,18 +10,18 @@ namespace AureliaComponents.PerformanceTests.Benches
 {
     public class GridBenchRun : BaseBench, IBench
     {
-        private By locator = By.CssSelector("*[click\\.trigger=\"addItem()\"]");
+        public By Locator { get { return By.CssSelector("*[click\\.trigger=\"addItem()\"]"); } }
 
         public void Init(IWebDriver driver)
         {
             driver.Navigate().GoToUrl(DefaultUri);
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(locator));
+            IWebElement element = wait.Until(ExpectedConditions.ElementToBeClickable(this.Locator));
         }
 
         public void Run(IWebDriver driver)
         {
-            IWebElement element = driver.FindElement(locator);
+            IWebElement element = driver.FindElement(this.Locator);
             element.Click();
         }
 
