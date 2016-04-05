@@ -5,7 +5,9 @@
     public interface IBench
     {
         void Init(IWebDriver driver);
+
         void Run(IWebDriver driver);
-        string GetName();
+
+        string Name {get;} 
     }
 }

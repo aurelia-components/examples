@@ -1,13 +1,14 @@
 ﻿namespace AureliaComponents.PerformanceTests.Benches
 {
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Support.UI;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Support.UI;
+    
     public class BenchRemove : BaseBench, IBench
     {
         public void Init(IWebDriver driver)
@@ -29,9 +30,9 @@
             element.Click();
         }
 
-        public String GetName()
+        public string Name
         {
-            return "remove row";
+            get { return "remove row"; }
         }
     }
 }

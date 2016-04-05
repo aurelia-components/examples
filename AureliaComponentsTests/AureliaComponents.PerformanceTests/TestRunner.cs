@@ -35,7 +35,7 @@
 
             foreach (var bench in benches)
             {
-                Console.WriteLine(bench.GetName());
+                Console.WriteLine(bench.Name);
                 ChromeOptions opts = new ChromeOptions();
                 ChromePerformanceLoggingPreferences prefs = new ChromePerformanceLoggingPreferences();
                 prefs.AddTracingCategories(new[] { "browser", "devtools.timeline", "devtools" });
@@ -49,16 +49,16 @@
                     double lastWait = 1000;
                     for (int i = 0; i < length; i++)
                     {
-                        Console.WriteLine(bench.GetName() + " => init");
+                        Console.WriteLine(bench.Name + " => init");
                         bench.Init(driver);
 
                         WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
                         Thread.Sleep(2000);
                         PrintLog(driver, false, true);
-                        Console.WriteLine(bench.GetName() + " => run");
+                        Console.WriteLine(bench.Name + " => run");
                         bench.Run(driver);
-                        Console.WriteLine("run " + bench.GetName());
+                        Console.WriteLine("run " + bench.Name);
 
                         var loc = By.Id("run");
 
@@ -89,14 +89,14 @@
 
                         Console.WriteLine("after " + string.Join(", ", data));
                     }
-                    results.Add(bench.GetName(), data.Average());
+                    results.Add(bench.Name, data.Average());
                 }
                 finally
                 {
                     driver.Quit();
                 }
             }
-            string labels = "'" + string.Join("','", benches.Select(bench => bench.GetName().ToString())) + "'";
+            string labels = "'" + string.Join("','", benches.Select(bench => bench.Name.ToString())) + "'";
             StringBuilder str = new StringBuilder("var data = { labels : [" + labels + "], datasets: [");
 
             str.Append(CreateChartData(0, "aurelia", benches, results));
@@ -105,8 +105,8 @@
 
             foreach (var b in benches)
             {
-                Console.WriteLine(b.GetName() + ":");
-                Console.WriteLine(results[b.GetName()]);
+                Console.WriteLine(b.Name + ":");
+                Console.WriteLine(results[b.Name]);
             }
         }
 
@@ -117,7 +117,7 @@
             int g = (colors[idx % colors.Length] >> 8) & 0xff;
             int b = (colors[idx % colors.Length]) & 0xff;
 
-            string data = "'" + string.Join("','", benches.Select(bench => results[bench.GetName()].ToString())) + "'";
+            string data = "'" + string.Join("','", benches.Select(bench => results[bench.Name].ToString())) + "'";
             return "{"
                     + "label: '" + framework + "',"
                     + "fillColor: 'rgba(" + r + ", " + g + " ," + b + ", 0.5)',"

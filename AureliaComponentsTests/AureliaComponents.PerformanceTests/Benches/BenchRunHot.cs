@@ -1,8 +1,9 @@
 ﻿namespace AureliaComponents.PerformanceTests.Benches
 {
+    using System;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using System;
 
     public class BenchRunHot : BaseBench, IBench
     {
@@ -24,9 +25,9 @@
             element.Click();
         }
 
-        public String GetName()
+        public string Name
         {
-            return "update 1000 rows (hot)";
+            get { return "update 1000 rows (hot)"; }
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿namespace AureliaComponents.PerformanceTests.Benches
 {
+    using System;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using System;
 
     public class BenchUpdate : BaseBench, IBench
     {
@@ -24,9 +25,9 @@
             driver.FindElement(By.Id("update")).Click();
         }
 
-        public String GetName()
+        public string Name
         {
-            return "partial update";
+            get { return "partial update"; }
         }
     }
 }

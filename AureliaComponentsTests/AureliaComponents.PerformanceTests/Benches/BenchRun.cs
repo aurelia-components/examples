@@ -1,8 +1,9 @@
 ﻿namespace AureliaComponents.PerformanceTests.Benches
 {
+    using System;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using System;
 
     public class BenchRun : BaseBench, IBench
     {
@@ -19,9 +20,9 @@
             element.Click();
         }
 
-        public String GetName()
+        public string Name
         {
-            return "create 1000 rows";
+            get { return "create 1000 rows"; } 
         }
     }
 }

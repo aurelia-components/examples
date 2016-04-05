@@ -1,13 +1,10 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AureliaComponents.PerformanceTests.Benches
+﻿namespace AureliaComponents.PerformanceTests.Benches
 {
+    using System;
+
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Support.UI;
+
     public class GridBenchRun : BaseBench, IBench
     {
         public By Locator { get { return By.CssSelector("*[click\\.trigger=\"toggleShowGrid()\"]"); } }
@@ -25,9 +22,12 @@ namespace AureliaComponents.PerformanceTests.Benches
             element.Click();
         }
 
-        public string GetName()
+        public string Name
         {
-            return "create 1000 in the grid";
+            get 
+            { 
+                return "create 1000 in the grid"; 
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿namespace AureliaComponents.PerformanceTests.Benches
 {
+    using System;
+
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using System;
 
     public class BenchSelect :BaseBench, IBench
     {
@@ -25,9 +26,9 @@
             element.Click();
         }
 
-        public String GetName()
+        public string Name
         {
-            return "select row";
+            get { return "select row"; }
         }
     }
 }
