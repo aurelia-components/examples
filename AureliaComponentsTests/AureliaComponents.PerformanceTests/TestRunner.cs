@@ -16,7 +16,7 @@
 
     public class TestRunner
     {
-        private const int REPEAT_RUN = 4;
+        private const int REPEAT_RUN = 12;
         private const int DROP_WORST_COUNT = 2;
         private readonly static IBench[] benches =
             new IBench[] { 
@@ -55,7 +55,7 @@
                         WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
                         Thread.Sleep(2000);
-                        PrintLog(driver, false, true);
+                        //PrintLog(driver, false, true);
                         Console.WriteLine(bench.Name + " => run");
                         bench.Run(driver);
                         Console.WriteLine("run " + bench.Name);
@@ -71,7 +71,7 @@
                         
                         Thread.Sleep(1000 + (int)lastWait);
 
-                        
+                        Console.Write(i + 1 + ". ");
                         double? res = PrintLog(driver, true, true);
                         if (res != null)
                         {
@@ -79,7 +79,7 @@
                             lastWait = data[i];
                         }
                     }
-                    Console.WriteLine("before " + string.Join(", ", data));
+                    //Console.WriteLine("before " + string.Join(", ", data));
                     if (DROP_WORST_COUNT > 0)
                     {
                         Array.Sort(data);
@@ -87,7 +87,7 @@
                         Array.Copy(data, arr, data.Length - DROP_WORST_COUNT);
                         data = arr;
 
-                        Console.WriteLine("after " + string.Join(", ", data));
+                        //Console.WriteLine("after " + string.Join(", ", data));
                     }
                     results.Add(bench.Name, data.Average());
                 }
@@ -131,15 +131,15 @@
         private double? PrintLog(IWebDriver driver, bool print, bool isAurelia)
         {
             IEnumerable<LogEntry> entries = driver.Manage().Logs.GetLog(LogType.Browser);
-            Console.WriteLine(entries.Count() + " " + LogType.Browser + " log entries found");
-            foreach (LogEntry entry in entries)
-            {
-                if (print) Console.WriteLine(
-                        entry.Timestamp + " " + entry + " " + entry.Message);
-            }
+            //Console.WriteLine(entries.Count() + " " + LogType.Browser + " log entries found");
+            //foreach (LogEntry entry in entries)
+            //{
+            //    if (print) Console.WriteLine(
+            //            entry.Timestamp + " " + entry + " " + entry.Message);
+            //}
 
             ILogs logs = driver.Manage().Logs;
-            if (print) Console.WriteLine("Log types: " + logs.AvailableLogTypes);
+            //if (print) Console.WriteLine("Log types: " + logs.AvailableLogTypes);
             List<PLogEntry> filtered = SubmitPerformanceResult(logs.GetLog("performance").ToList(), false);
 
             // Chrome 49 reports a Paint very short after the Event Dispatch which I can't find in the timeline
@@ -157,8 +157,8 @@
             PLogEntry lastPaint = filtered.Where(pe => "Paint".Equals(pe.Name) && pe.Timestamp > tsAfter)
                    .Aggregate((p1, p2) => p2);
 
-            if (print) Console.WriteLine("************************ filtered events");
-            if (print) filtered.ForEach(e => Console.WriteLine(e));
+            //if (print) Console.WriteLine("************************ filtered events");
+            //if (print) filtered.ForEach(e => Console.WriteLine(e));
             if (evt != null && lastPaint != null)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
