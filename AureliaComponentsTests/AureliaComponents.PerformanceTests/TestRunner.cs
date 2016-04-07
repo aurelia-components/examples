@@ -20,8 +20,8 @@
         private const int DROP_WORST_COUNT = 2;
         private readonly static IBench[] benches =
             new IBench[] { 
-            new GridBenchRun(), 
-            //new BenchRun(),
+            //new GridBenchRun(), 
+            new BenchRun(),
             //new BenchRunHot(), 
             //new BenchUpdate(), 
             //new BenchSelect(), 
@@ -72,7 +72,19 @@
                         Thread.Sleep(1000 + (int)lastWait);
 
                         Console.Write(i + 1 + ". ");
-                        double? res = PrintLog(driver, true, true);
+
+                        double? res = 0;
+                        try
+                        {
+                            res = PrintLog(driver, true, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("BOOM! ----> " + ex.Message);
+                            i--;
+                            continue;
+                        }
+                        
                         if (res != null)
                         {
                             data[i] = res.Value;
@@ -140,22 +152,24 @@
 
             ILogs logs = driver.Manage().Logs;
             //if (print) Console.WriteLine("Log types: " + logs.AvailableLogTypes);
-            List<PLogEntry> filtered = SubmitPerformanceResult(logs.GetLog("performance").ToList(), false);
+            List<PLogEntry> filteredLogs = SubmitPerformanceResult(logs.GetLog("performance").ToList(), false);
 
             // Chrome 49 reports a Paint very short after the Event Dispatch which I can't find in the timeline
             //   it also seems to have a performance regression that can be seen in the timeline
             //   we're using the last paint event to fix measurement
-            PLogEntry evt = filtered.Where(pe => "EventDispatch".Equals(pe.Name)).FirstOrDefault();
+            var evts = filteredLogs.Where(pe => "EventDispatch".Equals(pe.Name));
+            var evt = evts.FirstOrDefault();
 
             long tsEvent = evt == null ? 0 : (evt.Timestamp + evt.Duration);
             // First TimerFire
-            PLogEntry evtTimer = filtered.Where(pe => "TimerFire".Equals(pe.Name) && pe.Timestamp > tsEvent).FirstOrDefault();
+            PLogEntry evtTimer = filteredLogs.Where(pe => "TimerFire".Equals(pe.Name) && pe.Timestamp > tsEvent).FirstOrDefault();
 
             long tsEventFire = evtTimer == null ? 0 : (evtTimer.Timestamp + evtTimer.Duration);
             // First Paint after TimerFire only for Aurelia
-            long tsAfter = isAurelia ? tsEventFire : tsEvent;
-            PLogEntry lastPaint = filtered.Where(pe => "Paint".Equals(pe.Name) && pe.Timestamp > tsAfter)
-                   .Aggregate((p1, p2) => p2);
+            //long tsAfter = isAurelia ? tsEventFire : tsEvent;
+            PLogEntry lastPaint = filteredLogs
+                .Where(pe => "Paint".Equals(pe.Name))
+                .Last();
 
             //if (print) Console.WriteLine("************************ filtered events");
             //if (print) filtered.ForEach(e => Console.WriteLine(e));
