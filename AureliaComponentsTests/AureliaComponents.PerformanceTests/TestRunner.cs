@@ -16,7 +16,7 @@
 
     public class TestRunner
     {
-        private const int REPEAT_RUN = 22;
+        private const int REPEAT_RUN = 4;
         private const int DROP_WORST_COUNT = 2;
         private readonly static IBench[] benches =
             new IBench[] { 
@@ -28,10 +28,12 @@
             //new BenchRemove() 
             };
         private ChromeDriverFactory factory;
+        private ChartCreator chartDataCreator;
 
-        public TestRunner(ChromeDriverFactory factory)
+        public TestRunner(ChromeDriverFactory factory, ChartCreator chartDataCreator)
         {
             this.factory = factory;
+            this.chartDataCreator = chartDataCreator;
         }
 
         public void RunTests()
@@ -111,7 +113,8 @@
             string labels = "'" + string.Join("','", benches.Select(bench => bench.Name.ToString())) + "'";
             StringBuilder str = new StringBuilder("var data = { labels : [" + labels + "], datasets: [");
 
-            str.Append(CreateChartData(0, "aurelia", benches, results));
+            var chartData = this.chartDataCreator.CreateChartData(0, "aurelia", benches, results);
+            str.Append(chartData);
             string fin = str + "]};";
             File.WriteAllText("../../chartData.js", fin);
 
@@ -120,25 +123,7 @@
                 Console.WriteLine(b.Name + ":");
                 Console.WriteLine(results[b.Name]);
             }
-        }
-
-        private string CreateChartData(int idx, string framework, IBench[] benches, Dictionary<string, double> results)
-        {
-            int[] colors = new int[] { 0x00AAA0, 0x8ED2C9, 0x44B3C2, 0xF1A94E, 0xE45641, 0x7CE8BF, 0x5D4C46, 0x7B8D8E, 0xA9FFB7, 0xF4D00C, 0x462066 };
-            int r = (colors[idx % colors.Length] >> 16) & 0xff;
-            int g = (colors[idx % colors.Length] >> 8) & 0xff;
-            int b = (colors[idx % colors.Length]) & 0xff;
-
-            string data = "'" + string.Join("','", benches.Select(bench => results[bench.Name].ToString())) + "'";
-            return "{"
-                    + "label: '" + framework + "',"
-                    + "fillColor: 'rgba(" + r + ", " + g + " ," + b + ", 0.5)',"
-                    + "strokeColor: 'rgba(" + r + ", " + g + " ," + b + ", 0.8)',"
-                    + "highlightFill: 'rgba(" + r + ", " + g + " , " + b + ", 0.7)',"
-                    + "highlightStroke: 'rgba(" + r + ", " + g + " ," + b + ", 0.9)',"
-                    + "data: [" + data + "]"
-            + "}";
-        }
+        }        
 
         private double? PrintLog(IWebDriver driver, bool print, bool isAurelia)
         {
@@ -237,10 +222,11 @@
 
         private string GetAsStringRec(JObject root, List<string> path)
         {
-
             JObject obj = root;
             if (root[path[0]] == null)
+            {
                 return null;
+            }
 
             if (path.Count == 1)
             {
@@ -257,7 +243,9 @@
         {
             JObject obj = root;
             if (root[path[0]] == null)
+            {
                 return null;
+            }
 
             if (path.Count == 1)
             {
@@ -265,7 +253,6 @@
             }
             else
             {
-
                 JObject jo = JObject.Parse(root[path[0]].ToString());
                 return GetAsLongRec(jo, path.GetRange(1, path.Count - 1));
             }

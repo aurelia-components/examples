@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Benches\GridBenchRun.cs" />
+    <Compile Include="ChartCreator.cs" />
     <Compile Include="ChromeDriverFactory.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Benches\BaseBench.cs" />
