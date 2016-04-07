@@ -16,7 +16,7 @@
 
     public class TestRunner
     {
-        private const int REPEAT_RUN = 12;
+        private const int REPEAT_RUN = 22;
         private const int DROP_WORST_COUNT = 2;
         private readonly static IBench[] benches =
             new IBench[] { 
@@ -27,27 +27,27 @@
             //new BenchSelect(), 
             //new BenchRemove() 
             };
+        private ChromeDriverFactory factory;
+
+        public TestRunner(ChromeDriverFactory factory)
+        {
+            this.factory = factory;
+        }
 
         public void RunTests()
         {
-            int length = REPEAT_RUN;
             Dictionary<string, double> results = new Dictionary<string, double>();
 
             foreach (var bench in benches)
             {
-                Console.WriteLine(bench.Name);
-                ChromeOptions opts = new ChromeOptions();
-                ChromePerformanceLoggingPreferences prefs = new ChromePerformanceLoggingPreferences();
-                prefs.AddTracingCategories(new[] { "browser", "devtools.timeline", "devtools" });
-                opts.PerformanceLoggingPreferences = prefs;
-                opts.SetLoggingPreference("performance", LogLevel.All);
-                ChromeDriver driver = new ChromeDriver("../../", opts);
+                Console.WriteLine(bench.Name);                
+                ChromeDriver driver = this.factory.GetDriver();
 
                 try
                 {
-                    double[] data = new double[length];
+                    double[] data = new double[REPEAT_RUN];
                     double lastWait = 1000;
-                    for (int i = 0; i < length; i++)
+                    for (int i = 0; i < REPEAT_RUN; i++)
                     {
                         Console.WriteLine(bench.Name + " => init");
                         bench.Init(driver);

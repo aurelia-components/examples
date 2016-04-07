@@ -4,7 +4,7 @@
     {
         public static void Main()
         {
-            TestRunner app = new TestRunner();
+            TestRunner app = new TestRunner(new ChromeDriverFactory());
             app.RunTests();
         }
     }
