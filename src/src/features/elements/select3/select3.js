@@ -458,11 +458,6 @@ export class Select3 {
     }
   }
 
-  setHover(datum) {
-    this.hoveredDatum = datum;
-  }
-
-
   // selecting
 
   selectItem(datum) {
