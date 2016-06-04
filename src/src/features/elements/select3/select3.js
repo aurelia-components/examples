@@ -3,9 +3,10 @@ import {Tokenizers} from './tokenizers';
 import {Datum} from './datum';
 import {KEYS} from './keys';
 import {customElementHelper} from 'utils';
+import {UtilsHelper} from './utils-helper';
 
 @customElement('select3')
-@inject(Element, BindingEngine, TaskQueue)
+@inject(Element, BindingEngine, TaskQueue, UtilsHelper)
 export class Select3 {
   @bindable items = [];
   @bindable({defaultBindingMode: bindingMode.twoWay}) value = null;
@@ -46,10 +47,11 @@ export class Select3 {
     scrollTimeout: 300
   };
 
-  constructor(element, bindingEngine, taskQueue) {
+  constructor(element, bindingEngine, taskQueue, utilsHelper) {
     this.element = element;
     this.bindingEngine = bindingEngine;
     this.taskQueue = taskQueue;
+    this.utilsHelper = utilsHelper;
 
     this.parseInt = parseInt;
   }
@@ -156,7 +158,7 @@ export class Select3 {
 
   _reconstructItems() {
     this.items.forEach(i => {
-      i._escapedName = this._escapeHtml(i[this.opts.name]);
+      i._escapedName = this.utilsHelper._escapeHtml(i[this.opts.name]);
     });
     this.search(this.searchedItem);
   }
@@ -632,18 +634,6 @@ export class Select3 {
     return Tokenizers.nonword(query);
   }
 
-  _getTokensGroupedByValue(tokensArray) {
-    let uniqueTokens = this._arrayUniqueByField(tokensArray, 'value');
-    return /*let tokensGroupedByValue = */ uniqueTokens.map(uniqueToken => {
-      let tokensWithSameValue = tokensArray.filter(token => token.value === uniqueToken.value);
-      let indexesOfTokensWithSameValue = tokensWithSameValue.map(token => tokensArray.indexOf(token));
-      return {
-        indexes: indexesOfTokensWithSameValue,
-        value: uniqueToken.value
-      };
-    });
-  }
-
   _sortData(a, b) {
     //firstly compare by query matching
     let result = Datum.compare(a, b);
@@ -665,27 +655,5 @@ export class Select3 {
     }
 
     return a.index > b.index ? 1 : a.index < b.index ? -1 : 0;
-  }
-
-
-  // utils
-
-  _arrayUniqueByField(a, field) {
-    return a.reduce(function (p, c) {
-      if (p.every(x => x[field] !== c[field])) p.push(c);
-      return p;
-    }, []);
-  }
-
-  _escapeHtml(text) {
-    let map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    };
-
-    return text.toString().replace(/[&<>"']/g, m => map[m]);
   }
 }
