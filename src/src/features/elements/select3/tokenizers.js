@@ -2,14 +2,18 @@ export class Tokenizers {
   static whitespace(str) {
     str = str.toString();
     let regex = /\S+/g;
-    return Tokenizers.matchRegex(str, regex);
+    let result = Tokenizers.matchRegex(str, regex);
+
+    return result;
   }
 
   static nonword(str) {
     str = str.toString();
     // todo: fix for all letters
     let regex = /[A-Za-z0-9_А-Яа-я]+/g;
-    return Tokenizers.matchRegex(str, regex);
+    let result = Tokenizers.matchRegex(str, regex);
+
+    return result;
   }
 
   static matchRegex(str, regex) {
@@ -38,5 +42,3 @@ export class Tokenizers {
   //  };
   //}
 }
-
-
