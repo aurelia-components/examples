@@ -31,11 +31,7 @@ template
           div.select3-result.select3-no-results-message(if.bind="filteredData.length === 0") ${opts.noResultsMessage}
           div.select3-result(repeat.for="datum of filteredDataShort",
             mousedown.trigger="selectItem(datum)",
-            innerhtml.bind="datum.highlightedName",
-            mouseenter.trigger="setHover(datum)",
-            class="${datum.item[opts.id] === hoveredDatum.item[opts.id] ? 'hovered' : ''} " +
-                  "${(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] || " +
-            "parseInt(opts.modelValueBind ? value[opts.id] : value) === datum.item[opts.id] ? 'selected' : ''}")
+            innerhtml.bind="datum.highlightedName")
         div.select3-scrollbar(mousewheel.trigger="scrollDropdown($event)")
           button.select3-scrollbar-up-btn(tabindex="-1",
           type="button",

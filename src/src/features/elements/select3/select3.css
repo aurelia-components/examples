@@ -84,4 +84,6 @@
   background-color: #a9a9a9;
 }
 
-
+div.au-target.select3-result:hover {
+  background-color: red;
+}
