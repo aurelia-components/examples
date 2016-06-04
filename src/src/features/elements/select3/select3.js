@@ -4,9 +4,10 @@ import {Datum} from './datum';
 import {KEYS} from './keys';
 import {customElementHelper} from 'utils';
 import {UtilsHelper} from './utils-helper';
+import {SearchEngine} from './search-engine';
 
 @customElement('select3')
-@inject(Element, BindingEngine, TaskQueue, UtilsHelper)
+@inject(Element, BindingEngine, TaskQueue, UtilsHelper, SearchEngine)
 export class Select3 {
   @bindable items = [];
   @bindable({defaultBindingMode: bindingMode.twoWay}) value = null;
@@ -47,11 +48,12 @@ export class Select3 {
     scrollTimeout: 300
   };
 
-  constructor(element, bindingEngine, taskQueue, utilsHelper) {
+  constructor(element, bindingEngine, taskQueue, utilsHelper, searchEngine) {
     this.element = element;
     this.bindingEngine = bindingEngine;
     this.taskQueue = taskQueue;
     this.utilsHelper = utilsHelper;
+    this.searchEngine = searchEngine;
 
     this.parseInt = parseInt;
   }
