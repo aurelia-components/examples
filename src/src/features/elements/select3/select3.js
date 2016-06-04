@@ -584,78 +584,7 @@ export class Select3 {
     }
   }
 
-
-  // search
-
-  // todo: check if query.startsWith(previousQuery) and match only the already matched elements
-  // search(query) {
-  //   // todo: check for empty or null or not an array? maybe in items changed and throw error?
-  //   if (this.items === undefined) {
-  //     this.filteredData = [];
-  //     return;
-  //   }
-  //
-  //   // get only non-empty tokens
-  //   let queryTokens = this._queryTokenizer(query).filter(qt => qt.value.length > 0);
-  //   queryTokens.forEach(qt => {
-  //     qt.value = qt.value.toLowerCase();
-  //   });
-  //   // group tokens by value -> to know how many matches of each token we need
-  //   let queryTokensGroupedByValue = this._getTokensGroupedByValue(queryTokens);
-  //
-  //   // map every item to Datum object
-  //   // todo: create only once for every item and call method to match current query
-  //   let data = this.items.map((item, index) => new Datum(item, index, this.opts, queryTokens));
-  //
-  //   // filter only datums that match query
-  //   let filteredData = data.filter(datum => {
-  //     //get query tokens that match
-  //     let matchingQueryTokens = datum.queryTokensMatches
-  //       .filter(queryTokenIndex => queryTokenIndex > -1)
-  //       .map(queryTokenIndex => queryTokens[queryTokenIndex]);
-  //     // group query tokens (in case we have matched a token more than once)
-  //     let matchingQueryTokensGroupedByValue = this._getTokensGroupedByValue(matchingQueryTokens);
-  //     return /*let isMatchingQuery = */queryTokensGroupedByValue.every(queryTokenGroup => {
-  //       // find token that corresponds to current query token
-  //       let matchingQueryTokenGroup = matchingQueryTokensGroupedByValue.find(x => x.value === queryTokenGroup.value);
-  //       // evaluate if we have more matches than needed for current query token
-  //       return matchingQueryTokenGroup && (matchingQueryTokenGroup.indexes.length >= queryTokenGroup.indexes.length);
-  //     });
-  //   });
-  //
-  //   // sort datums by matching query
-  //   filteredData.sort(this._sortData.bind(this));
-  //
-  //   // hover first datum
-  //   this.hoveredDatum = filteredData.length > 0 ? filteredData[0] : null;
-  //
-  //   this.filteredData = filteredData;
-  // }
-
   _queryTokenizer(query) {
     return Tokenizers.nonword(query);
   }
-
-  // _sortData(a, b) {
-  //   //firstly compare by query matching
-  //   let result = Datum.compare(a, b);
-  //   if (result !== 0) {
-  //     return result;
-  //   }
-  //
-  //   //secondly compare traditional if requested
-  //   if (this.opts.sort) {
-  //     let sortField = this.opts.sortField || this.opts.name;
-  //     if (a.item[sortField] > b.item[sortField]) {
-  //       return 1;
-  //     }
-  //     if (a.item[sortField] < b.item[sortField]) {
-  //       return -1;
-  //     }
-  //
-  //     return 0;
-  //   }
-  //
-  //   return a.index > b.index ? 1 : a.index < b.index ? -1 : 0;
-  // }
 }
