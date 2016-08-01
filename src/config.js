@@ -43,7 +43,7 @@ System.config({
     "dialog": "features/dialog/index",
     "fetch": "github:github/fetch@0.10.1",
     "font-awesome": "npm:font-awesome@4.5.0",
-    "hubspot/tether": "github:hubspot/tether@1.1.1",
+    "hubspot/tether": "github:hubspot/tether@1.3.3",
     "jquery": "npm:jquery@2.2.0",
     "moment": "npm:moment@2.11.2",
     "nathancahill/Split.js": "github:nathancahill/Split.js@1.0.6",
@@ -72,7 +72,7 @@ System.config({
     },
     "github:twbs/bootstrap@4.0.0-alpha.2": {
       "jquery": "github:components/jquery@2.2.0",
-      "tether": "github:HubSpot/tether@1.1.1"
+      "tether": "github:HubSpot/tether@1.3.3"
     },
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
