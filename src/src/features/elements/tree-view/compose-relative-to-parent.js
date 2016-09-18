@@ -1,4 +1,4 @@
-import {
+﻿import {
   TaskQueue, Container, inject, customAttribute, bindable, noView,
   CompositionEngine, ViewSlot, customElement, View
 } from 'aurelia-framework';

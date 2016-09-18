@@ -1,4 +1,4 @@
-export class FileListToArrayValueConverter {
+﻿export class FileListToArrayValueConverter {
   toView(fileList) {
     let files = [];
     if (!fileList) {

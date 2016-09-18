@@ -1,0 +1,6 @@
+﻿template
+  fieldset.form-group
+    label ${label}
+      sup(if.bind="required") &nbsp;
+        i.fa.fa-asterisk.fa-xs.required-asterisk
+    select3(items.bind="items", value.bind="value", disabled.bind="disabled", options.bind="options")

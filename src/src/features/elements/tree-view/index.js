@@ -1,4 +1,4 @@
-export function configure(config, callback) {
+﻿export function configure(config, callback) {
   config.globalResources('./tree-view');
 
   if (typeof callback === 'function') {

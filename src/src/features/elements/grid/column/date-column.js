@@ -1,4 +1,4 @@
-import {BaseColumn} from './base-column';
+﻿import {BaseColumn} from './base-column';
 import moment from 'moment';
 
 export class DateColumn extends BaseColumn {

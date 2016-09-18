@@ -1,4 +1,4 @@
-export function processUserTemplate(viewCompiler, viewResources, element, instruction) {
+﻿export function processUserTemplate(viewCompiler, viewResources, element, instruction) {
   // todo: implement - place pagination options onto this custom element
   let paginationElement = element.querySelector('grid-pagination');
   // Get any col tags from the content

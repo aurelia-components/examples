@@ -1,4 +1,4 @@
-//import ajax from './ajax';
+﻿//import ajax from './ajax';
 import Promise from 'bluebird';
 
 function fakeQuery(subject) {

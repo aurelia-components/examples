@@ -1,11 +1,11 @@
-import {inject, customElement, bindable} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, bindingMode} from 'aurelia-framework';
 
 @customElement('filter-button')
 @inject(Element)
 export class FilterButton {
   @bindable disabled = false;
   @bindable onClick = null;
-  @bindable isActive;
+  @bindable({defaultBindingMode: bindingMode.twoWay}) isActive = false;
   name = '';
   type = 'btn-default';
 
@@ -14,10 +14,16 @@ export class FilterButton {
   }
 
   bind() {
-    if (this.isActive) {
-      this._activateFilter();
+    this.isActiveChanged();
+  }
+
+  isActiveChanged() {
+    if (this.isActive == true) {
+      this.name = 'Скрий филтър';
+      this.type = 'btn-success';
     } else {
-      this._deactivateFilter();
+      this.name = 'Покажи филтър';
+      this.type = 'btn-default';
     }
   }
 
@@ -30,23 +36,7 @@ export class FilterButton {
   }
 
   _toggleFilter() {
-    if (this.isActive) {
-      this._deactivateFilter();
-    } else {
-      this._activateFilter();
-    }
-  }
-
-  _activateFilter() {
-    this.isActive = true;
-    this.name = 'Скрий филтър';
-    this.type = 'btn-success';
-  }
-
-  _deactivateFilter() {
-    this.isActive = false;
-    this.name = 'Покажи филтър';
-    this.type = 'btn-default';
+    this.isActive = !this.isActive;
   }
 }
 

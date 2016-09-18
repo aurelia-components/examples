@@ -1,4 +1,4 @@
-import {inject, customElement, bindable, computedFrom, bindingMode, BindingEngine} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, computedFrom, bindingMode, BindingEngine} from 'aurelia-framework';
 import {customElementHelper} from 'utils';
 
 @customElement('assign')

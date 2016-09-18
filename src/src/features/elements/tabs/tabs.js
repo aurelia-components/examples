@@ -1,4 +1,4 @@
-import {inject, customElement, bindable, useView, children} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, useView, children} from 'aurelia-framework';
 import {customElementHelper} from 'utils';
 
 @customElement('tabs')

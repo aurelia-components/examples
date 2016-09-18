@@ -1,10 +1,16 @@
-export class HttpRequestStartedMessage {
+﻿export class HttpRequestStartedMessage {
 }
 
 export class HttpRequestFinishedMessage {
 }
 
 export class HttpBadRequestMessage {
+  constructor(error) {
+    this.error = error;
+  }
+}
+
+export class BusinessRuleValidationException {
   constructor(error) {
     this.error = error;
   }

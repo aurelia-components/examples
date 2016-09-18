@@ -1,4 +1,4 @@
-import {invokeLifecycle} from './lifecycle';
+﻿import {invokeLifecycle} from './lifecycle';
 
 export class DialogController {
   constructor(renderer, settings, resolve, reject) {

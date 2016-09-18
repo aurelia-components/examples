@@ -1,4 +1,4 @@
-import {customElement, bindable} from 'aurelia-framework';
+﻿import {customElement, bindable} from 'aurelia-framework';
 import {DialogController} from './dialog-controller';
 
 @customElement('ai-dialog-footer')

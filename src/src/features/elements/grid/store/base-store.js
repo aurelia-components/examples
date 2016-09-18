@@ -1,4 +1,4 @@
-export class BaseStore {
+﻿export class BaseStore {
   sortProcessingOrder = []; // Represents which order to apply sorts to each column
 
   constructor(settings) {

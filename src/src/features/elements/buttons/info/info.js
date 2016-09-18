@@ -1,4 +1,4 @@
-import {inject, customElement, bindable} from 'aurelia-framework';
+﻿import {inject, customElement, bindable} from 'aurelia-framework';
 
 @customElement('info-button')
 @inject(Element)

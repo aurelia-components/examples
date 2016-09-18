@@ -1,4 +1,4 @@
-import {Tokenizers} from './tokenizers';
+﻿import {Tokenizers} from './tokenizers';
 
 export class Datum {
   constructor(item, index, opts, queryTokens) {

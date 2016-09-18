@@ -1,4 +1,4 @@
-import {LocalStore} from './local-store';
+﻿import {LocalStore} from './local-store';
 import {RemoteStore} from './remote-store';
 
 export class StoreManager {

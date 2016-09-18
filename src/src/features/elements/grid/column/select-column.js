@@ -1,4 +1,4 @@
-import {BaseColumn} from './base-column';
+﻿import {BaseColumn} from './base-column';
 
 // todo: implement
 export class SelectColumn extends BaseColumn {

@@ -1,4 +1,4 @@
-export class ConsoleDebugValueConverter {
+﻿export class ConsoleDebugValueConverter {
   toView(value) {
     console.log('Converter toView:   ', value);
     return value;

@@ -1,0 +1,15 @@
+﻿pager {
+  display: block;
+}
+
+pager > ul.pagination {
+  margin: 0;
+}
+
+pager > div {
+  display: inline-block;
+}
+
+pager > span.pager-summary {
+  float: right;
+}

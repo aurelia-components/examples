@@ -1,4 +1,4 @@
-export class BaseColumn {
+﻿export class BaseColumn {
   specialColumns = {
     heading: true,
     nosort: true,

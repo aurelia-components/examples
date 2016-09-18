@@ -1,4 +1,4 @@
-export let data = {
+﻿export let data = {
   messages: {
     sessionTimedOut: 'Your session has timedout!',
     accessDenied: 'Access Denied!',

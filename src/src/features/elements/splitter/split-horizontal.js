@@ -1,4 +1,4 @@
-import {inject, customElement, bindable, useView} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, useView} from 'aurelia-framework';
 import {split} from './split';
 
 @customElement('split-horizontal')

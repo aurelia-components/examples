@@ -1,4 +1,4 @@
-export const customElementHelper = {
+﻿export const customElementHelper = {
   dispatchEvent(element, eventName, data) {
     let changeEvent;
     if (window.CustomEvent) {

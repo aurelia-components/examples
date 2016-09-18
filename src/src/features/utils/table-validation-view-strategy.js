@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by moshensky on 5/24/15.
  */
 //import {ValidateCustomAttributeViewStrategy} from 'aurelia-validation';

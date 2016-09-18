@@ -10,6 +10,10 @@ export class BaseModel {
     this._subscriptions = [];
   }
 
+  isNew() {
+    return this.id === undefined;
+  }
+
   setEditMode(edit) {
     this.isInEditMode = edit;
 
@@ -38,6 +42,7 @@ export class BaseModel {
     delete result.isInEditMode;
     delete result.validation;
     delete result._previousValues;
+    delete result._subscriptions;
 
     return result;
   }

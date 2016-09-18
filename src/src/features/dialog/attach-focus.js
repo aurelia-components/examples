@@ -1,4 +1,4 @@
-import {customAttribute} from 'aurelia-framework';
+﻿import {customAttribute} from 'aurelia-framework';
 
 @customAttribute('attach-focus')
 export class AttachFocus {

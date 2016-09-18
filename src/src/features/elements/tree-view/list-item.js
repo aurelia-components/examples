@@ -1,4 +1,4 @@
-export class ListItem {
+﻿export class ListItem {
   constructor(item, opts) {
     this.item = item;
     this.text = item.text;

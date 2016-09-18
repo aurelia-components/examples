@@ -1,4 +1,4 @@
-import {customElement, TaskQueue, useView, bindable, inject, BindingEngine,
+﻿import {customElement, TaskQueue, useView, bindable, inject, BindingEngine,
   processContent, TargetInstruction, ViewCompiler, ViewSlot, ViewResources,
   Container, bindingMode} from 'aurelia-framework';
 import {processUserTemplate} from './proccess-user-template';
@@ -49,7 +49,7 @@ export class Grid {
 
   // Pagination
   @bindable pageable = false;
-  @bindable pageSize = 10;
+  @bindable pageSize = "50";
   @bindable pagerSize = 10;
   @bindable page = 1;
   @bindable showFirstLastButtons = true;

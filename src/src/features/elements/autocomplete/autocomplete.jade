@@ -1,0 +1,11 @@
+﻿template
+  require(from="./autocomplete.css")
+  input.form-control(
+    type="text",
+    value.bind="value",
+    disabled.bind="disabled",
+    placeholder="${opts.caption | t}"
+  )
+  //focus.trigger="onValueInputFocus()",
+  //mousedown.trigger="toggleDropdown()",
+  //keydown.trigger="onValueInputKeyPressed($event)"

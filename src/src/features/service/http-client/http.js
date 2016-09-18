@@ -1,11 +1,11 @@
-// todo: migrate to aurelia-fetch-client
+﻿// todo: migrate to aurelia-fetch-client
 import {HttpClient} from 'aurelia-http-client';
 import $ from 'jquery';
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {HttpRequestStartedMessage, HttpRequestFinishedMessage,
   HttpBadRequestMessage, HttpServerErrorRequestMessage,
-  HttpSessionTimedOutMessage} from './http-client-messages';
+  HttpSessionTimedOutMessage, BusinessRuleValidationException} from './http-client-messages';
 
 import {Session} from '../session';
 import {Logger} from '../logger';
@@ -42,30 +42,29 @@ export class Http {
     this.eventAggregator.publish(new HttpRequestFinishedMessage());
   }
 
-  get(url, data, opts) {
+  _createQueryString(data) {
+    return Object.keys(data).map(function (key) {
+      let d = data[key];
+      if (Array.isArray(d)) {
+        return d.map(value => {
+          return '' + key + '=' + value;
+        }).join('&');
+      } else {
+        return '' + key + '=' + data[key];
+      }
+    }).join('&');
+  }
+
+  get(url, data) {
     this._showLoadingMask();
     let urlWithProps = url;
     if (data !== undefined) {
-      let props = Object.keys(data).map(function(key) {
-        let d = data[key];
-        if (Array.isArray(d)) {
-          return d.map(value => {
-            return '' + key + '=' + value;
-          }).join('&');
-        } else {
-          return '' + key + '=' + data[key];
-        }
-      }).join('&');
-
-      urlWithProps += '?' + props;
+      urlWithProps += '?' + this._createQueryString(data);
     }
+
     const promise = this.authHttp.get(urlWithProps).then(response => {
       this._hideLoadingMask();
-      if (opts && opts.raw === true){
-        return response.response;
-      } else {
-        return JSON.parse(response.response);
-      }
+      return JSON.parse(response.response);
     });
     promise.catch(this.errorHandler.bind(this));
     return promise;
@@ -78,6 +77,8 @@ export class Http {
       if (response.response !== '') {
         return JSON.parse(response.response);
       }
+
+      return undefined;
     });
     promise.catch(this.errorHandler.bind(this));
 
@@ -87,8 +88,16 @@ export class Http {
 
   put(url, content = {}) {
     this._showLoadingMask();
-    const promise = this.authHttp.put(url, content).then(response => this._hideLoadingMask());
+    const promise = this.authHttp.put(url, content).then(response => {
+      this._hideLoadingMask();
+      if (response.response !== '') {
+        return JSON.parse(response.response);
+      }
+
+      return undefined;
+    });
     promise.catch(this.errorHandler.bind(this));
+
     return promise;
   }
 
@@ -122,7 +131,7 @@ export class Http {
       }
     });
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       req.done(resolve);
       req.fail(reject);
       self._hideLoadingMask();
@@ -133,11 +142,17 @@ export class Http {
     return this.downloadFile(url, 'POST', data);
   }
 
-  getDownloadFile(url) {
-    return this.downloadFile(url, 'GET');
+  getDownloadFile(url, data) {
+    let urlWithProps = url;
+    if (data !== undefined) {
+      urlWithProps += '?' + this._createQueryString(data);
+    }
+
+    return this.downloadFile(urlWithProps, 'GET');
   }
 
   downloadFile(url, method, data) {
+    let self = this;
     this._showLoadingMask();
     const urlAddress = this.origin + url;
     const authHeaderValue = `Bearer ${this.token}`;
@@ -149,16 +164,24 @@ export class Http {
       xmlhttp.setRequestHeader('Authorization', authHeaderValue);
       xmlhttp.responseType = 'blob';
 
-      xmlhttp.onload = function(oEvent) {
+      xmlhttp.onload = function (oEvent) {
         if (this.status !== 200) {
-          reject({statusCode: this.status});
+          var reader = new FileReader();
+          let statusCode = this.status;
+          reader.addEventListener("loadend", function() {
+            self.errorHandler({
+              statusCode: statusCode,
+              response: reader.result
+            });
+          });
+          reader.readAsText(this.response);
           return;
         }
 
         const blob = xmlhttp.response;
         const windowUrl = window.URL || window.webkitURL;
         const url = windowUrl.createObjectURL(blob);
-        const filename = this.getResponseHeader('Content-Disposition').match(/^attachment; filename=(.+)/)[1];
+        const filename = this.getResponseHeader('Content-Disposition').match(/^attachment; filename=\"(.+)\";/)[1];
 
         const anchor = $('<a></a>');
         anchor.prop('href', url);
@@ -169,7 +192,7 @@ export class Http {
         anchor.remove();
       };
 
-      xmlhttp.ontimeout = function() {
+      xmlhttp.ontimeout = function () {
         reject({timeout: true});
       };
 
@@ -180,6 +203,7 @@ export class Http {
         resolve();
         this._hideLoadingMask();
       });
+
       if (method === 'GET') {
         xmlhttp.send();
       } else if (method === 'POST') {
@@ -296,7 +320,17 @@ export class Http {
     } else if (response.statusCode === 403) {
       this.logger.warn(this.locale.translate('accessDenied'));
     } else if (response.statusCode === 500) {
+      // todo: show and/or log error
+      /*
+{
+  "success": false,
+  "error": "AtikInLib.Exceptions.BusinessRuleValidationException: Please add laboratory environment data first for today(Saturday, 10 September 2016)\n   at AtikInLib.Validation.EnsureBusinessValidationRule(Boolean isViolatingBusinessRule, String errorMsg)\n   at GlobalTest.QueryStack.Services.RequestIndicatorService.GetRequestIndicatorResult(Int32 requestIndicatorId)\n   at GlobalTest.Server.Controllers.RequestIndicatorController.GetRequestIndicatorResult(Int32 requestIndicatorId)\n   at lambda_method(Closure , Object , Object[] )\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionFilterAsync>d__28.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeAsync>d__18.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\n   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\n   at Microsoft.AspNetCore.Builder.Extensions.MapMiddleware.<Invoke>d__3.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware`1.<Invoke>d__18.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware`1.<Invoke>d__18.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\n   at Microsoft.AspNetCore.Cors.Infrastructure.CorsMiddleware.<Invoke>d__7.MoveNext()\n--- End of stack trace from previous location where exception was thrown ---\n   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\n   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()\n   at GlobalTest.Server.Middleware.HttpExceptions.HttpExceptionMiddleware.<Invoke>d__4.MoveNext()"
+}
+*/
       this.logger.error(this.locale.translate('internalServerError'));
+    } else if (response.statusCode === 501) {
+      const error = JSON.parse(response.response);
+      this.eventAggregator.publish(new BusinessRuleValidationException(error.error));
     } else if (response.timeout === true) {
       this.logger.error(this.locale.translate('requestTimeout'));
     } else {

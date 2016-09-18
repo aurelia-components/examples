@@ -1,4 +1,4 @@
-import {BaseStore} from './base-store';
+﻿import {BaseStore} from './base-store';
 
 export class LocalStore extends BaseStore {
 

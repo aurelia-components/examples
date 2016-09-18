@@ -1,4 +1,4 @@
-import {inject, computedFrom} from 'aurelia-framework';
+﻿import {inject, computedFrom} from 'aurelia-framework';
 import $ from 'jquery';
 // IMPORTANT! needs to be uncommented if used!
 //import 'libs/jquery.signalR';

@@ -1,4 +1,4 @@
-import {BaseColumn} from './base-column';
+﻿import {BaseColumn} from './base-column';
 
 export class InputColumn extends BaseColumn {
   constructor(config, template, grid, columnId) {

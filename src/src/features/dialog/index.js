@@ -1,4 +1,4 @@
-import {globalSettings} from './dialog-renderer';
+﻿import {globalSettings} from './dialog-renderer';
 export {AiDialog} from './ai-dialog';
 export {AiDialogHeader} from './ai-dialog-header';
 export {AiDialogBody} from './ai-dialog-body';

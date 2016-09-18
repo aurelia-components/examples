@@ -1,4 +1,4 @@
-template
+﻿template
   require(from="../pager/pager")
   require(from="./aurelia-bs-grid.css")
 
@@ -21,7 +21,7 @@ template
             th(repeat.for="$column of columns", class="${ $column.class !== '' ? $column.class : '' }")
 
               div(if.bind="$column.filter === 'input'")
-                input.form-control(value.bind="$column.filterValue", placeholder="filter...", input.delegate="$column.updateFilter()")
+                input.form-control(value.bind="$column.filterValue", placeholder="филтрирай...", input.delegate="$column.updateFilter()")
 
               div.filter-boolean(if.bind="$column.filter === 'boolean'")
                 base-button(on-click.call="$column.trueFilterToggle()", icon.bind="$column.trueFilter ? 'fa-check-circle-o' : 'fa-circle-o'")

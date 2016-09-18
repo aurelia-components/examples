@@ -1,4 +1,4 @@
-import {Config} from './config';
+﻿import {Config} from './config';
 
 export {Logger} from './logger';
 export {Session} from './session';
@@ -8,7 +8,7 @@ export {HubFactory} from './ws/hub-factory';
 export {WS} from './ws/ws';
 export {HttpRequestStartedMessage, HttpRequestFinishedMessage,
   HttpBadRequestMessage, HttpServerErrorRequestMessage,
-  HttpSessionTimedOutMessage} from './http-client/http-client-messages';
+  HttpSessionTimedOutMessage, BusinessRuleValidationException} from './http-client/http-client-messages';
 
 export {UserLoggedInEvent} from './event/user-logged-in-event';
 export {UserLoggedOutEvent} from './event/user-logged-out-event';

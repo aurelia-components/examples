@@ -1,4 +1,4 @@
-import {inject, customElement, bindable} from 'aurelia-framework';
+﻿import {inject, customElement, bindable} from 'aurelia-framework';
 
 @customElement('popover')
 @inject(Element)
@@ -88,7 +88,12 @@ export class Popover {
   }
 
   _dispose() {
-    this.$parentElement.popover('dispose');
+    try {
+      this.$parentElement.popover('dispose');
+    } catch (ex) {
+      // probably bootstrap 3? :)
+      this.$parentElement.popover('destroy');
+    }
   }
 
   _getOptions() {

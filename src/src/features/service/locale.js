@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by moshensky on 6/17/15.
  */
 export class Locale {

@@ -1,0 +1,7 @@
+﻿template
+  require(from="../form.css")
+  fieldset.form-group
+    label ${label}
+      sup(if.bind="required") &nbsp;
+        i.fa.fa-asterisk.fa-xs.required-asterisk
+    check-button(is-active.bind="value", disabled.bind="disabled")

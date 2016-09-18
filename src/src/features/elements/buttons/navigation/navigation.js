@@ -1,4 +1,4 @@
-import {inject, customElement, bindable, computedFrom} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, computedFrom} from 'aurelia-framework';
 
 @customElement('navigation-button')
 @inject(Element)

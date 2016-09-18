@@ -1,4 +1,4 @@
-import {inject, customElement, ViewResources, bindable, BindingEngine} from 'aurelia-framework';
+﻿import {inject, customElement, ViewResources, bindable, BindingEngine} from 'aurelia-framework';
 import {ListItem} from './list-item';
 import {customElementHelper} from 'utils';
 

@@ -1,4 +1,4 @@
-export function configure(aurelia, configCallback) {
+﻿export function configure(aurelia, configCallback) {
   aurelia.globalResources('./base/base');
   aurelia.globalResources('./delete/delete');
   aurelia.globalResources('./cancel/cancel');

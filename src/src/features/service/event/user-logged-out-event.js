@@ -1,2 +1,2 @@
-export class UserLoggedOutEvent {
+﻿export class UserLoggedOutEvent {
 }

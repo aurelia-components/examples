@@ -1,4 +1,4 @@
-export class SumFormatValueConverter {
+﻿export class SumFormatValueConverter {
   toView(value) {
     if (value === undefined || value === null || value === '') {
       return;

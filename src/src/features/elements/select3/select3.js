@@ -1,4 +1,4 @@
-import {inject, customElement, bindable, bindingMode, BindingEngine, TaskQueue} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, bindingMode, BindingEngine, TaskQueue} from 'aurelia-framework';
 import {Tokenizers} from './tokenizers';
 import {Datum} from './datum';
 import {KEYS} from './keys';
@@ -268,6 +268,10 @@ export class Select3 {
     if (this.filteredDataShort.length === this.filteredData.length) {
       this.scrollbar.style.display = 'none';
     } else {
+      if (!this.scrollbar) {
+        return;
+      }
+
       this.scrollbar.style.display = '';
       const minDraggerHeight = 15;
       let availableHeight = this.draggerContainer.offsetHeight;

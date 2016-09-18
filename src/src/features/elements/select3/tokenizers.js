@@ -1,4 +1,4 @@
-export class Tokenizers {
+﻿export class Tokenizers {
   static whitespace(str) {
     str = str.toString();
     let regex = /\S+/g;
@@ -8,7 +8,7 @@ export class Tokenizers {
   static nonword(str) {
     str = str.toString();
     // todo: fix for all letters
-    let regex = /[A-Za-z0-9_А-Яа-я]+/g;
+    let regex = /[A-Za-z0-9\%\-_А-Яа-я]+/g;
     return Tokenizers.matchRegex(str, regex);
   }
 

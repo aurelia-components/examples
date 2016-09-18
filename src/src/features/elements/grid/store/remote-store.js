@@ -1,4 +1,4 @@
-import {BaseStore} from './base-store';
+﻿import {BaseStore} from './base-store';
 
 export class RemoteStore extends BaseStore {
   constructor(read, settings) {
@@ -37,24 +37,29 @@ export class RemoteStore extends BaseStore {
     return this.sortProcessingOrder.map(sorter => {
       return {
         name: sorter.name,
-        value: sorter.value
+        direction: sorter.value === 'asc' ? 1 : 2
       };
     });
   }
 
   getData() {
     const queryValues = {
-      filters: this.getFiltersValues(),
-      paging: {
+        filter: this.getFiltersValues().reduce((acc, el) => {
+            acc[el.name] = el.value;
+            return acc;
+        }, {}),
+      pager: {
         page: this.page,
         count: window.Number(this.pageSize, 10)
       },
-      sorters: this.getSorters()
+      sorter: {
+        sorters: this.getSorters()
+      }
     };
 
     return this.read(queryValues).then(result => {
       this.data = result.data;
-      this.count = result.count;
+      this.count = result.totalCount;
       this.updatePager();
 
       return (this.data);

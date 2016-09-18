@@ -1,4 +1,4 @@
-import {ViewSlot} from 'aurelia-framework';
+﻿import {ViewSlot} from 'aurelia-framework';
 
 let currentZIndex = 1040;
 let transitionEvent = (function () {
@@ -219,19 +219,31 @@ export class DialogRenderer {
 
     dialogController.centerDialog = () => {
       let child = modalContainer.children[0];
+      let windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
-      modalContainer.style.width = child.offsetWidth + 10 + 'px';
-      //modalContainer.style.height = child.offsetHeight + 20 + 'px';
-      const modalContainerHeight = child.offsetHeight + 10;
+      const modalContainerWidth = child.offsetWidth + 10;
+      if ((windowWidth - modalContainerWidth) > 0) {
+        modalContainer.style.width = modalContainerWidth + 'px';
+      } else {
+        modalContainer.style.width = (windowWidth - 50) + 'px';
+      }
 
-      let vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-      modalContainer.style.left = Math.max((vw - modalContainer.offsetWidth) / 2, 0) + 'px';
+      modalContainer.style.left = ((windowWidth - modalContainer.offsetWidth) / 2) + 'px';
 
       if (!settings.centerHorizontalOnly) {
-        let vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        // Left at least 30px from the top
-        //modalContainer.style.top = Math.max((vh - modalContainer.offsetHeight) / 2, 30) + 'px';
-        modalContainer.style.top = Math.max((vh - modalContainerHeight) / 2, 30) + 'px';
+        const modalContainerHeight = child.offsetHeight + 10;
+        let windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        if ((windowHeight - modalContainerHeight) > 0) {
+          modalContainer.style.top = Math.max((windowHeight - modalContainerHeight) / 2, 30) + 'px';
+        } else {
+          modalContainer.style.top = '30px';
+          let header = child.children[0];
+          let body = child.children[1];
+          let footer = child.children[2];
+          child.style.height = (windowHeight - 50) + 'px';
+          body.style.height = (windowHeight - 50 - header.offsetHeight - footer.offsetHeight) + 'px';
+          body.style.overflow = 'auto';
+        }
       } else {
         modalContainer.style.top = '5px';
       }

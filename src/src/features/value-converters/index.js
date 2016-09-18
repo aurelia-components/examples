@@ -1,4 +1,4 @@
-export function configure(aurelia, configCallback) {
+﻿export function configure(aurelia, configCallback) {
   aurelia.globalResources('./blob-to-url-value-converter');
   aurelia.globalResources('./console-debug');
   aurelia.globalResources('./date-format');

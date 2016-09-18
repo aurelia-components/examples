@@ -1,11 +1,11 @@
-import {inject, customElement, bindable} from 'aurelia-framework';
+﻿import {inject, customElement, bindable, bindingMode} from 'aurelia-framework';
 
 @customElement('check-button')
 @inject(Element)
 export class CheckButton {
   @bindable disabled = false;
   @bindable onClick = null;
-  @bindable isActive = false;
+  @bindable({defaultBindingMode: bindingMode.twoWay}) isActive = false;
   @bindable name = '';
 
   icon = '';
@@ -16,10 +16,14 @@ export class CheckButton {
   }
 
   bind() {
-    if (this.isActive) {
-      this._check();
+    this.isActiveChanged();
+  }
+
+  isActiveChanged() {
+    if (this.isActive == true) {
+      this.icon = 'fa-check-square-o';
     } else {
-      this._uncheck();
+      this.icon = 'fa-square-o';
     }
   }
 
@@ -32,21 +36,7 @@ export class CheckButton {
   }
 
   _toggle() {
-    if (this.isActive) {
-      this._uncheck();
-    } else {
-      this._check();
-    }
-  }
-
-  _check() {
-    this.isActive = true;
-    this.icon = 'fa-check-square-o';
-  }
-
-  _uncheck() {
-    this.isActive = false;
-    this.icon = 'fa-square-o';
+    this.isActive = !this.isActive;
   }
 }
 

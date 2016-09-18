@@ -1,4 +1,4 @@
-// todo: get Origin from aurelia-framework and jspm uninstall aurelia-metadata
+﻿// todo: get Origin from aurelia-framework and jspm uninstall aurelia-metadata
 import {Origin} from 'aurelia-metadata';
 import {Container, CompositionEngine, inject} from 'aurelia-framework';
 import {DialogController} from './dialog-controller';
